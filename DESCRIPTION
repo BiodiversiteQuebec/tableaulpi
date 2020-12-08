@@ -1,0 +1,15 @@
+Package: tableauproto
+Title: Prototype du Tableau
+Version: 0.0.0.9000
+Authors@R: person('Equipe', 'RBQC', email = '', role = c('cre', 'aut'))
+Description: Point du depart pour la construction d'un tableau de bord avec golem.
+License: MIT + file LICENSE
+Imports: 
+    config (>= 0.3),
+    golem (>= 0.3.0),
+    shiny (>= 1.5.0)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+URL: https://github.com/ReseauBiodiversiteQuebec/tableauproto
+BugReports: https://github.com/ReseauBiodiversiteQuebec/tableauproto/issues
