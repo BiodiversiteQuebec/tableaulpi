@@ -24,7 +24,7 @@ golem::fill_desc(
   pkg_description = "Point du depart pour la construction d'un tableau de bord avec golem.", # The Description of the package containing the App 
   author_first_name = "Equipe", # Your First Name
   author_last_name = "RBQC", # Your Last Name
-  author_email = NULL, # Your Email
+  author_email = "", # Your Email
   repo_url = "https://github.com/ReseauBiodiversiteQuebec/tableauproto" # The URL of the GitHub Repo (optional) 
 )     
 
@@ -33,7 +33,7 @@ golem::set_golem_options()
 
 ## Create Common Files ----
 ## See ?usethis for more information
-usethis::use_mit_license( name = "Golem User" )  # You can set another license here
+usethis::use_mit_license( name = "" )  # You can set another license here
 usethis::use_readme_rmd( open = FALSE )
 usethis::use_code_of_conduct()
 usethis::use_lifecycle_badge( "Experimental" )
@@ -51,7 +51,7 @@ golem::use_recommended_deps()
 
 ## Favicon ----
 # If you want to change the favicon (default is golem's one)
-golem::use_favicon() # path = "path/to/ico". Can be an online file. 
+golem::use_favicon("https://raw.githubusercontent.com/ReseauBiodiversiteQuebec/rcoleo/master/pkgdown/favicon/favicon-32x32.png") # path = "path/to/ico". Can be an online file. 
 golem::remove_favicon()
 
 ## Add helper functions ----

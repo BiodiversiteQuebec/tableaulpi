@@ -15,7 +15,8 @@
 
 ## Dependencies ----
 ## Add one line by package you want to add as dependency
-usethis::use_package( "thinkr" )
+## But don't add "tidyverse"
+usethis::use_package( "" )
 
 ## Add modules ----
 ## Create a module infrastructure in R/
