@@ -16,7 +16,7 @@
 ## Dependencies ----
 ## Add one line by package you want to add as dependency
 ## But don't add "tidyverse"
-usethis::use_package( "" )
+usethis::use_package( "mapselector", "suggests")
 
 ## Add modules ----
 ## Create a module infrastructure in R/
