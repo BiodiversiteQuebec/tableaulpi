@@ -19,13 +19,13 @@
 ## to change the name in the app_sys() function in app_config.R /!\
 ## 
 golem::fill_desc(
-  pkg_name = "tableauproto", # The Name of the package containing the App 
-  pkg_title = "Prototype du Tableau", # The Title of the package containing the App 
-  pkg_description = "Point du depart pour la construction d'un tableau de bord avec golem.", # The Description of the package containing the App 
-  author_first_name = "Equipe", # Your First Name
-  author_last_name = "RBQC", # Your Last Name
-  author_email = "", # Your Email
-  repo_url = "https://github.com/ReseauBiodiversiteQuebec/tableauproto" # The URL of the GitHub Repo (optional) 
+  pkg_name = "tableaulpi", # The Name of the package containing the App 
+  pkg_title = "Tableau de l'Indice Planète Vivante", # The Title of the package containing the App 
+  pkg_description = "Construction d'un tableau des tendances de l'Indice Planeee1ète Vivante.", # The Description of the package containing the App 
+  author_first_name = "Katherine", # Your First Name
+  author_last_name = "Hébert", # Your Last Name
+  author_email = "katherine.hebert@usherbrooke.ca", # Your Email
+  repo_url = "https://github.com/ReseauBiodiversiteQuebec/tableaulpi" # The URL of the GitHub Repo (optional) 
 )     
 
 ## Set {golem} options ----
