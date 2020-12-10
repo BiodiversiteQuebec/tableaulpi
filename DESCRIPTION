@@ -1,8 +1,8 @@
-Package: tableauproto
-Title: Prototype du Tableau
+Package: tableaulpi
+Title: Tableau de l'Indice Planète Vivante
 Version: 0.0.0.9000
-Authors@R: person('Equipe', 'RBQC', email = '', role = c('cre', 'aut'))
-Description: Point du depart pour la construction d'un tableau de bord avec golem.
+Authors@R: person('Katherine', 'Hebert', email = 'katherine.hebert@usherbrooke.ca', role = c('cre', 'aut'))
+Description: Construction d'un tableau des tendances de l'Indice Planeee1ète Vivante.
 License: MIT + file LICENSE
 Imports: 
     config (>= 0.3),
@@ -15,12 +15,11 @@ Imports:
     htmltools
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
-URL: https://github.com/ReseauBiodiversiteQuebec/tableauproto
-BugReports: https://github.com/ReseauBiodiversiteQuebec/tableauproto/issues
+RoxygenNote: 7.1.1
+URL: https://github.com/ReseauBiodiversiteQuebec/tableaulpi
+BugReports: https://github.com/ReseauBiodiversiteQuebec/tableaulpi/issues
 Suggests: 
     testthat,
     mapselector
 Remotes:
     ReseauBiodiversiteQuebec/mapselector
-
