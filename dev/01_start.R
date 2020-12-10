@@ -23,7 +23,7 @@ golem::fill_desc(
   pkg_title = "Tableau de l'Indice Planète Vivante", # The Title of the package containing the App 
   pkg_description = "Construction d'un tableau des tendances de l'Indice Planeee1ète Vivante.", # The Description of the package containing the App 
   author_first_name = "Katherine", # Your First Name
-  author_last_name = "Hebert", # Your Last Name
+  author_last_name = "Hébert", # Your Last Name
   author_email = "katherine.hebert@usherbrooke.ca", # Your Email
   repo_url = "https://github.com/ReseauBiodiversiteQuebec/tableaulpi" # The URL of the GitHub Repo (optional) 
 )     
