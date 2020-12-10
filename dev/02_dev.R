@@ -17,6 +17,9 @@
 ## Add one line by package you want to add as dependency
 ## But don't add "tidyverse"
 usethis::use_package( "mapselector", "suggests")
+usethis::use_package( "dplyr", "suggests")
+usethis::use_package( "ggplot2", "suggests")
+usethis::use_package( "plotly", "suggests")
 
 ## Add modules ----
 ## Create a module infrastructure in R/
