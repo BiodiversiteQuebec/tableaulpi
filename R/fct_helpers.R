@@ -1,0 +1,1 @@
+# Functions specific to the Living Planet Index dashboard
