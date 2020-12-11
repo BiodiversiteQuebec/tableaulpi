@@ -14,12 +14,8 @@ app_ui <- function(request) {
       dash_title(title = "Living Planet Index"), 
       dash_sidebar(
         badge(),
-        sliderInput("obs",
-                    "Nombre d'observations:",
-                    min = 0,
-                    max = 1000,
-                    value = 500),
-        textInput("name", "What's your name?")
+        selectInput("taxa", "Groupe taxonomique", 
+                    c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles"))
       ),
       dash_tabs(
         mapselector::tab_map()
