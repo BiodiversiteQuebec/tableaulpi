@@ -3,15 +3,27 @@
 #' @param request Internal parameter for `{shiny}`. 
 #'     DO NOT REMOVE.
 #' @import shiny
+#' @import mapselector
 #' @noRd
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic 
-    fluidPage(
-      h1("Tendances des populations à long terme"),
-      tab_map()
+    tableau_de_bord(
+      dash_title(title = "Living Planet Index"), 
+      dash_sidebar(
+        badge(),
+        sliderInput("obs",
+                    "Nombre d'observations:",
+                    min = 0,
+                    max = 1000,
+                    value = 500),
+        textInput("name", "What's your name?")
+      ),
+      dash_tabs(
+        mapselector::tab_map()
+      )
     )
   )
 }

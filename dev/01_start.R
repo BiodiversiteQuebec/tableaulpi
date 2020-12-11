@@ -21,7 +21,7 @@
 golem::fill_desc(
   pkg_name = "tableaulpi", # The Name of the package containing the App 
   pkg_title = "Tableau de l'Indice Planete Vivante", # The Title of the package containing the App 
-  pkg_description = "Construction d'un tableau des tendances de l'Indice Planete Vivante.", # The Description of the package containing the App 
+  pkg_description = "Tableau des tendances de l'Indice Planete Vivante.", # The Description of the package containing the App 
   author_first_name = "Katherine", # Your First Name
   author_last_name = "Hebert", # Your Last Name
   author_email = "katherine.hebert@usherbrooke.ca", # Your Email
