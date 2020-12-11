@@ -11,7 +11,7 @@ app_ui <- function(request) {
     # Your application UI logic 
     fluidPage(
       h1("Tendances des populations à long terme"),
-      fluidRow(leafletOutput("map"))
+      tab_map()
     )
   )
 }
