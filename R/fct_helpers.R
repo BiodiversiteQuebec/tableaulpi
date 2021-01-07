@@ -116,15 +116,15 @@ make_poptrend <- function(taxachoice){
                             "<br>L'abondance de cette population <br>a changé de %{y:.1%} depuis 1990.<br>",
                             "<extra></extra>")
     ) %>%
-    plotly::colorbar(limits = c(-max(abs(temp$perc_change))-0.02, 
-                        max(abs(temp$perc_change))+0.02)) %>% 
+    plotly::colorbar(limits = c(-max(abs(pop_trends$dt-1))-0.02, 
+                        max(abs(pop_trends$dt-1))+0.02)) %>% 
     plotly::hide_colorbar()   %>% # hide it! cramps the plot
     # axis and label stuff
     plotly::layout(
       title = "Tendances par population",
       yaxis = list(title = "Taux de croissance moyenne depuis 1990 (%)",
-                   range = c(-max(abs(temp$perc_change))-0.02, 
-                             max(abs(temp$perc_change))+0.02)),
+                   range = c(-max(abs(pop_trends$dt-1))-0.02, 
+                             max(abs(pop_trends$dt-1))+0.02)),
       # hide y axis
       xaxis = list(
         title = "",
