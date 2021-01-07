@@ -37,3 +37,7 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# Data
+data-raw/shp_qc/
+data-raw/LPR2020data_public.csv
