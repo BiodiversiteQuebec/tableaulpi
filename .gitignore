@@ -41,3 +41,6 @@ vignettes/*.pdf
 # Data
 data-raw/shp_qc/
 data-raw/LPR2020data_public.csv
+
+# To-do list
+todo.txt
