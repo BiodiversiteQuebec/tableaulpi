@@ -1,21 +1,52 @@
 # Functions specific to the Living Planet Index dashboard
 
 library(ggplot2)
+library(leaflet)
+library(dplyr)
 
 # data import and manipulation =================================================
 
-# Import sf object of points in the Living Planet Database
-lpd_qc <- readRDS("data/lpd_qc_fake.rds")
+
 # Import population growth rates
 pop_trends <- readRDS("data/lpi_trend_populations.rds")
 
+
 # point map of populations =====================================================
+
+make_pointmap <- function(){
+  
+  # Import sf object of points in the Living Planet Database
+  lpd_qc <- readRDS("data/lpd_qc_fake.rds")
+  
+  # create colorblind-friendly palette
+  pal <- c("#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73", "#999999")
+  palvalues <- c(taxa[2:length(taxa)], "inconnu")
+  
+  # add colour column
+  lpd_qc$color <- pal[6]
+  lpd_qc$color[which(lpd_qc$taxa == "amphibiens")] <- pal[1]
+  lpd_qc$color[which(lpd_qc$taxa == "mammifères")] <- pal[2]
+  lpd_qc$color[which(lpd_qc$taxa == "oiseaux")] <- pal[3]
+  lpd_qc$color[which(lpd_qc$taxa == "poissons")] <- pal[4]
+  lpd_qc$color[which(lpd_qc$taxa == "reptiles")] <- pal[5]
+  
+  # generate leaflet map
+  leaflet::leaflet() %>%
+    leaflet::addTiles() %>%
+    leaflet::addCircles(data = lpd_qc,
+               color = lpd_qc$color,
+               fillOpacity = .8) %>%
+    leaflet::addLegend("topright",
+              colors = pal,
+              labels = palvalues,
+              opacity = 1)
+}
 
 
 
 # plotly of index trend ========================================================
 
-index_trend_plot <- function(taxa){
+make_indextrend <- function(taxa){
   
   # create colorblind-friendly palette
   pal <- c("black", "#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73")
@@ -53,11 +84,12 @@ index_trend_plot <- function(taxa){
   plotly::ggplotly(p)
 }
 
+
 # plotly of population-level trends ============================================
 
 
 
 # text for "about" section =====================================================
 
-# to update! ====
+# to update and format! ====
 about_text <- "Developed by Loh et al. (2005), the World Wildlife Fund (WWF), and the Zoological Society of London, the Living Planet Index (LPI) measures the overall global trend in vertebrate abundances since 1970, including terrestrial, freshwater, and marine systems. The LPI has served as a popular indicator of global biodiversity change since the first Living Planet Report appeared in 1998, representing two decades of monitoring population-level trends (WWF 2018). This popularity is largely attributable to the LPI’s intuitive association with biodiversity targets, which makes it a powerful tool to communicate the status of biodiversity to decision-makers tasked with the management of biodiversity (Collen et al. 2009). The index is also used to present biodiversity trends to the general public in an accessible way, which incites public engagement in biodiversity issues (Collen et al. 2009). Importantly, the Convention on Biological Diversity (CBD) selected the LPI to monitor progress towards the 2020 Aichi Biodiversity Targets for population abundance trends (CBD 2016). The LPI was also selected as an Essential Biodiversity Variable, solidifying the index as an essential tool for the harmonized study, reporting, and management of biodiversity change worldwide (Pereira et al. 2013)."
