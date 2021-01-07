@@ -11,14 +11,17 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic 
     tableau_de_bord(
-      dash_title(title = "Living Planet Index"), 
+      dash_title(title = "Indice Planète Vivante"), 
       dash_sidebar(
         badge(),
         selectInput("taxa", "Groupe taxonomique", 
                     c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles"))
       ),
       dash_tabs(
-        mapselector::tab_map()
+        tab_pointmap(),
+        tab_fulltrend(),
+        tab_poptrend(),
+        tab_about()
       )
     )
   )
