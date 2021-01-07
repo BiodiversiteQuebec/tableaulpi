@@ -16,7 +16,11 @@ app_server <- function( input, output, session ) {
   # "Tendance de l'indice"
   output$indextrend <- plotly::renderPlotly(make_indextrend(taxa = taxachoice()))
   
+  # "Tendance par population
+  output$poptrend <- plotly::renderPlotly(make_poptrend(taxa = taxachoice()))
+  
   # "À propos de l'indice"
   output$about <- renderText(about_text)
+  
   
 }

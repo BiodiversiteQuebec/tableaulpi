@@ -4,13 +4,6 @@ library(ggplot2)
 library(leaflet)
 library(dplyr)
 
-# data import and manipulation =================================================
-
-
-# Import population growth rates
-pop_trends <- readRDS("data/lpi_trend_populations.rds")
-
-
 # point map of populations =====================================================
 
 make_pointmap <- function(){
@@ -33,14 +26,16 @@ make_pointmap <- function(){
   # generate leaflet map
   leaflet::leaflet() %>%
     leaflet::addTiles() %>%
-    leaflet::addCircles(data = lpd_qc,
-               color = lpd_qc$color,
-               label = lpd_qc$common_name,
-               fillOpacity = .8) %>%
-    leaflet::addLegend("topright",
-              colors = pal,
-              labels = palvalues,
-              opacity = 1)
+    leaflet::addCircles(
+      data = lpd_qc,
+      color = lpd_qc$color,
+      label = lpd_qc$common_name,
+      fillOpacity = 1) %>%
+    leaflet::addLegend(
+      "topright",
+      colors = pal,
+      labels = palvalues,
+      opacity = 1)
 }
 
 
@@ -87,6 +82,59 @@ make_indextrend <- function(taxa){
 
 
 # plotly of population-level trends ============================================
+
+make_poptrend <- function(taxachoice){
+  
+  # Import population growth rates
+  pop_trends <- readRDS("data/lpi_trend_populations.rds")
+  # prepare data
+  temp <- dplyr::filter(pop_trends, taxa != "tous") %>%
+    # create a column for % change since 1990
+    mutate(perc_change = (dt-1))
+  # set random seed
+  set.seed(20)
+  # assign random y axis positions to each population
+  temp$position <- runif(nrow(temp), min = 0.2, max = 2.8)
+  
+  # select taxa of choice
+  if(taxachoice != "tous"){
+    temp <- filter(temp, taxa == taxachoice)
+  }
+  
+  # set up plotly object
+  plotly::plot_ly(showscale = FALSE) %>%
+    # format points
+    plotly::add_markers(
+      data = temp, 
+      y = ~perc_change, 
+      x = ~position, 
+      color = ~perc_change,
+      colors = colorRampPalette(RColorBrewer::brewer.pal(10,"RdYlGn"))(length(unique(temp$perc_change))),
+      marker = list(size = 20, line = list(width = .2, color = "grey80")),
+      text = ~common_name,
+      hovertemplate = paste('<b>%{text}</b>',
+                            "<br>L'abondance de cette population <br>a changé de %{y:.1%} depuis 1990.<br>",
+                            "<extra></extra>")
+    ) %>%
+    plotly::colorbar(limits = c(-max(abs(temp$perc_change))-0.02, 
+                        max(abs(temp$perc_change))+0.02)) %>% 
+    plotly::hide_colorbar()   %>% # hide it! cramps the plot
+    # axis and label stuff
+    plotly::layout(
+      title = "Tendances par population",
+      yaxis = list(title = "Taux de croissance moyenne depuis 1990 (%)",
+                   range = c(-max(abs(temp$perc_change))-0.02, 
+                             max(abs(temp$perc_change))+0.02)),
+      # hide y axis
+      xaxis = list(
+        title = "",
+        zeroline = FALSE,
+        showline = FALSE,
+        showticklabels = FALSE,
+        showgrid = FALSE)
+    )
+}
+
 
 
 
