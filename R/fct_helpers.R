@@ -35,6 +35,7 @@ make_pointmap <- function(){
     leaflet::addTiles() %>%
     leaflet::addCircles(data = lpd_qc,
                color = lpd_qc$color,
+               label = lpd_qc$common_name,
                fillOpacity = .8) %>%
     leaflet::addLegend("topright",
               colors = pal,
