@@ -20,7 +20,6 @@ app_server <- function( input, output, session ) {
   output$poptrend <- plotly::renderPlotly(make_poptrend(taxa = taxachoice()))
   
   # "À propos de l'indice"
-  output$about <- renderText(about_text)
-  
-  
+  output$about <- renderUI({includeHTML("data/apropos_lpi.html")})
+
 }

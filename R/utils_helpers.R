@@ -30,7 +30,7 @@ tab_poptrend <- function(title = "Tendance par population",
 # text explaining the index, its context, and its interpretation
 #' @export
 tab_about <- function(title = "À propos de l'indice", 
-                      outputFunction = textOutput, 
+                      outputFunction = htmlOutput, 
                       id = "about") 
 {
   tabPanel(title, outputFunction(id))
