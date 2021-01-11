@@ -45,7 +45,7 @@ make_pointmap <- function(){
 make_indextrend <- function(taxa){
   
   # create colorblind-friendly palette
-  pal <- c("black", "#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73")
+  pal <- c("#984ea3", "#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73")
   names(pal) <- c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles")
   # create ggplot theme options to apply to all figures
   plot_theme <- theme_classic() +
@@ -54,9 +54,11 @@ make_indextrend <- function(taxa){
 
   # Import LPI results per taxa group
   lpi_df <- readRDS("data/lpi_index_taxa.rds")
-  # filter for subset of values according to user's choice of taxa
+   # filter for subset of values according to user's choice of taxa
   lpi_df <- lpi_df[which(lpi_df$taxa == taxa),]
-  
+  # get y axis limits
+  ylimits <- c(-max(abs(lpi_df$lpi_cihi))+1, max(abs(lpi_df$lpi_cihi)))
+
   # plot the LPI trend
   p <- ggplot(data = lpi_df, aes(x = year)) +
     scale_fill_manual(values = pal) +
@@ -74,7 +76,7 @@ make_indextrend <- function(taxa){
                lwd = .5) +
     labs(y = "Indice Planète Vivante", x = "") +
     # set limits
-    coord_cartesian(ylim = c(-2, 4)) +
+    coord_cartesian(ylim = ylimits) +
     plot_theme
   # generate as plotly object
   plotly::ggplotly(p)
@@ -135,10 +137,4 @@ make_poptrend <- function(taxachoice){
     )
 }
 
-
-
-
-# text for "about" section =====================================================
-
-# to update and format! ====
-about_text <- "Developed by Loh et al. (2005), the World Wildlife Fund (WWF), and the Zoological Society of London, the Living Planet Index (LPI) measures the overall global trend in vertebrate abundances since 1970, including terrestrial, freshwater, and marine systems. The LPI has served as a popular indicator of global biodiversity change since the first Living Planet Report appeared in 1998, representing two decades of monitoring population-level trends (WWF 2018). This popularity is largely attributable to the LPI’s intuitive association with biodiversity targets, which makes it a powerful tool to communicate the status of biodiversity to decision-makers tasked with the management of biodiversity (Collen et al. 2009). The index is also used to present biodiversity trends to the general public in an accessible way, which incites public engagement in biodiversity issues (Collen et al. 2009). Importantly, the Convention on Biological Diversity (CBD) selected the LPI to monitor progress towards the 2020 Aichi Biodiversity Targets for population abundance trends (CBD 2016). The LPI was also selected as an Essential Biodiversity Variable, solidifying the index as an essential tool for the harmonized study, reporting, and management of biodiversity change worldwide (Pereira et al. 2013)."
+# overview of results (interpretations) ========================================
