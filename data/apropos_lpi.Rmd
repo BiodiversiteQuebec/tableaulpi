@@ -4,16 +4,102 @@ output:
   html_document:
     theme: cerulean
 ---
+```{r setup, echo = FALSE, message = FALSE}
+knitr::opts_knit$set(root.dir = '~/Documents/GitHub/tableaulpi')
+
+library(ggplot2)
+library(dplyr)
+# set ggplot theme for all plots
+theme_set(theme_linedraw() +
+            theme(panel.grid = element_blank(),
+                  strip.text = element_text(size = 14, face = "bold"),
+                  axis.title = element_text(size = 12)
+                  )
+)
+```
+
+
 ### What is the Living Planet Index?
 
 Developed by Loh et al. (2005), the World Wildlife Fund (WWF), and the Zoological Society of London, the Living Planet Index (LPI) measures the overall global trend in vertebrate abundances since 1970, including terrestrial, freshwater, and marine systems. 
 
 ### How should I interpret the Living Planet Index?
 
-#### Uncertainty and biases
+```{r lpi-example-trends, echo = FALSE, fig.height = 4}
+# make some simple lines
+timepoints <- 1:20
+df <- data.frame(
+  "time" = 1989+timepoints,
+  "trend" = factor(rep(c("Déclin", "Stable", "Croissance"), each = 20),
+                levels = c("Déclin", "Stable", "Croissance")),
+  "LPI" = c(-0.1*timepoints + 1, rep(1, 20), 0.1*timepoints + 1),
+  "CI" = seq(from = 0, to = 0.5, length.out = 20)
+)
+# make plot
+ggplot(df, aes(x = time)) +
+  geom_ribbon(aes(ymin = LPI - CI, 
+                  ymax = LPI + CI,
+                  fill = trend), 
+              alpha = 1) +
+  geom_line(aes(y = LPI)) +
+  geom_hline(yintercept = 1, lty = 2, lwd = .4) +
+  facet_wrap(~trend) +
+  labs(x = "") +
+  scale_fill_manual(values = c("#f46d43", "#fee08b", "#66bd63")) +
+  scale_x_continuous(breaks = c(df$time[c(1,6,11,16)])) +
+  guides(fill = FALSE)
+```
 
-### A tool to monitor progress towards global biodiversity objectives
+[ interpretation guide for each panel ]
 
-The LPI has served as a popular indicator of global biodiversity change since the first Living Planet Report appeared in 1998, representing two decades of monitoring population-level trends (WWF 2018). This popularity is largely attributable to the LPI’s intuitive association with biodiversity targets, which makes it a powerful tool to communicate the status of biodiversity to decision-makers tasked with the management of biodiversity (Collen et al. 2009). The index is also used to present biodiversity trends to the general public in an accessible way, which incites public engagement in biodiversity issues (Collen et al. 2009). Importantly, the Convention on Biological Diversity (CBD) selected the LPI to monitor progress towards the 2020 Aichi Biodiversity Targets for population abundance trends (CBD 2016). The LPI was also selected as an Essential Biodiversity Variable, solidifying the index as an essential tool for the harmonized study, reporting, and management of biodiversity change worldwide (Pereira et al. 2013).
+### Limitations of the Living Planet Index
+
+#### Represents only a small part of biodiversity
+
+[ explanation ]
+
+```{r richness-representativeness, echo = FALSE, warning=FALSE, fig.align="center"}
+# tally number of species per taxa group
+lpd_sprich <- readRDS("data/lpd_qc_fake.RDS") %>% sf::st_drop_geometry() %>%
+  group_by(taxa) %>%
+ dplyr::distinct(scientific_name) %>%
+  tally()
+lpd_sprich$category = "Suivi dans LPI"
+
+# create fake number of total species in Quebec 
+# (following Wild Species 2010 report when possible)
+# https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/publications/wild-species-2010.html
+lpd_sprich <- rbind(lpd_sprich, data.frame(
+  taxa = lpd_sprich$taxa,
+  n = c(20, 50, 450, 100, 19),
+  category = rep("Documenté au Québec", 5)
+))
+
+# set category level order
+lpd_sprich$category <- factor(lpd_sprich$category, levels = rev(c("Suivi dans LPI", "Documenté au Québec")))
+
+# create colorblind-friendly palette
+pal <- c("#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73", "#999999")
+names(pal) <- c("amphibiens", "mammifères", "oiseaux", "poissons", "reptiles", "inconnu")
+
+ggplot(lpd_sprich) + 
+  geom_bar(aes(x = taxa, 
+               y = n, 
+               alpha = category,
+               fill = taxa), 
+           stat = "identity") +
+  labs(y = "Nombre d'espèces", x = "",
+       alpha = "") +
+  scale_alpha_discrete(range = c(0.4, 1)) +
+  scale_fill_manual(values = pal) +
+  guides(fill = FALSE)
+```
+
+#### Represents only a few regions
+
+[ same type of barplot, but predicted richness per region or biome]
+
 
 ### How is the Living Planet Index calculated?
+
+[ short demo with figures]
