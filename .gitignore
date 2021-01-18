@@ -44,3 +44,5 @@ data-raw/LPR2020data_public.csv
 
 # To-do list
 todo.txt
+.Rproj.user
+tableauproto.Rproj

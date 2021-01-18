@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Martel:wght@200;300;400;600;700;800;900&display=swap');
 
 #closebtn{
   float:right;
@@ -14,7 +15,7 @@
 }
 
 .blue-badge{
-  background-color:#4190e0;
+  background-color:#2571bb;
   color:white;
   padding:12px;
   border-radius:7px;
@@ -30,16 +31,24 @@
 
 .dash-title{
   float:left;
-  font-family:"Montserrat,Arial";
-  margin-top:15px;
+  font-family:"Martel";
+  margin-top:25px;
   font-size:20px;
-  font-weight:bold;
+  font-weight:800;
   
 }
 
 .left-header{
   position: relative;
-  height:60px;
+  height:80px;
+  width:450px;
+  background-color: #ffffffdd;
+  margin:10px auto;
+  border-radius:8px;
+}
+
+.left-header img{
+  height:70px;
 }
 
 .widget-div{
@@ -47,5 +56,11 @@
   border-radius:7px;
   border:1px solid #ececec;
   margin:5px;
+}
+
+.top-header{
+  background: rgb(64,174,78);
+  background: linear-gradient(90deg, rgba(64,174,78,1) 14%, rgba(37,113,187,1) 99%);
+  height:90px;
 }
 
