@@ -10,7 +10,7 @@ library(plotly)
 make_pointmap <- function(){
   
   # Import sf object of points in the Living Planet Database
-  lpd_qc <- readRDS("data/lpd_qc_fake.rds")
+  lpd_qc <- readRDS("data/lpd_qc_fake.RDS")
   
   # create colorblind-friendly palette
   pal <- c("#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73", "#999999")
@@ -54,7 +54,7 @@ make_indextrend <- function(taxa){
           axis.title = element_text(size = 15))
 
   # Import LPI results per taxa group
-  lpi_df <- readRDS("data/lpi_index_taxa.rds")
+  lpi_df <- readRDS("data/lpi_index_taxa.RDS")
    # filter for subset of values according to user's choice of taxa
   lpi_df <- lpi_df[which(lpi_df$taxa == taxa),]
   # get y axis limits
@@ -89,7 +89,7 @@ make_indextrend <- function(taxa){
 make_poptrend <- function(taxachoice){
   
   # Import population growth rates
-  pop_trends <- readRDS("data/lpi_trend_populations.rds")
+  pop_trends <- readRDS("data/lpi_trend_populations.RDS")
   # prepare data
   temp <- dplyr::filter(pop_trends, taxa != "tous") %>%
     # create a column for % change since 1990
