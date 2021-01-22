@@ -3,6 +3,7 @@
 library(ggplot2)
 library(leaflet)
 library(dplyr)
+library(plotly)
 
 # point map of populations =====================================================
 
