@@ -69,7 +69,7 @@ lpi_df <- bind_rows(dt_gm_taxa, .id = NULL) %>%
   rbind(dt_gm_tous) %>%
   select(c(group_id, year, gm, cilo, cihi, lpi, lpi_cilo, lpi_cihi)) %>%
   rename(taxa = group_id)
-saveRDS(lpi_df, "data/lpi_index_taxa.rds")
+saveRDS(lpi_df, "data/lpi_index_taxa.RDS")
 
 
 ## LPI for each population ----
@@ -84,7 +84,7 @@ lpi_pops <- growthrates %>%
   mutate(trend = ifelse(round(dt, 4) < 1, "déclin", 
                         ifelse(round(dt, 4) > 1, "croissance", "stable"))) %>%
   ungroup()
-saveRDS(lpi_pops, "data/lpi_index_populations.rds")
+saveRDS(lpi_pops, "data/lpi_index_populations.RDS")
 
 
 ## mean growth rate for each species ----
@@ -110,4 +110,4 @@ trend_tous <- trend_df
 trend_tous$taxa <- "tous"
 # combine with taxa-grouped trend table
 trend_df <- rbind(trend_df, trend_tous)
-saveRDS(trend_df, "data/lpi_trend_populations.rds")
+saveRDS(trend_df, "data/lpi_trend_populations.RDS")

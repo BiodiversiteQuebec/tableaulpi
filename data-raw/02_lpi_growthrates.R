@@ -68,7 +68,7 @@ names(gam) = unique(paste(df_gam$id_datasets,
                           df_gam$common_name, 
                           sep = "_"))
 # save list
-saveRDS(gam, "data/lpi_gam.rds")
+saveRDS(gam, "data/lpi_gam.RDS")
 
 # calculate population growth rates (dt) with error propagation
 pred_ls = vector("list", length(gam))
