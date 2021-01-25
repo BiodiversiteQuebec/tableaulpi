@@ -18,47 +18,21 @@ theme_set(theme_linedraw() +
 )
 ```
 
+#### Ce que mesure l'indice
 
-### What is the Living Planet Index?
+L'Indice Planète Vivante (IPV) mesure la tendance globale de l'abondance des vertébrés dans les systèmes terrestres, d'eau douce et marins depuis 1990. L'indice mesure une moyenne de tendances de taux de croissances des populations, et non des changements dans le nombre total d'animaux ou d'espèces au Québec. 
 
-Developed by Loh et al. (2005), the World Wildlife Fund (WWF), and the Zoological Society of London, the Living Planet Index (LPI) measures the overall global trend in vertebrate abundances since 1970, including terrestrial, freshwater, and marine systems. 
+Une valeur **entre 0 et 1** indiquerait qu'en moyenne, les populations animales sont en déclin, où 0 signifierait que les populations suivies ont diminué à 0% de leur taille en 1990 et donc se sont éteints et une valeur de 0.99 signifierait que les populations ont subit un déclin de 1% de leur abondance depuis 1990. Une **valeur de 1** indiquerait que les populations animales sont en moyenne stables, donc qu'elles maintiennent (en moyenne) la même abondance depuis 1990. Une **valeur plus grande que 1** indiquerait que les populations sont en moyenne en croissance, donc qu'elles sont plus abondantes comparé à leur taille en 1990. 
 
-### How should I interpret the Living Planet Index?
+#### Comment calculer l'indice
 
-```{r lpi-example-trends, echo = FALSE, fig.height = 4}
-# make some simple lines
-timepoints <- 1:20
-df <- data.frame(
-  "time" = 1989+timepoints,
-  "trend" = factor(rep(c("Déclin", "Stable", "Croissance"), each = 20),
-                levels = c("Déclin", "Stable", "Croissance")),
-  "LPI" = c(-0.1*timepoints + 1, rep(1, 20), 0.1*timepoints + 1),
-  "CI" = seq(from = 0, to = 0.5, length.out = 20)
-)
-# make plot
-ggplot(df, aes(x = time)) +
-  geom_ribbon(aes(ymin = LPI - CI, 
-                  ymax = LPI + CI,
-                  fill = trend), 
-              alpha = 1) +
-  geom_line(aes(y = LPI)) +
-  geom_hline(yintercept = 1, lty = 2, lwd = .4) +
-  facet_wrap(~trend) +
-  labs(x = "") +
-  scale_fill_manual(values = c("#f46d43", "#fee08b", "#66bd63")) +
-  scale_x_continuous(breaks = c(df$time[c(1,6,11,16)])) +
-  guides(fill = FALSE)
-```
+L'Indice Planète Vivante a été calculée pour le Québec en suivant <a href =  "https://doi.org/10.1111/j.1523-1739.2008.01117.x">cette méthodologie</a>, et a été développée par Loh <i>et al.</i> (2006) avec le Zoological Society of London et le World Wildlife Fund (WWF). Pour en savoir plus sur l'indice, consultez <a href = "https://livingplanetindex.org/home/index">ceci</a>. 
 
-[ interpretation guide for each panel ]
+### Mises en garde
 
-### Limitations of the Living Planet Index
+L'Indice Planète Vivante du Québec ne représente qu'une petite partie de la biodiversité québécoise:
 
-#### Represents only a small part of biodiversity
-
-[ explanation ]
-
-```{r richness-representativeness, echo = FALSE, warning=FALSE, fig.align="center"}
+```{r richness-representativeness, echo = FALSE, warning=FALSE, fig.align="center", fig.height = 3}
 # tally number of species per taxa group
 lpd_sprich <- readRDS("data/lpd_qc_fake.RDS") %>% sf::st_drop_geometry() %>%
   group_by(taxa) %>%
@@ -82,7 +56,7 @@ lpd_sprich$category <- factor(lpd_sprich$category, levels = rev(c("Suivi dans LP
 pal <- c("#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73", "#999999")
 names(pal) <- c("amphibiens", "mammifères", "oiseaux", "poissons", "reptiles", "inconnu")
 
-ggplot(lpd_sprich) + 
+p <- ggplot(lpd_sprich) + 
   geom_bar(aes(x = taxa, 
                y = n, 
                alpha = category,
@@ -93,13 +67,31 @@ ggplot(lpd_sprich) +
   scale_alpha_discrete(range = c(0.4, 1)) +
   scale_fill_manual(values = pal) +
   guides(fill = FALSE)
+p
 ```
 
-#### Represents only a few regions
 
-[ same type of barplot, but predicted richness per region or biome]
-
-
-### How is the Living Planet Index calculated?
-
-[ short demo with figures]
+```{r lpi-example-trends, echo = FALSE, fig.height = 4, include = FALSE}
+# # make some simple lines
+# timepoints <- 1:20
+# df <- data.frame(
+#   "time" = 1989+timepoints,
+#   "trend" = factor(rep(c("Déclin", "Stable", "Croissance"), each = 20),
+#                 levels = c("Déclin", "Stable", "Croissance")),
+#   "LPI" = c(-0.1*timepoints + 1, rep(1, 20), 0.1*timepoints + 1),
+#   "CI" = seq(from = 0, to = 0.5, length.out = 20)
+# )
+# # make plot
+# ggplot(df, aes(x = time)) +
+#   geom_ribbon(aes(ymin = LPI - CI, 
+#                   ymax = LPI + CI,
+#                   fill = trend), 
+#               alpha = 1) +
+#   geom_line(aes(y = LPI)) +
+#   geom_hline(yintercept = 1, lty = 2, lwd = .4) +
+#   facet_wrap(~trend) +
+#   labs(x = "") +
+#   scale_fill_manual(values = c("#f46d43", "#fee08b", "#66bd63")) +
+#   scale_x_continuous(breaks = c(df$time[c(1,6,11,16)])) +
+#   guides(fill = FALSE)
+```
