@@ -65,13 +65,15 @@ saveRDS(lpd_sel, "data/lpd_qc.RDS")
 fake <- matrix(NA, nrow = 150, ncol = ncol(lpd_sel), 
                dimnames = list(NULL, colnames(lpd_sel))) %>%
   as.data.frame()
+
 # fill in the data frame with 5 time series of 10 years for each missing group
 fake$taxa <- c(rep("amphibiens", 50), rep("oiseaux", 50), rep("reptiles", 50))
 fake$system <- "Terrestrial"
 fake$year_obs <- rep(2000:2009, 15)
 fake[,c("id_datasets", "org_event", "plot")] <- "fake"
 fake[,c("scientific_name", "common_name")] <- rep(letters[1:15], each = 10)
-fake$obs_value <- runif(nrow(fake), min = 20, max = 40)
+fake$obs_value <- runif(nrow(fake), min = 1, max = 1.5)
+
 # assign random coordinates from original dataset
 fake$geom <- lpd_qc$pts_sfc[runif(nrow(fake), min = 1, max = nrow(lpd_qc))]
 fake <- st_as_sf(fake, sf_column_name = "geom", crs = st_crs(lpd_sel))

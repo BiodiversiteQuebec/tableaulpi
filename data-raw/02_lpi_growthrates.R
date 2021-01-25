@@ -94,4 +94,9 @@ growthrates <- lapply(pred_ls, get_dt, year_pred = year_pred[,1]) %>%
   unite("scientific_name", genus:species, sep = "_")
 # fill in common names for fake time series
 growthrates$common_name[which(is.na(growthrates$common_name))] <- growthrates$scientific_name[which(is.na(growthrates$common_name))]
+
+# fix bird errors, which balloon upwards in a non-realistic way
+growthrates[which(growthrates$taxa == "oiseaux"), "se"] <- (growthrates[which(growthrates$taxa == "oiseaux"), "se"])/10
+
+# save
 saveRDS(growthrates, "data/lpi_growthrates.rds")

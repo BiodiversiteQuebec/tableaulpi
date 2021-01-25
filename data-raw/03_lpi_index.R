@@ -69,6 +69,17 @@ lpi_df <- bind_rows(dt_gm_taxa, .id = NULL) %>%
   rbind(dt_gm_tous) %>%
   select(c(group_id, year, gm, cilo, cihi, lpi, lpi_cilo, lpi_cihi)) %>%
   rename(taxa = group_id)
+
+## MANUALLY CHANGE FAKE DATA FOR TEST PURPOSES ---- to remove after the prototype ## -----------
+
+# fix oiseaux and reptile uncertainty interval, which balloon outwards too rapidly
+temp <- lpi_df[which(lpi_df$taxa == "oiseaux"), "lpi_cihi"] 
+lpi_df[which(lpi_df$taxa == "oiseaux"), "lpi_cihi"]  <- lpi_df[which(lpi_df$taxa == "oiseaux"), "lpi"] + sort(runif(min = 0.1, max = 0.4, n = length(temp)))
+lpi_df[which(lpi_df$taxa == "oiseaux"), "lpi_cilo"]  <- lpi_df[which(lpi_df$taxa == "oiseaux"), "lpi"] - sort(runif(min = 0.1, max = 0.4, n = length(temp)))
+lpi_df[which(lpi_df$taxa == "reptiles"), "lpi_cihi"]  <- lpi_df[which(lpi_df$taxa == "reptiles"), "lpi"] + sort(runif(min = 0.1, max = 0.4, n = length(temp)))
+lpi_df[which(lpi_df$taxa == "reptiles"), "lpi_cilo"]  <- lpi_df[which(lpi_df$taxa == "reptiles"), "lpi"] - sort(runif(min = 0.1, max = 0.4, n = length(temp)))
+
+# save 
 saveRDS(lpi_df, "data/lpi_index_taxa.RDS")
 
 
@@ -111,3 +122,4 @@ trend_tous$taxa <- "tous"
 # combine with taxa-grouped trend table
 trend_df <- rbind(trend_df, trend_tous)
 saveRDS(trend_df, "data/lpi_trend_populations.RDS")
+
