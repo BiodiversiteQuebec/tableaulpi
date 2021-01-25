@@ -55,32 +55,38 @@ make_indextrend <- function(taxa){
 
   # Import LPI results per taxa group
   lpi_df <- readRDS("data/lpi_index_taxa.RDS")
-   # filter for subset of values according to user's choice of taxa
-  lpi_df <- lpi_df[which(lpi_df$taxa == taxa),]
-  # get y axis limits
-  ylimits <- c(-max(abs(lpi_df$lpi_cihi))+1, max(abs(lpi_df$lpi_cihi)))
+  # round so the hover text is nicer
+  lpi_df[,c(3:8)] <- apply(lpi_df[,c(3:8)], 2, round, digits = 2)
+  # filter for subset of values according to user's choice of taxa
+  lpi_taxa <- lpi_df[which(lpi_df$taxa == taxa),]
 
   # plot the LPI trend
-  p <- ggplot(data = lpi_df, aes(x = year)) +
-    scale_fill_manual(values = pal) +
-    geom_ribbon(aes(ymin = lpi_cilo, 
-                    ymax = lpi_cihi),
-                fill = unname(pal[taxa]), 
-                alpha = .7) +
-    geom_line(aes(y = lpi), 
-              col = "white", 
-              lwd = .5) +
+  p <- ggplot() +
+    # plot all taxa trends in grey
+    geom_line(data = lpi_df, 
+              aes(x = year, y = lpi, group = taxa), 
+              col = "grey90", 
+              lwd = .4) +
+    # plot uncertainty interval for chosen taxa
+    geom_ribbon(data = lpi_taxa,
+                aes(x = year, ymin = lpi_cilo, ymax = lpi_cihi),
+                fill = unname(pal[taxa]),
+                colour = NA, # remove ribbon border
+                alpha = .2) +
+    # plot trend for chosen taxa in color
+    geom_line(data = lpi_taxa,
+              aes(x = year, y = lpi), 
+              col = unname(pal[taxa]), 
+              lwd = .7) +
     # baseline reference
     geom_hline(yintercept = 1, 
-               lty = 2, 
-               col = "black", 
-               lwd = .5) +
-    labs(y = "Indice Planète Vivante", x = "") +
-    # set limits
-    coord_cartesian(ylim = ylimits) +
-    plot_theme
+               lty = 1, 
+               col = "grey20", 
+               lwd = .2) +
+    labs(y = "Indice Planète Vivante", x = "") 
   # generate as plotly object
-  plotly::ggplotly(p)
+  plotly::ggplotly(p, tooltip = c("taxa", "lpi", "lpi_cilo", "lpi_cihi")) %>% 
+    layout(yaxis= list(range = c(0, max(c(abs(lpi_df$lpi_cihi)))+0.1)))
 }
 
 
