@@ -85,11 +85,19 @@ make_indextrend <- function(taxa){
   # filter for subset of values according to user's choice of taxa
   lpi_taxa <- lpi_df[which(lpi_df$taxa == taxa),]
 
+  # generate a custom string (to appear in tooltip)
+  text_lpi <- paste0(
+    "LPI en ", lpi_taxa$year," = ", lpi_taxa$lpi, 
+    "\n(CI: ", lpi_taxa$lpi_cilo, ", ", lpi_taxa$lpi_cihi, ")"
+  )
+  # rename the background lpi trend columns 
+  lpi_df <- dplyr::rename(lpi_df, "lpi_b" = "lpi")
+  
   # plot the LPI trend
   p <- ggplot() +
     # plot all taxa trends in grey
     geom_line(data = lpi_df, 
-              aes(x = year, y = lpi, group = taxa), 
+              aes(x = year, y = lpi_b, group = taxa), 
               col = "grey90", 
               lwd = .4) +
     # plot uncertainty interval for chosen taxa
@@ -108,12 +116,17 @@ make_indextrend <- function(taxa){
                lty = 1, 
                col = "grey20", 
                lwd = .2) +
-    labs(y = "Indice Planète Vivante", x = "") 
+    labs(y = "Indice Planète Vivante", x = "") +
+    plot_theme
   # generate as plotly object
-  plotly::ggplotly(p, tooltip = c("taxa", "lpi", "lpi_cilo", "lpi_cihi")) %>% 
-    layout(yaxis= list(range = c(0, max(c(abs(lpi_df$lpi_cihi)))+0.1)))
+  plotly::ggplotly(p, tooltip = c("lpi")) %>% 
+    layout(yaxis = list(range = c(0, max(c(abs(lpi_df$lpi_cihi)))+0.1)),
+           hovermode = "x unified"
+            ) %>%
+    style(hoverinfo = "skip", traces = 1) %>%
+    style(hoverinfo = "skip", traces = 2) %>%
+    style(text = text_lpi, traces = 3)
 }
-
 
 # plotly of population-level trends ============================================
 
