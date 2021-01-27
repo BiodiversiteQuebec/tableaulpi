@@ -7,39 +7,64 @@ library(plotly)
 
 # point map of populations =====================================================
 
-make_pointmap <- function(){
+make_pointmap <- function(taxa){
   
   # Import sf object of points in the Living Planet Database
   lpd_qc <- readRDS("data/lpd_qc_fake.RDS")
   
-  # create colorblind-friendly palette
-  pal <- c("#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73", "#999999")
-  palvalues <- c(taxa[2:length(taxa)], "inconnu")
+  ## SELECTION ##
+  if(taxa != "tous"){
+    lpd_qc <- lpd_qc[which(lpd_qc$taxa == taxa),]
+  }
   
-  # add colour column
-  lpd_qc$color <- pal[6]
-  lpd_qc$color[which(lpd_qc$taxa == "amphibiens")] <- pal[1]
-  lpd_qc$color[which(lpd_qc$taxa == "mammifères")] <- pal[2]
-  lpd_qc$color[which(lpd_qc$taxa == "oiseaux")] <- pal[3]
-  lpd_qc$color[which(lpd_qc$taxa == "poissons")] <- pal[4]
-  lpd_qc$color[which(lpd_qc$taxa == "reptiles")] <- pal[5]
+  ## PALETTE ##
+  
+  # create colorblind-friendly palette
+  pal <- c("#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73","#999999")
+
+  ## function to set marker color ##
+  getColor <- function(lpd_qc) {
+    sapply(lpd_qc$taxa, function(taxa) {
+      if(taxa == "amphibiens") { 
+        pal[1] } else if(taxa == "mammifères") {
+        pal[2] } else if(taxa == "oiseaux") {
+        pal[3] } else if(taxa == "poissons") {
+        pal[4] } else if(taxa == "reptiles"){
+        pal[5] } else {
+        pal[6] }
+    }
+    )
+  }
+  
+  ## POP-UPS ##
+  get_popup_content <- function(lpd_qc){
+    paste0(
+      "<b>", lpd_qc$common_name, "</b>",
+      "<br><i>", gsub("_", " ", lpd_qc$scientific_name), "</i>",
+      "<br><b>Source: </b>", lpd_qc$intellectual_rights
+    )
+  }
+  
+  ## MAP ##
   
   # generate leaflet map
   leaflet::leaflet() %>%
     leaflet::addTiles() %>%
-    leaflet::addCircles(
+    leaflet::addCircleMarkers(
       data = lpd_qc,
-      color = lpd_qc$color,
-      label = lpd_qc$common_name,
-      fillOpacity = 1) %>%
+      popup = ~get_popup_content(lpd_qc),
+      color = unname(getColor(lpd_qc)),
+      stroke = FALSE,
+      fillOpacity = .7,
+      radius = 5
+    ) %>%
     leaflet::addLegend(
       "topright",
-      colors = pal,
-      labels = palvalues,
-      opacity = 1)
+      colors = pal[c(1:5)],
+      labels = c("Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles"),
+      opacity = 1
+      )
 }
-
-
 
 # plotly of index trend ========================================================
 

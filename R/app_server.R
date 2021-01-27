@@ -10,7 +10,7 @@ app_server <- function( input, output, session ) {
   taxachoice <- reactive({toString(input$taxa)})
   
   # Map 
-  output$pointmap <- leaflet::renderLeaflet(make_pointmap())
+  output$pointmap <- leaflet::renderLeaflet(make_pointmap(taxa = taxachoice()))
   #mod_modal_make_server("modal_make_ui_1", region = reactive(input$map_shape_click$id))
   
   # "Tendance de l'indice"
