@@ -7,16 +7,18 @@ library(sf)
 # subset Living Planet Database to Quebec only ----
 
 # load cropping function for Atlas (from Vincent Bellavance)
-source('data-raw/crop_qc.R')
-
-# subset Living Planet Database (LPD) to Quebec
-lpd_qc <- lpdCropQc("LPR2020data_public.csv", dir = "data_raw/")
-
-# save
-saveRDS(lpd_qc, "data/LPR2020data_public_qc.RDS")
+# source('data-raw/crop_qc.R')
+# 
+# # subset Living Planet Database (LPD) to Quebec
+# lpd_qc <- lpdCropQc("LPR2020data_public.csv", dir = "data_raw/")
+# 
+# # save
+# saveRDS(lpd_qc, "data/LPR2020data_public_qc.RDS")
 
 
 # dataset manipulation ----
+
+lpd_qc <- readRDS("data/LPR2020data_public_qc.RDS")
 
 # convert to long format
 lpd_qc_l <- lpd_qc %>%
@@ -54,6 +56,9 @@ lpd$taxa[which(lpd$Class == "Amphibia")] <- "amphibiens"
 # select necessary columns
 lpd_sel <- select(lpd, c(id_datasets, org_event, plot, scientific_name, 
                          common_name, year_obs, obs_value, taxa, system))
+
+lpd_sel$intellectual_rights <- "Living Planet Database"
+
 # save object with sf geometry
 saveRDS(lpd_sel, "data/lpd_qc.RDS")
 
@@ -73,12 +78,14 @@ fake$year_obs <- rep(2000:2009, 15)
 fake[,c("id_datasets", "org_event", "plot")] <- "fake"
 fake[,c("scientific_name", "common_name")] <- rep(letters[1:15], each = 10)
 fake$obs_value <- runif(nrow(fake), min = 1, max = 1.5)
+fake$intellectual_rights <- "Fake"
 
 # assign random coordinates from original dataset
-fake$geom <- lpd_qc$pts_sfc[runif(nrow(fake), min = 1, max = nrow(lpd_qc))]
+temp <- rep(runif(15, min = 1, max = nrow(lpd_qc)), each = 10)
+fake$geom <- lpd_qc$pts_sfc[temp] + c(1,2)
 fake <- st_as_sf(fake, sf_column_name = "geom", crs = st_crs(lpd_sel))
 # add noise to coordinates so they don't overlap
-fake <- st_jitter(fake, amount = 1)
+#fake <- st_jitter(fake, amount = 1)
 # bind to lpd dataframe
 lpd_sel_fake <- bind_rows(lpd_sel, fake)
 
