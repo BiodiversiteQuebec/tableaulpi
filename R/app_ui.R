@@ -13,9 +13,10 @@ app_ui <- function(request) {
     tableau_de_bord(
       dash_title(title = "Indice Planète Vivante"), 
       dash_sidebar(
-        badge(text_badge = "L'Indice Planète Vivante mesure les changements dans l'abondance des populations des animaux vertébrés depuis 1990."),
-        radioButtons("taxa", "Groupe taxonomique", 
-                     choices = c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles"))
+        badge(text_badge = "L'Indice Planète Vivante mesure les changements dans l'abondance des populations animales depuis 1990."),
+        radioButtons("taxa", "Groupe d'espèces", 
+                     choiceValues = c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles"),
+                     choiceNames = c("Toutes les espèces", "Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles"))
       ),
       dash_tabs(
         tab_pointmap(),
