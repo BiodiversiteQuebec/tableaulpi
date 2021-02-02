@@ -59,7 +59,7 @@ make_pointmap <- function(taxa){
       radius = 5
     ) %>%
     leaflet::addLegend(
-      "topright",
+      "topleft",
       colors = pal[c(1:5)],
       labels = c("Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles"),
       opacity = 1
