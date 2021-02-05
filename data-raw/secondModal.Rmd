@@ -1,0 +1,6 @@
+---
+title: "Interprétation de l'indice"
+output: html_document
+---
+
+### Guide pour l'interprétation
