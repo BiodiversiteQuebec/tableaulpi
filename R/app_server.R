@@ -22,11 +22,11 @@ app_server <- function( input, output, session ) {
     mod_tuto_modal2_server("tuto_modal2_ui_1")
   })
   
-  # "Tendance de l'indice" en module
   # Sidebar menu choices of species
   observeEvent(input$taxa, {
     mod_lpi_time_series_server("lpi_time_series_ui_1", taxachoice)
   })
+  
   # Show plot in modal
   observeEvent(input$show_index, {
     showModal(

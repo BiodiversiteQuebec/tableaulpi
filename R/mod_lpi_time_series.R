@@ -20,9 +20,10 @@ mod_lpi_time_series_ui <- function(id){
 mod_lpi_time_series_server <- function(id, taxachoice){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-
     # "Tendance de l'indice"
-    output$indextrend <- renderPlot(make_indextrend(taxa = taxachoice()))
+    output$indextrend <- renderPlot(
+      make_indextrend(taxa = taxachoice())
+      )
   })
 }
     
