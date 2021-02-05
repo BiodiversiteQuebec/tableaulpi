@@ -118,14 +118,16 @@ make_indextrend <- function(taxa){
                lwd = .2) +
     labs(y = "Indice Planète Vivante", x = "") +
     plot_theme
-  # generate as plotly object
-  plotly::ggplotly(p, tooltip = c("lpi")) %>% 
-    layout(yaxis = list(range = c(0, max(c(abs(lpi_df$lpi_cihi)))+0.1)),
-           hovermode = "x unified"
-            ) %>%
-    style(hoverinfo = "skip", traces = 1) %>%
-    style(hoverinfo = "skip", traces = 2) %>%
-    style(text = text_lpi, traces = 3)
+  p
+  #plotly::ggplotly(p, tooltip = c("lpi"))
+  # # generate as plotly object
+  # plotly::ggplotly(p, tooltip = c("lpi")) %>% 
+  #   layout(yaxis = list(range = c(0, max(c(abs(lpi_df$lpi_cihi)))+0.1)),
+  #          hovermode = "x unified"
+  #           ) %>%
+  #   style(hoverinfo = "skip", traces = 1) %>%
+  #   style(hoverinfo = "skip", traces = 2) %>%
+  #   style(text = text_lpi, traces = 3)
 }
 
 # plotly of population-level trends ============================================
