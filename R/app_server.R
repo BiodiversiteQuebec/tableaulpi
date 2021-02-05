@@ -6,7 +6,7 @@
 #' @noRd
 app_server <- function( input, output, session ) {
   
-  # get taxa choice input
+  # Set reactive values
   taxachoice <- reactive({toString(input$taxa)})
   
   # Map 
@@ -14,7 +14,23 @@ app_server <- function( input, output, session ) {
   #mod_modal_make_server("modal_make_ui_1", region = reactive(input$map_shape_click$id))
   
   # "Tendance de l'indice"
-  output$indextrend <- plotly::renderPlotly(make_indextrend(taxa = taxachoice()))
+  # output$indextrend <- plotly::renderPlotly(make_indextrend(taxa = taxachoice()))
+  
+  # Sidebar menu choices of species
+  observeEvent(input$taxa, {
+    mod_lpi_time_series_server("lpi_time_series_ui_1", taxachoice)
+  })
+  
+  # Show plot in modal
+  observeEvent(input$show_index, {
+    showModal(
+      modalDialog(
+        mod_lpi_time_series_ui("lpi_time_series_ui_1"),
+        title = "Indice Planète Vivante",
+        size = "l"
+      )
+    )
+  })
   
   # "Tendance par population
   output$poptrend <- plotly::renderPlotly(make_poptrend(taxa = taxachoice()))

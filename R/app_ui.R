@@ -10,17 +10,18 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic 
-    tableau_de_bord(
-      dash_title(title = "Indice Planète Vivante"), 
-      dash_sidebar(
+    mapselector::tableau_de_bord(
+      mapselector::dash_title(title = "Indice Planète Vivante"), 
+      mapselector::dash_sidebar(
         badge(text_badge = "L'Indice Planète Vivante mesure les changements dans l'abondance des populations animales depuis 1990."),
-        radioButtons("taxa", "Groupe d'espèces", 
+        radioButtons("taxa", "Choisir le groupe d'espèces", 
                      choiceValues = c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles"),
-                     choiceNames = c("Toutes les espèces", "Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles"))
+                     choiceNames = c("Toutes les espèces", "Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles")),
+        actionButton("show_index", "Afficher l'indice")
       ),
-      dash_tabs(
+      mapselector::dash_tabs(
         tab_pointmap(),
-        tab_fulltrend(),
+        # tab_fulltrend(),
         tab_poptrend(),
         tab_about()
       )
@@ -46,7 +47,7 @@ golem_add_external_resources <- function(){
     favicon(ext = 'png'),
     bundle_resources(
       path = app_sys('app/www'),
-      app_title = 'IPV Québec'
+      app_title = 'IPVQuébec'
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert() 
