@@ -21,7 +21,7 @@ mod_lpi_time_series_server <- function(id, taxachoice){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
-    output$indextrend <- renderPlotly({
+    output$indextrend <- plotly::renderPlotly({
       make_indextrend(taxa = taxachoice())}
       )
   })
@@ -32,3 +32,21 @@ mod_lpi_time_series_server <- function(id, taxachoice){
     
 ## To be copied in the server
 # mod_lpi_time_series_server("lpi_time_series_ui_1")
+
+
+
+
+testapp_lpi_timeseries <- function(){
+  ui <- fluidPage(
+    mod_lpi_time_series_ui("test")
+  )
+  
+  server <-  function(input, output, session) {
+    
+    mod_lpi_time_series_server("test", 
+                               taxachoice = reactive("tous"))
+  }
+  shinyApp(ui, server)
+}
+
+testapp_lpi_timeseries()

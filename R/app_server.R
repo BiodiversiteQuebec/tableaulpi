@@ -27,16 +27,26 @@ app_server <- function( input, output, session ) {
     mod_lpi_time_series_server("lpi_time_series_ui_1", taxachoice)
   })
   
-  # Show plot in modal
-  observeEvent(input$show_index, {
-    showModal(
-      modalDialog(
-        mod_lpi_time_series_ui("lpi_time_series_ui_1"),
-        title = "Indice Planète Vivante",
-        size = "l"
-      )
-    )
-  })
+  # # Show plot in modal
+  # observeEvent(input$show_index, {
+  #   showModal(
+  #     modalDialog(
+  #       mod_lpi_time_series_ui("lpi_time_series_ui_1"),
+  #       title = "Indice Planète Vivante",
+  #       size = "l"
+  #     )
+  #   )
+  # })
+  # 
+  mod_lpi_time_series_server("siteobs", taxachoice = reactive("tous"))
+  
+  mapselector::mod_modal_observeEvent_server("affiche_index",
+                                title_format_pattern =  "Indice Planète Vivante pour %s",
+                                title_var = taxachoice,
+                        tabPanel(
+                          title = "title",
+                          mod_lpi_time_series_ui("test")
+                        ))
   
   # "Tendance par population
   output$poptrend <- plotly::renderPlotly(make_poptrend(taxa = taxachoice()))

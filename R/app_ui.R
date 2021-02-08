@@ -17,7 +17,7 @@ app_ui <- function(request) {
         radioButtons("taxa", "Choisir le groupe d'espèces", 
                      choiceValues = c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles"),
                      choiceNames = c("Toutes les espèces", "Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles")),
-        actionButton("show_index", "Afficher l'indice")
+        mapselector::mod_modal_observeEvent_ui("affiche_index")
       ),
       mapselector::dash_tabs(
         tab_pointmap(),
