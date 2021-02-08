@@ -77,14 +77,14 @@ make_indextrend <- function(taxa){
   plot_theme <- theme_classic() +
     theme(axis.text = element_text(size = 13),
           axis.title = element_text(size = 15))
-
+  
   # Import LPI results per taxa group
   lpi_df <- readRDS("data/lpi_index_taxa.RDS")
   # round so the hover text is nicer
   lpi_df[,c(3:8)] <- apply(lpi_df[,c(3:8)], 2, round, digits = 2)
   # filter for subset of values according to user's choice of taxa
   lpi_taxa <- lpi_df[which(lpi_df$taxa == taxa),]
-
+  
   # generate a custom string (to appear in tooltip)
   text_lpi <- paste0(
     "LPI en ", lpi_taxa$year," = ", lpi_taxa$lpi, 
@@ -118,16 +118,15 @@ make_indextrend <- function(taxa){
                lwd = .2) +
     labs(y = "Indice Planète Vivante", x = "") +
     plot_theme
-  p
-  #plotly::ggplotly(p, tooltip = c("lpi"))
-  # # generate as plotly object
-  # plotly::ggplotly(p, tooltip = c("lpi")) %>% 
-  #   layout(yaxis = list(range = c(0, max(c(abs(lpi_df$lpi_cihi)))+0.1)),
-  #          hovermode = "x unified"
-  #           ) %>%
-  #   style(hoverinfo = "skip", traces = 1) %>%
-  #   style(hoverinfo = "skip", traces = 2) %>%
-  #   style(text = text_lpi, traces = 3)
+  # generate as plotly object
+  p <- plotly::ggplotly(p, tooltip = c("lpi")) %>%
+    layout(yaxis = list(range = c(0, max(c(abs(lpi_df$lpi_cihi)))+0.1)),
+           hovermode = "x unified"
+    ) %>%
+    style(hoverinfo = "skip", traces = 1) %>%
+    style(hoverinfo = "skip", traces = 2) %>%
+    style(text = text_lpi, traces = 3)
+  return(p)
 }
 
 # plotly of population-level trends ============================================
