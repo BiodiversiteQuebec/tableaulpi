@@ -13,22 +13,20 @@ app_server <- function( input, output, session ) {
   output$pointmap <- leaflet::renderLeaflet(make_pointmap(taxa = taxachoice()))
   #mod_modal_make_server("modal_make_ui_1", region = reactive(input$map_shape_click$id))
   
-  # Small intro to dashboard
-  mod_tuto_modal_server("tuto_modal_ui_1")
-  observeEvent(input$pass, {
-    removeModal()
-  })
-  observeEvent(input$next1, {
-    mod_tuto_modal2_server("tuto_modal2_ui_1")
-  })
-  
-  # Sidebar menu choices of species
-  observeEvent(input$taxa, {
-    mod_lpi_time_series_server("lpi_time_series_ui_1", taxachoice)
-  })
+  # # Small intro to dashboard
+  # mod_tuto_modal_server("tuto_modal_ui_1")
+  # observeEvent(input$pass, {
+  # removeModal()
+  #   })
+  # observeEvent(input$next1, {
+  # mod_tuto_modal2_server("tuto_modal2_ui_1")
+  # })
+  # removeModal()
   
   # Show plot in modal
   observeEvent(input$show_index, {
+    mod_lpi_time_series_server("lpi_time_series_ui_1", taxachoice)
+
     showModal(
       modalDialog(
         mod_lpi_time_series_ui("lpi_time_series_ui_1"),
