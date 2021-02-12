@@ -1,45 +1,46 @@
 #' The application server-side
-#' 
-#' @param input,output,session Internal parameters for {shiny}. 
+#'
+#' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @noRd
 app_server <- function( input, output, session ) {
-  
+
   # Set reactive values
   taxachoice <- reactive({toString(input$taxa)})
-  
-  # Map 
-  output$pointmap <- leaflet::renderLeaflet(make_pointmap(taxa = taxachoice()))
-  #mod_modal_make_server("modal_make_ui_1", region = reactive(input$map_shape_click$id))
-  
-  # # Small intro to dashboard
-  # mod_tuto_modal_server("tuto_modal_ui_1")
-  # observeEvent(input$pass, {
-  # removeModal()
-  #   })
-  # observeEvent(input$next1, {
-  # mod_tuto_modal2_server("tuto_modal2_ui_1")
-  # })
-  # removeModal()
-  
-  # Show plot in modal
-  observeEvent(input$show_index, {
-    mod_lpi_time_series_server("lpi_time_series_ui_1", taxachoice)
 
-    showModal(
-      modalDialog(
-        mod_lpi_time_series_ui("lpi_time_series_ui_1"),
-        title = "Indice Planète Vivante",
-        size = "l"
-      )
-    )
-  })
-  
+  # Map
+  output$pointmap <- leaflet::renderLeaflet(make_pointmap(taxa = taxachoice()))
+
+  # Small intro to dashboard
+  mapselector::mod_modal_observeEvent_tutorial_server("affiche_tuto",
+                                         title_text = "Cest un tuto",
+                                         md_file = "data-raw/firstModal.md",
+                                         second_button =
+                                           mapselector::mod_modal_observeEvent_ui("affiche_tuto2",
+                                                                                  button_text = "Je veux plus d'info"))
+
+  mapselector::mod_modal_observeEvent_tutorial_server("affiche_tuto2",
+                                         title_text = "Guide pour l'interprétation",
+                                         md_file = "data-raw/secondModal.md")
+
+  mod_lpi_time_series_server("lpi", taxachoice =  taxachoice)
+
+  mapselector::mod_modal_observeEvent_server("affiche_index",
+                                             title_format_pattern =  "Indice Planète Vivante pour %s",
+                                             title_var = taxachoice,
+                                             tabPanel(
+                                               title = "title",
+                                               mod_lpi_time_series_ui("lpi")
+                                             ), type = "hidden")
+
   # "Tendance par population
   output$poptrend <- plotly::renderPlotly(make_poptrend(taxa = taxachoice()))
-  
+
   # "À propos de l'indice"
   output$about <- renderUI({includeHTML("data/apropos_lpi.html")})
 
 }
+
+
+# TODO contrast reactivelog with and without the tuto modals
