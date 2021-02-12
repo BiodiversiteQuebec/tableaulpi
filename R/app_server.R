@@ -13,14 +13,14 @@ app_server <- function( input, output, session ) {
   output$pointmap <- leaflet::renderLeaflet(make_pointmap(taxa = taxachoice()))
 
   # Small intro to dashboard
-  mod_modal_observeEvent_tutorial_server("affiche_tuto",
+  mapselector::mod_modal_observeEvent_tutorial_server("affiche_tuto",
                                          title_text = "Cest un tuto",
                                          md_file = "data-raw/firstModal.md", 
                                          second_button = 
                                            mapselector::mod_modal_observeEvent_ui("affiche_tuto2",
                                                                                   button_text = "Je veux plus d'info"))
   
-  mod_modal_observeEvent_tutorial_server("affiche_tuto2",
+  mapselector::mod_modal_observeEvent_tutorial_server("affiche_tuto2",
                                          title_text = "Guide pour l'interprétation",
                                          md_file = "data-raw/secondModal.md")
 

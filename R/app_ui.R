@@ -13,7 +13,7 @@ app_ui <- function(request) {
     mapselector::tableau_de_bord(
       mapselector::dash_title(title = "Indice Planète Vivante"), 
       mapselector::dash_sidebar(
-        #badge(text_badge = "L'Indice Planète Vivante mesure les changements dans l'abondance des populations animales depuis 1990."),
+        badge(text_badge = "L'Indice Planète Vivante mesure les changements dans l'abondance des populations animales depuis 1990."),
         radioButtons("taxa", "Choisir le groupe d'espèces", 
                      choiceValues = c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles"),
                      choiceNames = c("Toutes les espèces", "Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles")),
