@@ -69,7 +69,7 @@ make_pointmap <- function(taxa){
 # plotly of index trend ========================================================
 
 make_indextrend <- function(taxa){
-  
+
   # create colorblind-friendly palette
   pal <- c("#984ea3", "#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73")
   names(pal) <- c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles")

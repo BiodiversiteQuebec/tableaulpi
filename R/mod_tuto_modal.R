@@ -25,15 +25,15 @@ mod_tuto_modal_server <- function(id){
         includeHTML(
           rmarkdown::render("data-raw/firstModal.Rmd", output_dir = "data", quiet = TRUE)
         ),
-        easyClose = FALSE,
+        # easyClose = FALSE,
         footer = tagList(
           span(
-            actionButton("pass", "Passer l'introduction"),
+            modalButton("Passer l'introduction"),
             style = "position:relative; float:left;"
           ),
           actionButton("next1", "Suivant")
-        ),
-        size = "l"
+        )#,
+        # size = "l"
       )
     )
   })
@@ -45,3 +45,37 @@ mod_tuto_modal_server <- function(id){
     
 ## To be copied in the server
 # mod_tuto_modal_server("tuto_modal_ui_1")
+
+
+# same as the other .. no need to rewrite it!! 
+#' @export
+mod_modal_observeEvent_ui <- function(id, button_text, ...){
+  ns <- NS(id)
+  actionButton(ns("open_modal"), button_text, ...)
+}
+
+#' modal_make Server Functions
+#'
+
+
+
+nextPage <- function(id, i) {
+  actionButton(NS(id, paste0("go_", i, "_", i + 1)), "next")
+}
+
+wrapPage <- function(title, page, button_right = NULL) {
+  tabPanel(
+    title = title, 
+    fluidRow(
+      column(12, page)
+    ), 
+    fluidRow(
+      column(6, button_left),
+      column(6, button_right)
+    )
+  )
+}
+
+# need to take a list of markdown pages, catch dots in list
+# give each a modal button 
+# and recurse for the next button each time.
