@@ -13,7 +13,7 @@ Imports:
     DT,
     glue,
     htmltools,
-    mapselector (>= 0.1.2),
+    mapselector (>= 0.1.3),
     dplyr,
     ggplot2,
     plotly,
