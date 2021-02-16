@@ -22,7 +22,7 @@ app_server <- function( input, output, session ) {
  
   mapselector::mod_modal_observeEvent_tutorial_server("affiche_tuto2",
                                          title_text = "Guide pour l'interprétation",
-                                         md_file = "data-raw/secondModal.md")
+                                         md_file = here::here("inst", "app", "www", "second_modal_text.md"))
 
   mod_lpi_time_series_server("lpi", taxachoice =  taxachoice)
 
