@@ -15,7 +15,7 @@ make_poptrend <- function(taxachoice){
   # set random seed
   set.seed(20)
   # assign random y axis positions to each population
-  temp$position <- runif(nrow(temp), min = 0.2, max = 2.8)
+  temp$position <- runif(nrow(temp), min = 0.1, max = 1)
   
   # select taxa of choice
   if(taxachoice != "tous"){
@@ -27,26 +27,25 @@ make_poptrend <- function(taxachoice){
     # format points
     plotly::add_markers(
       data = temp,
-      y = ~perc_change,
-      x = ~position,
+      x = ~perc_change,
+      y = ~position,
       color = ~perc_change,
       colors = colorRampPalette(RColorBrewer::brewer.pal(10,"RdYlGn"))(length(unique(temp$perc_change))),
       marker = list(size = 20, line = list(width = .2, color = "grey80")),
       text = ~common_name,
       hovertemplate = paste('<b>%{text}</b>',
-                            "<br>L'abondance de cette population <br>a changé de %{y:.1%} depuis 1990.<br>",
+                            "<br>L'abondance de cette population <br>a changé de %{x:.1%} depuis 1990.<br>",
                             "<extra></extra>")
     ) %>%
     plotly::colorbar(limits = c(-max(abs(pop_trends$dt-1))-0.02,
                                 max(abs(pop_trends$dt-1))+0.02)) %>%
-    plotly::hide_colorbar()   %>% # hide it! cramps the plot
     # axis and label stuff
     plotly::layout(
-      title = "Tendances par population",
-      yaxis = list(range = c(-max(abs(pop_trends$dt-1))-0.02,
-                             max(abs(pop_trends$dt-1))+0.02)),
+      xaxis = list(range = c(-max(abs(pop_trends$dt-1))-0.02,
+                             max(abs(pop_trends$dt-1))+0.02),
+                   title = "Taux de croissance"),
       # hide y axis
-      xaxis = list(
+      yaxis = list(
         title = "",
         zeroline = FALSE,
         showline = FALSE,
