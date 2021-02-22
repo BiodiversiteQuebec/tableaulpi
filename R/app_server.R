@@ -40,7 +40,7 @@ app_server <- function( input, output, session ) {
   # Comparer entre groupes
   mod_ridgeplot_server("mod_ridgeplot_ui_1")
   mapselector::mod_modal_observeEvent_server("affiche_ridgeplot",
-                                             title_format_pattern =  "Taux de croissance des groupes %s",
+                                             title_format_pattern = "Taux de croissance des groupes %s",
                                              title_var = taxachoice,
                                              tabPanel(
                                                title = "title",

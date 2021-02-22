@@ -10,7 +10,7 @@ make_ridgeplot <- function(){
   
   # create ggplot theme options to apply to all figures
   plot_theme <- ggplot2::theme_classic() +
-    ggplot2::theme(axis.text = ggplot2::element_text(size = 13),
+    ggplot2::theme(axis.text = ggplot2::element_text(size = 15),
                    axis.title = ggplot2::element_text(size = 15))
   
   # Import population growth rates
