@@ -28,7 +28,6 @@ app_server <- function( input, output, session ) {
                                              ), type = "hidden")
 
   # "Tendance par population
-  #output$poptrend <- plotly::renderPlotly(make_poptrend(taxa = taxachoice()))
   mod_population_bubbleplot_server("population_bubbleplot_ui_1", taxachoice = taxachoice)
   mapselector::mod_modal_observeEvent_server("affiche_poptrend",
                                              title_format_pattern =  "Taux de croissance des populations pour %s",
@@ -36,6 +35,16 @@ app_server <- function( input, output, session ) {
                                              tabPanel(
                                                title = "title",
                                                mod_population_bubbleplot_ui("population_bubbleplot_ui_1")
+                                             ), type = "hidden")
+  
+  # Comparer entre groupes
+  mod_ridgeplot_server("mod_ridgeplot_ui_1")
+  mapselector::mod_modal_observeEvent_server("affiche_ridgeplot",
+                                             title_format_pattern =  "Taux de croissance des groupes %s",
+                                             title_var = taxachoice,
+                                             tabPanel(
+                                               title = "title",
+                                               mod_ridgeplot_ui("mod_ridgeplot_ui_1")
                                              ), type = "hidden")
   
 
