@@ -61,6 +61,8 @@ make_indextrend <- function(taxa){
     ) %>%
     plotly::style(hoverinfo = "skip", traces = 1) %>%
     plotly::style(hoverinfo = "skip", traces = 2) %>%
-    plotly::style(text = text_lpi, traces = 3)
+    plotly::style(text = text_lpi, traces = 3) %>%
+    # remove zooming option
+    plotly::config(modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d"))
   return(p)
 }
