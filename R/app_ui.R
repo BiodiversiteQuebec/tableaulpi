@@ -27,8 +27,6 @@ app_ui <- function(request) {
       ),
       mapselector::dash_tabs(
         tab_pointmap(),
-        # tab_fulltrend(),
-        # tab_poptrend(),
         tab_about()
       )
     )
