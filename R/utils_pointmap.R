@@ -5,13 +5,8 @@
 make_pointmap <- function(taxa){
   
   # Import sf object of points in the Living Planet Database
-  lpd_qc <- readRDS("data/lpd_qc_fake.RDS")
-  
-  ## SELECTION ##
-  if(taxa != "tous"){
-    lpd_qc <- lpd_qc[which(lpd_qc$taxa == taxa),]
-  }
-  
+  lpd_qc <- tableaulpi::lpd_qc_fake
+
   ## PALETTE ##
   
   # create colorblind-friendly palette
@@ -43,14 +38,16 @@ make_pointmap <- function(taxa){
   ## MAP ##
     leaflet::leaflet() %>%
     leaflet::addTiles() %>%
-    leaflet::addCircleMarkers(
-      data = lpd_qc,
-      popup = ~get_popup_content(lpd_qc),
-      color = unname(getColor(lpd_qc)),
-      stroke = FALSE,
-      fillOpacity = .7,
-      radius = 5
-    ) %>%
+    # leaflet::addCircleMarkers(
+    #   data = lpd_qc,
+    #   layerId = lpd_qc[["scientific_name"]],
+    #   label = lpd_qc[["scientific_name"]],
+    #   popup = ~get_popup_content(lpd_qc),
+    #   color = unname(getColor(lpd_qc)),
+    #   stroke = FALSE,
+    #   fillOpacity = .7,
+    #   radius = 5
+    # ) %>%
     leaflet::addLegend(
       "topleft",
       colors = pal[c(1:5)],
@@ -58,3 +55,28 @@ make_pointmap <- function(taxa){
       opacity = 1
     )
 }
+
+
+filter_lpd_qc <- function(target_taxa){
+  ## SELECTION ##
+  lpd_qc <- tableaulpi::lpd_qc_fake
+  
+  stopifnot(target_taxa %in% c("poissons",
+                               "mammifères", 
+                               "reptiles", 
+                               "amphibiens", 
+                               "oiseaux","tous"
+  ))
+  
+  
+  if (target_taxa != "tous") {
+    lpd_qc_filtered <- subset(lpd_qc, lpd_qc$taxa == target_taxa)
+  } else {
+    lpd_qc_filtered <- lpd_qc
+  }
+  return(lpd_qc_filtered)
+}
+
+filter_lpd_qc("tous")
+
+filter_lpd_qc("reptiles")

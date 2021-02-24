@@ -11,7 +11,17 @@ app_server <- function( input, output, session ) {
   taxachoice <- reactive({toString(input$taxa)})
 
   # Map
-  output$pointmap <- leaflet::renderLeaflet(make_pointmap(taxa = taxachoice()))
+  # output$pointmap <- leaflet::renderLeaflet(make_pointmap(taxa = taxachoice()))
+  
+  clicked_population <- mapselector::mod_map_select_server(id = "pointmap",
+                                                           what_to_click = "marker",
+                                                           fun = make_pointmap, 
+                                                           taxa = "tous")
+  
+  mapselector::mod_modal_make_server(id = "pop_modal",
+                                     region = clicked_population, 
+                                     title_format_pattern = "Les données pour la population de %s",
+                                     )
   
   mapselector::mod_modal_observeEvent_tutorial_server("affiche_tuto",
                                                       title_text = "Cest un tuto",
@@ -59,6 +69,6 @@ app_server <- function( input, output, session ) {
   
 
   # "À propos de l'indice"
-  output$about <- renderUI({includeHTML("data/apropos_lpi.html")})
+  # output$about <- renderUI({includeHTML("data/apropos_lpi.html")})
 
 }

@@ -91,3 +91,7 @@ lpd_sel_fake <- bind_rows(lpd_sel, fake)
 
 # save object with sf geometry
 saveRDS(lpd_sel_fake, "data/lpd_qc_fake.RDS")
+
+lpd_qc_fake <- lpd_sel_fake
+
+usethis::use_data(lpd_qc_fake, overwrite = TRUE)

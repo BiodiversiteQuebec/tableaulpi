@@ -27,15 +27,14 @@ app_ui <- function(request) {
       ),
       mapselector::dash_tabs(
         #maybe a little strange, but here we pass in the UI of a modal and the id that defines it.
-        tab_map(title = "Carte", id = "pointmap"),
-        # tab_pointmap(),
-        # tab_fulltrend(),
-        tab_map(title = "Tendance par population", 
+        mapselector::tab_map(title = "Carte", id = "pointmap",
+                             outputFunction = mapselector::mod_map_select_ui),
+        mapselector::tab_map(title = "Tendance par population", 
                 outputFunction = plotly::plotlyOutput, 
-                id = "poptrend"),
-        tab_gen(title = "À propos de l'indice", 
-                outputFunction = htmlOutput, 
-                id = "about")
+                id = "poptrend")#,
+        # mapselector::tab_gen(title = "À propos de l'indice", 
+        #         outputFunction = htmlOutput, 
+        #         id = "about")
       )
     )
   )
