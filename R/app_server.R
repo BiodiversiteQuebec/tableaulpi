@@ -7,21 +7,19 @@
 #' @noRd
 app_server <- function( input, output, session ) {
 
-  # Set reactive values
-  taxachoice <- reactive({toString(input$taxa)})
-
-  # Map
-  # output$pointmap <- leaflet::renderLeaflet(make_pointmap(taxa = taxachoice()))
-  
   clicked_population <- mapselector::mod_map_select_server(id = "pointmap",
                                                            what_to_click = "marker",
                                                            fun = make_pointmap, 
                                                            taxa = "tous")
   
+  # this is a sort of part-2 to the modal above. it must have the SAME ID or else it won't find the right map
+  taxachoice <- mod_subset_plot_leafletproxy_server("pointmap")
+  
+  
   mapselector::mod_modal_make_server(id = "pop_modal",
                                      region = clicked_population, 
                                      title_format_pattern = "Les données pour la population de %s",
-                                     )
+                                     tabPanel("Population trend", span("trend here")))
   
   mapselector::mod_modal_observeEvent_tutorial_server("affiche_tuto",
                                                       title_text = "Cest un tuto",

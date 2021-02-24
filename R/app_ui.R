@@ -15,11 +15,11 @@ app_ui <- function(request) {
       mapselector::dash_title(title = "Indice Planète Vivante"), 
       mapselector::dash_sidebar(
         badge(text_badge = "L'Indice Planète Vivante mesure les changements dans l'abondance des populations animales depuis 1990."),
-        radioButtons("taxa", 
-                     mapselector::mod_modal_helpbutton_ui(id = "spp_help",
-                                                          "Choisir le groupe d'espèces"), 
-                     choiceValues = c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles"),
-                     choiceNames = c("Toutes les espèces", "Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles")),
+        mod_subset_plot_leafletproxy_ui(
+          "pointmap", 
+          mapselector::mod_modal_helpbutton_ui(id = "spp_help",
+                                               "Choisir le groupe d'espèces")
+        ),
         mapselector::mod_modal_observeEvent_ui("affiche_index", button_text = "Index"),
         mapselector::mod_modal_observeEvent_ui("affiche_poptrend", button_text = "Par population"),
         mapselector::mod_modal_observeEvent_ui("affiche_ridgeplot", button_text = "Distribution par groupe"),
@@ -31,10 +31,10 @@ app_ui <- function(request) {
                              outputFunction = mapselector::mod_map_select_ui),
         mapselector::tab_map(title = "Tendance par population", 
                 outputFunction = plotly::plotlyOutput, 
-                id = "poptrend")#,
-        # mapselector::tab_gen(title = "À propos de l'indice", 
-        #         outputFunction = htmlOutput, 
-        #         id = "about")
+                id = "poptrend"),
+        mapselector::tab_gen(title = "À propos de l'indice", 
+                outputFunction = htmlOutput, 
+                id = "about")
       )
     )
   )

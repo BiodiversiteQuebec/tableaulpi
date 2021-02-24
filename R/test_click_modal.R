@@ -1,11 +1,15 @@
 # test function
 testapp_map_click <- function(){
   ui <- fluidPage(
-    actionButton("button", "filter me!"),
+    
+    mod_subset_plot_leafletproxy_ui("pointmap"),
+    
+    
     mapselector::tab_map(title = "Carte", id = "pointmap",
                          outputFunction = mapselector::mod_map_select_ui),
     
-    textOutput(outputId = "clicked")
+    textOutput(outputId = "clicked"),
+    textOutput(outputId = "grp")
   )
   
   server <-  function(input, output, session) {
@@ -16,19 +20,10 @@ testapp_map_click <- function(){
     
     output$clicked <- renderText(paste("its a ", clicked_population()))
     
-    lpd_qc_test <- filter_lpd_qc("reptiles")
+#
+    group_selected <- mod_subset_plot_leafletproxy_server("pointmap")
     
-    leaflet::leafletProxy("pointmap-map", data = lpd_qc_test) %>% 
-      leaflet::clearShapes() %>% 
-      leaflet::addCircleMarkers(
-        data = lpd_qc_test,
-        layerId = lpd_qc_test[["scientific_name"]],
-        label = lpd_qc_test[["scientific_name"]],
-        color = "#99999",
-        stroke = FALSE,
-        fillOpacity = .7,
-        radius = 5
-      ) 
+    output$grp <- renderText(paste("Looks like they want to see only ", group_selected()))
 
   }
   shinyApp(ui, server)

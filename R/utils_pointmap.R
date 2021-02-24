@@ -7,47 +7,10 @@ make_pointmap <- function(taxa){
   # Import sf object of points in the Living Planet Database
   lpd_qc <- tableaulpi::lpd_qc_fake
 
-  ## PALETTE ##
-  
-  # create colorblind-friendly palette
-  pal <- c("#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73","#999999")
-  
-  ## function to set marker color ##
-  getColor <- function(lpd_qc) {
-    sapply(lpd_qc$taxa, function(taxa) {
-      if(taxa == "amphibiens") {
-        pal[1] } else if(taxa == "mammifères") {
-          pal[2] } else if(taxa == "oiseaux") {
-            pal[3] } else if(taxa == "poissons") {
-              pal[4] } else if(taxa == "reptiles"){
-                pal[5] } else {
-                  pal[6] }
-    }
-    )
-  }
-  
-  ## POP-UPS ##
-  get_popup_content <- function(lpd_qc){
-    paste0(
-      "<b>", lpd_qc$common_name, "</b>",
-      "<br><i>", gsub("_", " ", lpd_qc$scientific_name), "</i>",
-      "<br><b>Source: </b>", lpd_qc$intellectual_rights
-    )
-  }
-  
   ## MAP ##
-    leaflet::leaflet() %>%
-    leaflet::addTiles() %>%
-    # leaflet::addCircleMarkers(
-    #   data = lpd_qc,
-    #   layerId = lpd_qc[["scientific_name"]],
-    #   label = lpd_qc[["scientific_name"]],
-    #   popup = ~get_popup_content(lpd_qc),
-    #   color = unname(getColor(lpd_qc)),
-    #   stroke = FALSE,
-    #   fillOpacity = .7,
-    #   radius = 5
-    # ) %>%
+  leaflet::leaflet() %>%
+    leaflet::fitBounds(-78, 44, -59, 52) %>% 
+    leaflet::addTiles()  %>%
     leaflet::addLegend(
       "topleft",
       colors = pal[c(1:5)],
@@ -80,3 +43,44 @@ filter_lpd_qc <- function(target_taxa){
 filter_lpd_qc("tous")
 
 filter_lpd_qc("reptiles")
+
+
+pal <- c("amphibiens" = "#56B4E9",
+         "mammifères" = "#D55E00", 
+         "oiseaux" = "#E69F00", 
+         "poissons" = "#0072B2", 
+         "reptiles" = "#009E73",
+         "#999999")
+
+## function to set marker color ##
+getColor <- function(data_with_taxa_names) {
+  pal[data_with_taxa_names$taxa]
+}
+
+
+## POP-UPS ##
+get_popup_content <- function(lpd_qc_dataset){
+  paste0(
+    "<b>", lpd_qc_dataset$common_name, "</b>",
+    "<br><i>", gsub("_", " ", lpd_qc_dataset$scientific_name), "</i>",
+    "<br><b>Source: </b>", lpd_qc_dataset$intellectual_rights
+  )
+}
+
+filter_leaflet_map <- function(mapid, taxa_to_show = "tous"){
+  
+  lpd_qc_filtered <- filter_lpd_qc(taxa_to_show)
+  
+  leaflet::leafletProxy(mapid) %>%
+    leaflet::clearMarkers() %>% 
+    leaflet::addCircleMarkers(
+      data = lpd_qc_filtered,
+      layerId = lpd_qc_filtered[["scientific_name"]],
+      label = lpd_qc_filtered[["scientific_name"]],
+      popup = ~get_popup_content(lpd_qc_filtered),
+      color = unname(getColor(lpd_qc_filtered)),
+      stroke = FALSE,
+      fillOpacity = .7,
+      radius = 5
+    )
+}
