@@ -43,6 +43,3 @@ app_server <- function( input, output, session ) {
   output$about <- renderUI({includeHTML("data/apropos_lpi.html")})
 
 }
-
-
-# TODO contrast reactivelog with and without the tuto modals
