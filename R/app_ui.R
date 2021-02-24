@@ -20,7 +20,9 @@ app_ui <- function(request) {
                                                           "Choisir le groupe d'espèces"), 
                      choiceValues = c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles"),
                      choiceNames = c("Toutes les espèces", "Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles")),
-        mapselector::mod_modal_observeEvent_ui("affiche_index", "Index"),
+        mapselector::mod_modal_observeEvent_ui("affiche_index", button_text = "Index"),
+        mapselector::mod_modal_observeEvent_ui("affiche_poptrend", button_text = "Par population"),
+        mapselector::mod_modal_observeEvent_ui("affiche_ridgeplot", button_text = "Distribution par groupe"),
         mapselector::mod_modal_observeEvent_ui("affiche_tuto", button_text = "tuto")
       ),
       mapselector::dash_tabs(
