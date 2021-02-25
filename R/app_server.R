@@ -45,14 +45,14 @@ app_server <- function( input, output, session ) {
                                              ), type = "hidden")
 
   # "Tendance par population
-  mod_population_bubbleplot_server("population_bubbleplot_ui_1", taxachoice = taxachoice)
-  mapselector::mod_modal_observeEvent_server("affiche_poptrend",
-                                             title_format_pattern =  "Taux de croissance des populations pour %s",
-                                             title_var = taxachoice,
-                                             tabPanel(
-                                               title = "title",
-                                               mod_population_bubbleplot_ui("population_bubbleplot_ui_1")
-                                             ), type = "hidden")
+  mod_population_bubbleplot_server("poptrend", taxachoice = taxachoice)
+  # mapselector::mod_modal_observeEvent_server("affiche_poptrend",
+  #                                            title_format_pattern =  "Taux de croissance des populations pour %s",
+  #                                            title_var = taxachoice,
+  #                                            tabPanel(
+  #                                              title = "title",
+  #                                              mod_population_bubbleplot_ui("population_bubbleplot_ui_1")
+  #                                            ), type = "hidden")
   
   # Comparer entre groupes
   mod_ridgeplot_server("mod_ridgeplot_ui_1")
@@ -66,6 +66,6 @@ app_server <- function( input, output, session ) {
   
 
   # "À propos de l'indice"
-  # output$about <- renderUI({includeHTML("data/apropos_lpi.html")})
+  output$about <- renderUI({includeHTML("data/apropos_lpi.html")})
 
 }
