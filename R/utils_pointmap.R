@@ -3,14 +3,9 @@
 #' @import dplyr
 
 make_pointmap <- function(){
-  
-  # Import sf object of points in the Living Planet Database
-  lpd_qc <- tableaulpi::lpd_qc_fake
 
   ## MAP ##
-  leaflet::leaflet() %>%
-    leaflet::fitBounds(-78, 44, -59, 52) %>% 
-    leaflet::addTiles()  %>%
+  mapselector::make_leaflet_empty()  %>%
     leaflet::addLegend(
       "topleft",
       colors = pal[c(1:5)],
