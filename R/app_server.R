@@ -9,8 +9,7 @@ app_server <- function( input, output, session ) {
 
   clicked_population <- mapselector::mod_map_select_server(id = "pointmap",
                                                            what_to_click = "marker",
-                                                           fun = make_pointmap, 
-                                                           taxa = "tous")
+                                                           fun = make_pointmap)
   
   # this is a sort of part-2 to the modal above. it must have the SAME ID or else it won't find the right map
   taxachoice <- mod_subset_plot_leafletproxy_server("pointmap")

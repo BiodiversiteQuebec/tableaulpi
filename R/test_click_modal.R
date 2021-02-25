@@ -15,8 +15,7 @@ testapp_map_click <- function(){
   server <-  function(input, output, session) {
     clicked_population <- mapselector::mod_map_select_server(id = "pointmap",
                                                              what_to_click = "marker",
-                                                             fun = make_pointmap,
-                                                             taxa = "tous")
+                                                             fun = make_pointmap)
     
     output$clicked <- renderText(paste("its a ", clicked_population()))
     

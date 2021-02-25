@@ -2,7 +2,7 @@
 
 #' @import dplyr
 
-make_pointmap <- function(taxa){
+make_pointmap <- function(){
   
   # Import sf object of points in the Living Planet Database
   lpd_qc <- tableaulpi::lpd_qc_fake
