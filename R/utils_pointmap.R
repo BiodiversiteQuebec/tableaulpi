@@ -36,11 +36,6 @@ filter_lpd_qc <- function(target_taxa){
   return(lpd_qc_filtered)
 }
 
-filter_lpd_qc("tous")
-
-filter_lpd_qc("reptiles")
-
-
 pal <- c("amphibiens" = "#56B4E9",
          "mammifères" = "#D55E00", 
          "oiseaux" = "#E69F00", 
