@@ -17,7 +17,8 @@ make_pointmap <- function(){
 
 filter_lpd_qc <- function(target_taxa){
   ## SELECTION ##
-  lpd_qc <- tableaulpi::lpd_qc_fake
+  lpd_qc <- readRDS("data/lpd_qc_fake.RDS")
+  #tableaulpi::lpd_qc_fake
   
   stopifnot(target_taxa %in% c("poissons",
                                "mammifères", 
