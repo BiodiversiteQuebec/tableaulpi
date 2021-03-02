@@ -80,6 +80,7 @@ This dashboard is an ever-evolving collaborative effort with the entire [Réseau
 ## To-do list
 
 These are essential things that are left to do:
+- [ ] Organise the figures (and their event buttons) in a way that makes sense in terms of information flow
 - [ ] Add interpretation guide in the à propos 
 - [ ] Add informative text in the tutorial and information modals
 - [ ] Add selection option within the trendplot modal, the population one, and the ridgeplot/density plot
