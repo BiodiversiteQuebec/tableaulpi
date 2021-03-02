@@ -46,3 +46,4 @@ data-raw/LPR2020data_public.csv
 todo.txt
 .Rproj.user
 tableauproto.Rproj
+data-raw/valid.csv
