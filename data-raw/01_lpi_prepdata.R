@@ -4,6 +4,9 @@
 library(tidyverse)
 library(sf)
 
+#### Living Planet Database ####
+
+# This sections only needs to run once when first setting up:
 # subset Living Planet Database to Quebec only ----
 
 # load cropping function for Atlas (from Vincent Bellavance)
@@ -16,7 +19,7 @@ library(sf)
 # saveRDS(lpd_qc, "data/LPR2020data_public_qc.RDS")
 
 
-# dataset manipulation ----
+# Getting LPD the same shape as Atlas ----
 
 lpd_qc <- readRDS("data/LPR2020data_public_qc.RDS")
 
@@ -62,9 +65,48 @@ lpd_sel$intellectual_rights <- "Living Planet Database"
 # save object with sf geometry
 saveRDS(lpd_sel, "data/lpd_qc.RDS")
 
+#### SurVol Benthos ####
 
+# Getting SurVol Benthos in the same shape as Atlas ----
 
-## FAKE DATA FOR TEST PURPOSES ---- to remove after the prototype ## -----------
+# read SurvolBenthos validated dataset output from Atlas by Vincent/Ben
+benthos <- readr::read_delim("data-raw/valid.csv", ";", 
+                             escape_double = FALSE, trim_ws = TRUE)
+benthos <- sf::st_as_sf(benthos, coords = c("lon", "lat")) # convert to sf object
+# fill in columns needed for calculation/analysis of the LPI
+benthos$taxa <- "invertébrés"
+benthos$system <- "Freshwater"
+benthos$org_event <- as.character(benthos$org_event)
+benthos$id_datasets <- "SB"
+benthos$common_name <- benthos$scientific_name
+
+# transformation: add a small value to 0 to allow for modelling of time series
+
+# find populations with observations of 0
+with_zeros <- benthos$org_event[which(benthos$obs_value == 0)]
+
+# following Collen 2008 method, get mean population measure 
+with_zeros_means <- filter(benthos, org_event %in% with_zeros) %>%
+  group_by(org_event) %>%
+  summarise(mean_obs_value = mean(obs_value, na.rm = TRUE)) %>% ungroup()
+# add these means to all years for these populations in order to correct for zeros
+for(i in with_zeros_means$org_event){
+  to_add <- with_zeros_means$mean_obs_value[which(with_zeros_means$org_event == i)]
+  benthos$obs_value[which(benthos$org_event == i)] <- benthos$obs_value[which(benthos$org_event == i)] + to_add
+}
+
+# remove time series with >= 6 time steps (in a non-efficient way)
+benthos$obs_value_log10 <- log10(benthos$obs_value) # split into list of individual population time series
+benthos_ls = group_split(benthos, id_datasets, org_event, scientific_name) 
+lengths <- unlist(lapply(benthos_ls, nrow))
+benthos_ls <- benthos_ls[which(lengths >= 6)]
+benthos <- bind_rows(benthos_ls)
+
+# spatialize
+benthos <- sf::st_sf(benthos)
+
+#### FAKE DATA FOR TEST PURPOSES #### 
+# ---- to remove after the prototype ## -----------
 
 # create data frame to fill with fake data
 fake <- matrix(NA, nrow = 150, ncol = ncol(lpd_sel), 
@@ -86,12 +128,14 @@ fake$geom <- lpd_qc$pts_sfc[temp] + c(1,2)
 fake <- st_as_sf(fake, sf_column_name = "geom", crs = st_crs(lpd_sel))
 # add noise to coordinates so they don't overlap
 #fake <- st_jitter(fake, amount = 1)
-# bind to lpd dataframe
-lpd_sel_fake <- bind_rows(lpd_sel, fake)
+
+#### Put everything together in one data frame ####
+
+lpd_qc_fake <- bind_rows(lpd_sel, benthos)
+lpd_qc_fake <- bind_rows(lpd_qc_fake, fake)
 
 # save object with sf geometry
-saveRDS(lpd_sel_fake, "data/lpd_qc_fake.RDS")
+saveRDS(lpd_qc_fake, "data/lpd_qc_fake.RDS")
 
-lpd_qc_fake <- lpd_sel_fake
-
+# save internally in the tableauplpi package
 usethis::use_data(lpd_qc_fake, overwrite = TRUE)
