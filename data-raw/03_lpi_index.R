@@ -2,7 +2,8 @@
 # taxa groups together
 
 # load libraries
-require(tidyverse)
+require(tidyr)
+require(dplyr)
 require(EnvStats)
 
 # load functions
@@ -90,8 +91,8 @@ lpi_pops <- growthrates %>%
   # org_event is a unique ID per population in Living Planet Database
   # added scientific_name because the fake populations are all labelled "fake" in org_event
   mutate(lpi = calclpi(dt),
-         lpi_cilo = calclpi(dt - 1.96*se),
-         lpi_cihi = calclpi(dt + 1.96*se)) %>%
+         lpi_cilo = calclpi(dt_cilo),
+         lpi_cihi = calclpi(dt_cihi)) %>%
   mutate(trend = ifelse(round(dt, 4) < 1, "déclin", 
                         ifelse(round(dt, 4) > 1, "croissance", "stable"))) %>%
   ungroup()
