@@ -49,18 +49,20 @@ get_dt <- function(gam.pred_ls, year_pred){
   # extract predicted population size values
   N = gam.pred_ls$fit 
   # assign errors to values for propagation
-  errors::errors(N) = gam.pred_ls$se.fit
+  N_se = gam.pred_ls$se.fit
   # un-log10
   N = 10^N # un-log
+  N_se = 10^N_se
   
   # initialize df to store dts
-  dt_df = data.frame(year_pred = year_pred, dt = NA)
+  dt_df = data.frame(year_pred = year_pred, dt = NA, dt_cilo = NA, dt_cihi = NA)
   for(i in 2:length(N)){
     # calculate dt
     dt = log10(N[i]/N[i-1])
     dt_df[i, "dt"] = dt # save in the table
-    # save propagated error 
-    dt_df[i, "se"] = unlist(errors::errors(dt))
+    # calculate confidence intervals
+    dt_df[i, "cilo"] = log10((N[i] + 1.96*N_se[i])/(N[i-1] - 1.96*N_se[i-1]))
+    dt_df[i, "cihi"] = log10((N[i] + 1.96*N_se[i])/(N[i-1] + 1.96*N_se[i-1]))
   }
   return("dt" = dt_df)
 }
