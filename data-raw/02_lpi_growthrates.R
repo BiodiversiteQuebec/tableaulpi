@@ -2,7 +2,8 @@
 # from the Living Planet Database
 
 # load libraries
-require(tidyverse)
+require(tidyr)
+require(dplyr)
 require(mgcv)
 require(sf)
 
@@ -26,26 +27,11 @@ duration_df = df %>% group_by(id_datasets, org_event, scientific_name) %>%
   summarise(duration = max(year_obs) - min(year_obs),
             steps = length(unique(year_obs))) 
 
-# 2. identify populations to be analyzed with chain method (< 6 steps)
+# 2. select populations to analyze with GAM method (>= 6 time steps)
 
-chain = duration_df$org_event[which(duration_df$steps < 6 & duration_df$steps >= 2)]
-# extract datasets to analyze with chain method
-df_chain = df[which(df$org_event %in% chain),]
-
-# 3. select populations to analyze with GAM method
-
-gam = duration_df$org_event[which(duration_df$steps > 6 & duration_df$duration > 6)]
+gam = duration_df$org_event[which(duration_df$steps >= 6 & duration_df$duration >= 6)]
 # extract datasets to analyze with GAM method
 df_gam = df[which(df$org_event %in% gam),]
-
-
-# chain method -----------------------------------------------------------------
-
-# calculate growth rates (dt) using the chain method 
-dt_chain = df_chain %>%
-  group_by(id_datasets, org_event, scientific_name) %>%
-  mutate(dt = calc_dt_chain(obs_value_log10))
-
 
 # GAM method -------------------------------------------------------------------
 
@@ -96,7 +82,8 @@ growthrates <- lapply(pred_ls, get_dt, year_pred = year_pred[,1]) %>%
 growthrates$common_name[which(is.na(growthrates$common_name))] <- growthrates$scientific_name[which(is.na(growthrates$common_name))]
 
 # fix bird errors, which balloon upwards in a non-realistic way
-growthrates[which(growthrates$taxa == "oiseaux"), "se"] <- (growthrates[which(growthrates$taxa == "oiseaux"), "se"])/10
+growthrates[which(growthrates$taxa == "oiseaux"), "cilo"] <- (growthrates[which(growthrates$taxa == "oiseaux"), "cilo"])/10
+growthrates[which(growthrates$taxa == "oiseaux"), "cihi"] <- (growthrates[which(growthrates$taxa == "oiseaux"), "cihi"])/10
 
 # save
 saveRDS(growthrates, "data/lpi_growthrates.rds")
