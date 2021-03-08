@@ -20,9 +20,9 @@ app_ui <- function(request) {
           mapselector::mod_modal_helpbutton_ui(id = "spp_help",
                                                "Choisir le groupe d'espèces")
         ),
-        mapselector::mod_modal_observeEvent_ui("affiche_index", button_text = "Afficher l'indice"),
-        mapselector::mod_modal_observeEvent_ui("affiche_poptrend", button_text = "Par population"),
-        mapselector::mod_modal_observeEvent_ui("affiche_ridgeplot", button_text = "Distribution par groupe"),
+        mapselector::mod_modal_observeEvent_ui("affiche_index", button_text = "Afficher l'IPV"),
+        mapselector::mod_modal_observeEvent_ui("affiche_ridgeplot", button_text = "IPV par groupe"),
+        mapselector::mod_modal_observeEvent_ui("affiche_poptrend", button_text = "IPV par population"),
         mapselector::mod_modal_observeEvent_ui("affiche_tuto", button_text = "tuto")
       ),
       mapselector::dash_tabs(
