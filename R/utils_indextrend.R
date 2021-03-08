@@ -6,8 +6,8 @@
 make_indextrend <- function(taxa){
   
   # create colorblind-friendly palette
-  pal <- c("#984ea3", "#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73")
-  names(pal) <- c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles")
+  pal <- c("#984ea3", "#56B4E9", "#CC79A7", "#D55E00", "#E69F00", "#0072B2", "#009E73")
+  names(pal) <- c("tous", "amphibiens", "invertébrés", "mammifères", "oiseaux", "poissons", "reptiles")
   
   # create ggplot theme options to apply to all figures
   plot_theme <- ggplot2::theme_classic() +
@@ -54,15 +54,16 @@ make_indextrend <- function(taxa){
                         lwd = .2) +
     ggplot2::labs(y = "Indice Planète Vivante", x = "") +
     plot_theme
-  # generate as plotly object
-  p <- plotly::ggplotly(p, tooltip = c("lpi")) %>%
-    plotly::layout(yaxis = list(range = c(0, max(c(abs(lpi_df$lpi_cihi)))+0.1)),
-                   hovermode = "x unified"
-    ) %>%
-    plotly::style(hoverinfo = "skip", traces = 1) %>%
-    plotly::style(hoverinfo = "skip", traces = 2) %>%
-    plotly::style(text = text_lpi, traces = 3) %>%
-    # remove zooming option
-    plotly::config(modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d"))
+  # plotly is broken due to tidyr ("_tidyr_melt_dataframe" not resolved from current namespace (tidyr))
+  # # generate as plotly object
+  # p <- plotly::ggplotly(p, tooltip = c("lpi")) %>%
+  #   plotly::layout(yaxis = list(range = c(0, max(c(abs(lpi_df$lpi_cihi)))+0.1)),
+  #                  hovermode = "x unified"
+  #   ) %>%
+  #   plotly::style(hoverinfo = "skip", traces = 1) %>%
+  #   plotly::style(hoverinfo = "skip", traces = 2) %>%
+  #   plotly::style(text = text_lpi, traces = 3) %>%
+  #   # remove zooming option
+  #   plotly::config(modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d"))
   return(p)
 }

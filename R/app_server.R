@@ -31,7 +31,7 @@ app_server <- function( input, output, session ) {
                                                       md_file = "second_modal_text.md")
   
   mapselector::mod_modal_observeEvent_tutorial_server("spp_help",
-                                         title_text = "Categories d'espece",
+                                         title_text = "Catégories d'espece",
                                          md_file = "second_modal_text.md")
 
   # LPI time series plot
@@ -46,14 +46,14 @@ app_server <- function( input, output, session ) {
 
   # "Tendance par population
   mod_population_bubbleplot_server("poptrend", taxachoice = taxachoice)
-  # mapselector::mod_modal_observeEvent_server("affiche_poptrend",
-  #                                            title_format_pattern =  "Taux de croissance des populations pour %s",
-  #                                            title_var = taxachoice,
-  #                                            tabPanel(
-  #                                              title = "title",
-  #                                              mod_population_bubbleplot_ui("population_bubbleplot_ui_1")
-  #                                            ), type = "hidden")
-  
+  mapselector::mod_modal_observeEvent_server("affiche_poptrend",
+                                             title_format_pattern =  "Taux de croissance des populations pour %s",
+                                             title_var = taxachoice,
+                                             tabPanel(
+                                               title = "title",
+                                               mod_population_bubbleplot_ui("population_bubbleplot_ui_1")
+                                             ), type = "hidden")
+
   # Comparer entre groupes
   mod_ridgeplot_server("mod_ridgeplot_ui_1")
   mapselector::mod_modal_observeEvent_server("affiche_ridgeplot",

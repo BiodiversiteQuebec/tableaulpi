@@ -8,8 +8,8 @@ make_pointmap <- function(){
   mapselector::make_leaflet_empty()  %>%
     leaflet::addLegend(
       "topleft",
-      colors = pal[c(1:5)],
-      labels = c("Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles"),
+      colors = pal[c(1:6)],
+      labels = c("Amphibiens", "Invertébrés", "Mammifères", "Oiseaux", "Poissons", "Reptiles"),
       opacity = 1
     )
 }
@@ -22,9 +22,11 @@ filter_lpd_qc <- function(target_taxa){
   
   stopifnot(target_taxa %in% c("poissons",
                                "mammifères", 
+                               "invertébrés",
                                "reptiles", 
                                "amphibiens", 
-                               "oiseaux","tous"
+                               "oiseaux",
+                               "tous"
   ))
   
   
@@ -37,6 +39,7 @@ filter_lpd_qc <- function(target_taxa){
 }
 
 pal <- c("amphibiens" = "#56B4E9",
+         "invertébrés" = "#CC79A7",
          "mammifères" = "#D55E00", 
          "oiseaux" = "#E69F00", 
          "poissons" = "#0072B2", 

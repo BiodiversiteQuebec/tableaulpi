@@ -10,7 +10,8 @@
 mod_lpi_time_series_ui <- function(id){
   ns <- NS(id)
   tagList(
-    plotly::plotlyOutput(outputId = ns("indextrend"), width = "100%")
+    plotOutput(outputId = ns("indextrend"), width = "100%")
+    #plotly::plotlyOutput(outputId = ns("indextrend"), width = "100%")
   )
 }
 
@@ -21,7 +22,8 @@ mod_lpi_time_series_server <- function(id, taxachoice){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    output$indextrend <- plotly::renderPlotly({
+    #output$indextrend <- plotly::renderPlotly({
+    output$indextrend <- renderPlot({
       make_indextrend(taxa = taxachoice())}
       )
   })

@@ -23,7 +23,7 @@ make_poptrend <- function(taxachoice){
   }
   
   # set up plotly object
-  plotly::plot_ly(showscale = FALSE) %>%
+  p <- plotly::plot_ly(showscale = FALSE) %>%
     # format points
     plotly::add_markers(
       data = temp,
@@ -52,4 +52,5 @@ make_poptrend <- function(taxachoice){
         showticklabels = FALSE,
         showgrid = FALSE)
     )
+  return(p)
 }
