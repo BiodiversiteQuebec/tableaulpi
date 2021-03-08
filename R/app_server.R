@@ -21,7 +21,7 @@ app_server <- function( input, output, session ) {
                                      tabPanel("Population trend", span("trend here")))
   
   mapselector::mod_modal_observeEvent_tutorial_server("affiche_tuto",
-                                                      title_text = "Cest un tuto",
+                                                      title_text = "C'est un tuto",
                                                       md_file = "firstModal.md", 
                                                       second_button = 
                                                       mapselector::mod_modal_observeEvent_ui("affiche_tuto2",
