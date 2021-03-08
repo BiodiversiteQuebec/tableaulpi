@@ -23,7 +23,7 @@ app_ui <- function(request) {
         mapselector::mod_modal_observeEvent_ui("affiche_index", button_text = "Afficher l'IPV"),
         mapselector::mod_modal_observeEvent_ui("affiche_ridgeplot", button_text = "IPV par groupe"),
         mapselector::mod_modal_observeEvent_ui("affiche_poptrend", button_text = "IPV par population"),
-        mapselector::mod_modal_observeEvent_ui("affiche_tuto", button_text = "tuto")
+        mapselector::mod_modal_observeEvent_ui("affiche_tuto", button_text = "Guide d'utilisation")
       ),
       mapselector::dash_tabs(
         #maybe a little strange, but here we pass in the UI of a modal and the id that defines it.
