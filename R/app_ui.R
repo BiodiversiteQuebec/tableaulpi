@@ -20,7 +20,7 @@ app_ui <- function(request) {
           mapselector::mod_modal_helpbutton_ui(id = "spp_help",
                                                "Choisir le groupe d'espèces")
         ),
-        mapselector::mod_modal_observeEvent_ui("affiche_index", button_text = "Index"),
+        mapselector::mod_modal_observeEvent_ui("affiche_index", button_text = "Afficher l'indice"),
         mapselector::mod_modal_observeEvent_ui("affiche_poptrend", button_text = "Par population"),
         mapselector::mod_modal_observeEvent_ui("affiche_ridgeplot", button_text = "Distribution par groupe"),
         mapselector::mod_modal_observeEvent_ui("affiche_tuto", button_text = "tuto")
@@ -29,9 +29,6 @@ app_ui <- function(request) {
         #maybe a little strange, but here we pass in the UI of a modal and the id that defines it.
         mapselector::tab_map(title = "Carte", id = "pointmap",
                              outputFunction = mapselector::mod_map_select_ui),
-        mapselector::tab_map(title = "Tendance par population", 
-                outputFunction = mod_population_bubbleplot_ui, 
-                id = "poptrend"),
         mapselector::tab_gen(title = "À propos de l'indice", 
                 outputFunction = htmlOutput, 
                 id = "about")
