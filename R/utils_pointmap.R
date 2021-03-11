@@ -66,8 +66,8 @@ filter_leaflet_map <- function(mapid, taxa_to_show = "tous"){
     leaflet::clearMarkers() %>% 
     leaflet::addCircleMarkers(
       data = lpd_qc_filtered,
-      layerId = lpd_qc_filtered[["scientific_name"]],
-      label = lpd_qc_filtered[["scientific_name"]],
+      layerId = lpd_qc_filtered[["org_event"]],
+      label = lpd_qc_filtered[["org_event"]],
       popup = ~get_popup_content(lpd_qc_filtered),
       color = unname(getColor(lpd_qc_filtered)),
       stroke = FALSE,

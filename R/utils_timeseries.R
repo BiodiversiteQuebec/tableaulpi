@@ -14,7 +14,7 @@ make_timeseries <- function(clicked_population){
   
   # import dataset
   df <- readRDS("data/lpd_qc_fake.RDS")
-  df <- df[which(df$scientific_name == clicked_population),]
+  df <- df[which(df$org_event == clicked_population),]
   group_name <- df$taxa[1]
   
   # plot raw time series
