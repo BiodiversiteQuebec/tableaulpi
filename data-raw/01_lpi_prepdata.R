@@ -28,7 +28,8 @@ lpd_qc <- readRDS("data/LPR2020data_public_qc.RDS")
 lpd_qc_l <- lpd_qc %>%
   pivot_longer(cols = 30:98, values_to = "obs_value", names_to = "year_obs") %>%
   # remove NAs
-  mutate_at(vars(obs_value), na_if, "NULL") %>% drop_na(obs_value) %>%
+  mutate_at(vars(obs_value), na_if, "NULL") %>% 
+  drop_na(obs_value) %>%
   # convert classes
   mutate_at(vars(obs_value), as.numeric) %>%
   mutate_at(vars(year_obs), as.integer) %>%
@@ -58,6 +59,21 @@ lpd$taxa[which(lpd$Class == "Mammalia")] <- "mammifères"
 lpd$taxa[which(lpd$Class == "Reptilia")] <- "reptiles"
 lpd$taxa[which(lpd$Class == "Aves")] <- "oiseaux"
 lpd$taxa[which(lpd$Class == "Amphibia")] <- "amphibiens"
+
+# transformation: add a small value to 0 to allow for modelling of time series
+
+# find populations with observations of 0
+with_zeros <- lpd$org_event[which(lpd$obs_value == 0)]
+
+# following Collen 2008 method, get mean population measure 
+with_zeros_means <- filter(lpd, org_event %in% with_zeros) %>%
+  group_by(org_event) %>%
+  summarise(mean_obs_value = mean(obs_value, na.rm = TRUE)) %>% ungroup()
+# add these means to all years for these populations in order to correct for zeros
+for(i in with_zeros_means$org_event){
+  to_add <- with_zeros_means$mean_obs_value[which(with_zeros_means$org_event == i)]
+  lpd$obs_value[which(lpd$org_event == i)] <- lpd$obs_value[which(lpd$org_event == i)] + to_add
+}
 
 # select necessary columns
 lpd_sel <- select(lpd, c(id_datasets, org_event, plot, scientific_name, 
