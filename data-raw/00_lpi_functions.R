@@ -126,7 +126,8 @@ calclpi <- function(dt){
   # dt = vector of population growth rates (un-log10 transformed)
   lpi = c(1) # initial value is 1 
   for(i in 2:length(dt)){
-    lpi[i] <- lpi[i-1]*10^dt[i] }
+    lpi[i] <- lpi[i-1]*10^dt[i] 
+    }
   return(lpi)
 }
 

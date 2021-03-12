@@ -1,7 +1,8 @@
 # Script to subset BioTIME and Living Planet Database datasets to Quebec
 
 # load libraries
-library(tidyverse)
+library(tidyr)
+library(dplyr)
 library(sf)
 
 #### Living Planet Database ####
@@ -34,8 +35,8 @@ lpd_qc_l <- lpd_qc %>%
   # add column to identify source of the observation
   mutate(id_datasets = "LPD") %>% 
   mutate(plot = ID) %>% # add column to identify the plot within the study (to match biotime)
-  mutate(org_event = ID) %>% # this is going to function as a population ID 
-  st_sf() # spatialize
+  mutate(org_event = ID) #%>% # this is going to function as a population ID 
+  #st_sf() # spatialize
 
 # rename column names (some to match Atlas)
 lpd <- rename(lpd_qc_l, 
@@ -46,6 +47,8 @@ lpd <- rename(lpd_qc_l,
               "unit" = "Units",
               "methods" = "Method",
               "org_id_obs" = "ID",
+              "lat" = "Latitude",
+              "lon" = "Longitude",
               "geom" = "pts_sfc") # need to keep this for biotime
 
 # add taxonomic group category for input selection
@@ -58,8 +61,10 @@ lpd$taxa[which(lpd$Class == "Amphibia")] <- "amphibiens"
 
 # select necessary columns
 lpd_sel <- select(lpd, c(id_datasets, org_event, plot, scientific_name, 
-                         common_name, year_obs, obs_value, taxa, system))
-
+                         common_name, year_obs, obs_value, taxa, system, 
+                         lon, lat))
+lpd_sel$lat <- as.numeric(lpd_sel$lat)
+lpd_sel$lon <- as.numeric(lpd_sel$lon)
 lpd_sel$intellectual_rights <- "Living Planet Database"
 
 # save object with sf geometry
@@ -72,7 +77,6 @@ saveRDS(lpd_sel, "data/lpd_qc.RDS")
 # read SurvolBenthos validated dataset output from Atlas by Vincent/Ben
 benthos <- readr::read_delim("data-raw/valid.csv", ";", 
                              escape_double = FALSE, trim_ws = TRUE)
-benthos <- sf::st_as_sf(benthos, coords = c("lon", "lat")) # convert to sf object
 # fill in columns needed for calculation/analysis of the LPI
 benthos$taxa <- "invertébrés"
 benthos$system <- "Freshwater"
@@ -96,14 +100,11 @@ for(i in with_zeros_means$org_event){
 }
 
 # remove time series with >= 6 time steps (in a non-efficient way)
-benthos$obs_value_log10 <- log10(benthos$obs_value) # split into list of individual population time series
-benthos_ls = group_split(benthos, id_datasets, org_event, scientific_name) 
+# split into list of individual population time series
+benthos_ls = group_split(benthos, id_datasets, org_event, scientific_name, lon, lat) 
 lengths <- unlist(lapply(benthos_ls, nrow))
 benthos_ls <- benthos_ls[which(lengths >= 6)]
 benthos <- bind_rows(benthos_ls)
-
-# spatialize
-benthos <- sf::st_sf(benthos)
 
 #### FAKE DATA FOR TEST PURPOSES #### 
 # ---- to remove after the prototype ## -----------
@@ -122,17 +123,19 @@ fake[,c("scientific_name", "common_name")] <- rep(letters[1:15], each = 10)
 fake$obs_value <- runif(nrow(fake), min = 1, max = 1.5)
 fake$intellectual_rights <- "Fake"
 
-# assign random coordinates from original dataset
-temp <- rep(runif(15, min = 1, max = nrow(lpd_qc)), each = 10)
-fake$geom <- lpd_qc$pts_sfc[temp] + c(1,2)
-fake <- st_as_sf(fake, sf_column_name = "geom", crs = st_crs(lpd_sel))
-# add noise to coordinates so they don't overlap
-#fake <- st_jitter(fake, amount = 1)
+# assign random coordinates
+temp <- rep(runif(15, min = 1, max = nrow(lpd_sel)), each = 10)
+fake$lat <- as.numeric(lpd_sel$lat[temp]) + rnorm(length(temp), mean = 0, sd = 0.5)
+fake$lon <- as.numeric(lpd_sel$lon[temp]) + rnorm(length(temp), mean = 0, sd = 0.5)
+
 
 #### Put everything together in one data frame ####
 
 lpd_qc_fake <- bind_rows(lpd_sel, benthos)
 lpd_qc_fake <- bind_rows(lpd_qc_fake, fake)
+
+# spatialize
+lpd_qc_fake <- st_as_sf(lpd_qc_fake, coords = c("lon", "lat"))
 
 # save object with sf geometry
 saveRDS(lpd_qc_fake, "data/lpd_qc_fake.RDS")
