@@ -55,13 +55,13 @@ get_dt <- function(gam.pred_ls, year_pred){
   N_se = 10^N_se
   
   # initialize df to store dts
-  dt_df = data.frame(year_pred = year_pred, dt = NA, dt_cilo = NA, dt_cihi = NA)
+  dt_df = data.frame(year_pred = year_pred, dt = NA, cilo = NA, cihi = NA)
   for(i in 2:length(N)){
     # calculate dt
     dt = log10(N[i]/N[i-1])
     dt_df[i, "dt"] = dt # save in the table
     # calculate confidence intervals
-    dt_df[i, "cilo"] = log10((N[i] + 1.96*N_se[i])/(N[i-1] - 1.96*N_se[i-1]))
+    dt_df[i, "cilo"] = log10((N[i] - 1.96*N_se[i])/(N[i-1] - 1.96*N_se[i-1]))
     dt_df[i, "cihi"] = log10((N[i] + 1.96*N_se[i])/(N[i-1] + 1.96*N_se[i-1]))
   }
   return("dt" = dt_df)
@@ -98,7 +98,9 @@ dt_boot = function(dt){
   # calculate 95% confidence intervals
   dt_ci = boot::boot.ci(dt_r, type = "basic", R = 1000)
   # wrangle into table for output
-  dtboot_df = data.frame(gm = dt_ci$t0, cilo = dt_ci$basic[4], cihi = dt_ci$basic[5])
+  dtboot_df = data.frame(gm = dt_ci$t0, 
+                         cilo = dt_ci$basic[4], 
+                         cihi = dt_ci$basic[5])
   return(dtboot_df)
 }
 

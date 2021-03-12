@@ -17,7 +17,7 @@ year_pred <- data.frame("year_obs" = 1990:2018)
 df <- readRDS("data/lpd_qc_fake.RDS")
 
 # log10-transform population sizes
-df = mutate(df, obs_value_log10 = log10(obs_value + 1))
+df = mutate(df, obs_value_log10 = log10(obs_value))
 df = sf::st_drop_geometry(df)
 
 # triage of populations by time series length ----------------------------------
