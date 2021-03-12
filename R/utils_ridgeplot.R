@@ -5,7 +5,7 @@
 make_ridgeplot <- function(){
   
   # create colorblind-friendly palette
-  pal <- c("#984ea3", "#56B4E9", "#CC79A7", "#D55E00", "#E69F00", "#0072B2", "#009E73")
+  pal <- c("#984ea3", "#56B4E9", "#7D3F98", "#D55E00", "#E69F00", "#0072B2", "#009E73")
   names(pal) <- c("tous", "amphibiens", "invertébrés", "mammifères", "oiseaux", "poissons", "reptiles")
   
   # create ggplot theme options to apply to all figures

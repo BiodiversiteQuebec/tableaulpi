@@ -39,7 +39,7 @@ filter_lpd_qc <- function(target_taxa){
 }
 
 pal <- c("amphibiens" = "#56B4E9",
-         "invertébrés" = "#CC79A7",
+         "invertébrés" = "#7D3F98",
          "mammifères" = "#D55E00", 
          "oiseaux" = "#E69F00", 
          "poissons" = "#0072B2", 
