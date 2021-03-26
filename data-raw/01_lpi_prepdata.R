@@ -1,9 +1,12 @@
-# Script to subset BioTIME and Living Planet Database datasets to Quebec
+# Script to prepare Living Planet Database dataset for LPI Quebec
 
 # load libraries
 library(tidyr)
 library(dplyr)
 library(sf)
+
+# source helper functions
+source('data-raw/00_lpi_functions.R')
 
 #### Living Planet Database ####
 
@@ -115,11 +118,11 @@ for(i in with_zeros_means$org_event){
   benthos$obs_value[which(benthos$org_event == i)] <- benthos$obs_value[which(benthos$org_event == i)] + to_add
 }
 
-# remove time series with >= 6 time steps (in a non-efficient way)
+# remove time series with < 6 time steps (in a non-efficient way)
 # split into list of individual population time series
 benthos_ls = group_split(benthos, id_datasets, org_event, scientific_name, lon, lat) 
 lengths <- unlist(lapply(benthos_ls, nrow))
-benthos_ls <- benthos_ls[which(lengths >= 6)]
+benthos_ls <- benthos_ls[which(lengths >= 2)]
 benthos <- bind_rows(benthos_ls)
 
 #### FAKE DATA FOR TEST PURPOSES #### 
@@ -136,7 +139,7 @@ fake$system <- "Terrestrial"
 fake$year_obs <- rep(2000:2009, 15)
 fake[,c("id_datasets", "org_event", "plot")] <- "fake"
 fake[,c("scientific_name", "common_name")] <- rep(letters[1:15], each = 10)
-fake$obs_value <- runif(nrow(fake), min = 1, max = 1.5)
+fake$obs_value <- runif(nrow(fake), min = 10, max = 20)
 fake$intellectual_rights <- "Fake"
 
 # assign random coordinates

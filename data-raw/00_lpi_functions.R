@@ -33,8 +33,8 @@ calc_dt_chain <- function(N){
 compute_gam <- function(df_population){
   
   # smoothing parameter to be half the number of time points
-  smoothParm <- length(unique(df_population[,"year_obs"]))/2
-  
+  smoothParm <- floor(nrow(unique(df_population[,"year_obs"]))/2)
+  print(paste("smoothParm =", smoothParm))
   # run GAM 
   m <- mgcv::gam(obs_value_log10 ~ s(year_obs, k = smoothParm), data = df_population,
                  family = gaussian(), method = "REML")
@@ -108,18 +108,19 @@ dt_boot = function(dt){
 dt_gm_group <- function(growthrates_df, groupname){
   
   # get year vector
-  year_vec <- unique(growthrates_df$year_pred)
+  year_vec <- sort(unique(growthrates_df$year_pred))
   
   dt_gm <- list(data.frame(gm = 1, cilo = 1, cihi = 1))
   # calculate geometric mean growth rate with 95% CI from bootstrapping
   for(t in 2:length(year_vec)){
-    dt_v <- growthrates_df[which(growthrates_df$year_pred == year_vec[t]), "dt"] %>% 
-      na.omit()
-    dt_gm[[t]] <- dt_boot(10^dt_v) 
+    dt_v <- growthrates_df[which(growthrates_df$year_pred == year_vec[t]), "dt"] %>% na.omit() %>% 
+      # remove tibble format
+      unlist() %>% unname()
+    dt_gm[[t]] <- dt_boot(10^dt_v)  
   }
-  dt_gm <- bind_rows(dt_gm) %>% log10() %>% 
-    mutate(year = year_vec,
-           group_id = groupname)
+  dt_gm <- bind_rows(dt_gm) %>% log10() 
+  dt_gm$year = year_vec
+  dt_gm$groupid = groupname
   return(dt_gm)
 }
 
@@ -128,7 +129,7 @@ calclpi <- function(dt){
   # dt = vector of population growth rates (un-log10 transformed)
   lpi = c(1) # initial value is 1 
   for(i in 2:length(dt)){
-    lpi[i] <- lpi[i-1]*10^dt[i] 
+    lpi[i] <- lpi[i-1]*dt[i] 
     }
   return(lpi)
 }

@@ -15,26 +15,29 @@ growthrates <- readRDS("data/lpi_growthrates.RDS")
 ## get growth rates per species ----
 
 # split into list by scientific name
-growthrates_sp <- split(growthrates, growthrates$scientific_name)
+growthrates_sp <- group_split(growthrates, scientific_name, year_pred)
 
 # get mean per year per species
 dt_gm_sp <- vector("list", length(growthrates_sp))
 for(i in 1:length(dt_gm_sp)){
-  if(length(unique(growthrates_sp[[i]]$org_event)) > 1){
-    temp <- dt_gm_group(growthrates_sp[[i]], names(growthrates_sp)[i])
-    dt_gm_sp[[i]] <- temp %>% 
-      mutate(system = unique(growthrates_sp[[i]]$system),
-             taxa = unique(growthrates_sp[[i]]$taxa),
-             scientific_name = unique(growthrates_sp[[i]]$scientific_name),
-             common_name = unique(growthrates_sp[[i]]$common_name)) %>%
-      rename("dt" = "gm", "year_pred" = "year")
-  } else{
+  if(nrow(growthrates_sp[[i]]) == 1){
     dt_gm_sp[[i]] <- growthrates_sp[[i]]
+    } else{
+    if(length(unique(growthrates_sp[[i]]$dt)) == 1){
+      dt_gm_sp[[i]] <- growthrates_sp[[i]][1,]
+    } else{
+    # calculate geometric mean, per species
+    temp <- dt_boot(10^growthrates_sp[[i]]$dt)
+    dt_gm_sp[[i]] <- growthrates_sp[[i]][1,]
+    dt_gm_sp[[i]]$dt <- log10(temp$gm)
+    dt_gm_sp[[i]]$cilo <- log10(temp$cilo)
+    dt_gm_sp[[i]]$cihi <- log10(temp$cihi)
+  } 
   }
 }
-names(dt_gm_sp) <- names(growthrates_sp)
-# bind rows once again - wait they're not bindable, the columns are different
-growthrates_sp <- bind_rows(dt_gm_sp, .id = "scientific_name")
+
+# bind rows back together
+growthrates_sp <- bind_rows(dt_gm_sp)
 
 ## LPI per taxa group ----
 
@@ -43,10 +46,10 @@ growthrates_ls <- split(growthrates_sp, growthrates_sp$taxa)
 
 # get mean per year per taxa
 dt_gm_taxa <- vector("list", length(growthrates_ls))
-for(i in 1:length(dt_gm_taxa)){
-  dt_gm_taxa[[i]] <- dt_gm_group(growthrates_ls[[i]], 
-                                 names(growthrates_ls)[i])
+for(i in c(1,2,4)){#1:length(dt_gm_taxa)){
+  dt_gm_taxa[[i]] <- dt_gm_group(growthrates_ls[[i]], names(growthrates_ls)[i])
 }
+# 3 and 5 are bugging. ---############----------############-####################
 
 # calculate LPI per taxa with confidence intervals
 for(i in 1:length(dt_gm_taxa)){
@@ -68,8 +71,9 @@ dt_gm_tous$lpi_cihi <- calclpi(dt_gm_tous$cihi)
 # bind all groups together
 lpi_df <- bind_rows(dt_gm_taxa, .id = NULL) %>%
   rbind(dt_gm_tous) %>%
-  select(c(group_id, year, gm, cilo, cihi, lpi, lpi_cilo, lpi_cihi)) %>%
-  rename(taxa = group_id)
+  select(c(groupid, year, gm, cilo, cihi, lpi, lpi_cilo, lpi_cihi)) %>%
+  rename(taxa = groupid)
+ggplot(filter(lpi_df, taxa == "tous"), aes(x = year, y = lpi, col  = taxa)) + geom_line()
 
 ## MANUALLY CHANGE FAKE DATA FOR TEST PURPOSES ---- to remove after the prototype ## -----------
 
