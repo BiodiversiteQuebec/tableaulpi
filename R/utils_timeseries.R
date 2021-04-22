@@ -25,6 +25,7 @@ make_timeseries <- function(clicked_population){
     geom_point(col = pal[group_name], 
                size = 4) +
     scale_color_manual(values = pal) +  # use palette from above
+    scale_x_continuous(breaks = function(x) seq(ceiling(x[1]), floor(x[2]), by = 1)) + # round to integer, since the x axis is years
     labs(x = "",
          y = "Abondance de la population",
          caption = paste0("Source des données: ", 
