@@ -1,0 +1,62 @@
+# ggplot2 theme
+
+#' @import ggplot2
+
+theme_mapselector <- function(){
+  
+  font <- "Helvetica"
+  
+  ggplot2::theme(
+    
+    # Plot title
+    plot.title = ggplot2::element_text(
+      family = font, 
+      size = 16, 
+      face = "bold", 
+      color = "#222222"), 
+    
+    # Plot subtitle
+    plot.subtitle = ggplot2::element_text(
+      family = font, 
+      size = 14, 
+      margin = ggplot2::margin(9, 0, 9, 0)), 
+    
+    # Plot caption
+    plot.caption = ggplot2::element_text(
+      family = font,
+      size = 12,
+      color = "#222222"),
+    
+    # Legend
+    legend.position = "right", 
+    legend.text.align = 0, 
+    legend.background = ggplot2::element_blank(), 
+    legend.key = ggplot2::element_blank(), 
+    legend.text = ggplot2::element_text(
+      family = font, 
+      size = 14, 
+      color = "#222222"), 
+    legend.title = ggplot2::element_text(
+      family = font, 
+      size = 14, 
+      face = "bold"),
+    
+    # Axes
+    axis.text = ggplot2::element_text(family = font, 
+                                      size = 14, 
+                                      color = "#222222"), 
+    axis.title = ggplot2::element_text(family = font, 
+                                      size = 18, 
+                                      face = "bold",
+                                      color = "#222222"),              
+    
+    # Panel grid lines
+    panel.grid.minor = ggplot2::element_blank(), 
+    panel.grid.major = ggplot2::element_line(color = "#e6e6e6"), 
+    panel.background = ggplot2::element_blank(), 
+    
+    # Facets            
+    strip.background = ggplot2::element_rect(fill = "white"), 
+    strip.text = ggplot2::element_text(size = 12, hjust = 0)
+    )
+}

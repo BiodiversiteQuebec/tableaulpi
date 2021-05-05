@@ -137,10 +137,11 @@ fake <- matrix(NA, nrow = 150, ncol = ncol(lpd_sel),
 fake$taxa <- c(rep("amphibiens", 50), rep("oiseaux", 50), rep("reptiles", 50))
 fake$system <- "Terrestrial"
 fake$year_obs <- rep(2000:2009, 15)
-fake[,c("id_datasets", "org_event", "plot")] <- "fake"
+fake[,c("id_datasets", "plot")] <- "fake"
 fake[,c("scientific_name", "common_name")] <- rep(letters[1:15], each = 10)
 fake$obs_value <- runif(nrow(fake), min = 10, max = 20)
 fake$intellectual_rights <- "Fake"
+fake$org_event <- paste0(fake$scientific_name, fake$plot)
 
 # assign random coordinates
 temp <- rep(runif(15, min = 1, max = nrow(lpd_sel)), each = 10)
