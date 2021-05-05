@@ -59,16 +59,21 @@ Users of this dashboard can select the taxonomic group for which they want to se
 #### Specific to this app
 
 ##### `mod_lpi_time_series.R`
-A shiny module to generate the user interface and server functions used to produce a time series plotly of the Living Planet Index for the selected taxonomic group. This plotly is generated using the function `make_indextrend()` in `utils_indextrend.R`.
 
-##### `mod_population_bubbleplot.R`
+A shiny module to generate the user interface and server functions used to produce a time series plotly of the Living Planet Index for the selected taxonomic group. This plotly is generated using the function `make_indextrend()`. This plot appears when the `Afficher l'IPV` button is clicked on the current version of the dashboard.
 
 ##### `mod_ridgeplot.R`
 
-##### `mod_subset_plot_leafletproxy.R.R`
+A shiny module to generate the user interface and server functions used to produce a plot showing the density of each taxonomic group's population growth rates over the entire period covered by the dashboard (currently set to 1990-2018). This plotly is generated using the function `make_ridgeplot()`. This plot appears when the `IPV par groupe` button is clicked on the current version of the dashboard.
 
-#### From :star: :star: :star: `mapselector` :star: :star: :star: 
+##### `mod_population_bubbleplot.R`
 
+A shiny module to generate the user interface and server functions used to produce a plotly showing each population's growth rate over the entire period covered by the dashboard (currently set to 1990-2018). This plotly is generated using the function `make_poptrend()`. This plot appears when the `IPV par population` button is clicked on the current version of the dashboard.
+
+
+##### `mod_subset_plot_leafletproxy.R.R` from :star: :star: :star: `mapselector` :star: :star: :star: 
+
+A shiny module to filter the point map on the home screen of the dashboard according to the selected taxonomic group in the sidebar using `leaflet proxy`.
 
 
 ## Credits
@@ -84,15 +89,15 @@ These are essential things that are left to do:
 - [ ] Add interpretation guide in the à propos 
 - [ ] Add informative text in the tutorial and information modals
 - [ ] Add selection option within the trendplot modal, the population one, and the ridgeplot/density plot
-- [ ] Have each density curve show up by selecting taxons of interest instead of a ridgeplot?
 - [ ] Add information about time series length in map pop-ups (and in à propos)
 - [ ] Add SurVol Benthos data in there.. and chiroptères?
-- [ ] Think of a way to "score" population time series in terms of their length (vs. life histories???) to help with interpretation
+- [ ] Centralize the palette used across the dashboard to avoid re-writing it in each plot function
 
 ## Wishlist
 
 These are things that would enhance the dashboard, but are not necessary:
 - [ ] Show the clicked population's position in the ridgeplot distribution?
+- [ ] Think of a way to "score" population time series in terms of their length (vs. life histories???) to help with interpretation
 
 
 ## Links
