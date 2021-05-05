@@ -1,10 +1,20 @@
-# Index to make a bubble plot of each populations' trend, where each bubble's fill
-# colour is scaled to the population's population growth rate (%). The x axis is 
-# arbitrary, while the y axis indicates growth rate (%).
-
-#' @import dplyr
+#' Plot each population growth rate since 1990
+#' 
+#' Makes a plot to compare individual populations' growth rates over the entire time frame of the estimated LPI trend (1990-2018).
+#'
+#' @param taxachoice 
+#' @import ggplot2 dplyr plotly
+#'
+#' @return A "bubbleplot" using \code{plotly} where each population is shown as a filled circle, called a "bubble" here. Each bubble's fill colour is scaled to the population's population growth rate (%). Bubbles are arranged on the \code{x} axis according to the population's growth rate (%) since 1990. The \code{y} axis is a set of random positions to differentiate the circles more easily. On hover, the common name of the population and a sentence explaining this population change rate (%) appears over the circle.
+#' @export
 
 make_poptrend <- function(taxachoice){
+  
+  # Index to make a bubble plot of each populations' trend, where each bubble's fill
+  # colour is scaled to the population's population growth rate (%). The x axis is 
+  # arbitrary, while the y axis indicates growth rate (%).
+  
+  #' @import dplyr
   
   # Import population growth rates
   pop_trends <- readRDS("data/lpi_trend_populations.RDS")
@@ -19,7 +29,7 @@ make_poptrend <- function(taxachoice){
   
   # select taxa of choice
   if(taxachoice != "tous"){
-    temp <- filter(temp, taxa == taxachoice)
+    temp <- dplyr::filter(temp, taxa == taxachoice)
   }
   
   # set up plotly object
