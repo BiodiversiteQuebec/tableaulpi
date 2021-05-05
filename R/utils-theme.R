@@ -1,6 +1,9 @@
 #' Mapselector ggplot2 theme
 #'
 #' @return A \code{ggplot} theme that can be added to any \code{ggplot} object to change its theme. Plot titles are set to be larger, grid lines are adjusted to show only major grid lines, and facet colours and label size are set.
+#' 
+#' @import ggplot2
+#' 
 #' @export
 #'
 #' @examples 
