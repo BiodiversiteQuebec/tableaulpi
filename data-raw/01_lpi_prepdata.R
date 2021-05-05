@@ -118,12 +118,38 @@ for(i in with_zeros_means$org_event){
   benthos$obs_value[which(benthos$org_event == i)] <- benthos$obs_value[which(benthos$org_event == i)] + to_add
 }
 
-# remove time series with < 6 time steps (in a non-efficient way)
 # split into list of individual population time series
 benthos_ls = group_split(benthos, id_datasets, org_event, scientific_name, lon, lat) 
+
+# if there are years with multiple samples, take the mean observation for that year
+colnames(benthos_ls[[1]])
+test <- rbind(benthos_ls[[855]], benthos_ls[[855]])
+for(i in 1:length(benthos_ls)){
+  x <- table(benthos_ls[[i]]$year_obs) 
+  if(max(x) > 1){
+    multi_years <- names(x[which(x > 1)]) %>% as.numeric()
+    avg_years <- dplyr::filter(benthos_ls[[i]], year_obs %in% multi_years) %>%
+      dplyr::group_by(year_obs) %>%
+      dplyr::summarise(mean_value = mean(obs_value, na.rm = TRUE))
+    
+    # replace obs_value with this mean per year for all years in the dataset
+    for(j in 1:length(multi_years)){
+      benthos_ls[[i]][which(benthos_ls[[i]]$year_obs %in% multi_years[j]),"obs_value"] <- avg_years[j, "mean_value"]
+    }
+    # keep only one unique row per year
+    benthos_ls[[i]] <- benthos_ls[[i]][!duplicated(benthos_ls[[i]]$year_obs),]
+  }
+}
+
+
+# remove time series with < 2 time steps 
 lengths <- unlist(lapply(benthos_ls, nrow))
-benthos_ls <- benthos_ls[which(lengths >= 2)]
+benthos_ls <- benthos_ls[which(lengths > 2)]
 benthos <- bind_rows(benthos_ls)
+
+# stitch the org_event column with the scientific name to make a unique ID
+# for the pointmap clicked population selector
+benthos$org_event <- paste0(benthos$org_event, benthos$scientific_name, sep = "-")
 
 #### FAKE DATA FOR TEST PURPOSES #### 
 # ---- to remove after the prototype ## -----------
@@ -161,4 +187,4 @@ lpd_qc_fake <- st_as_sf(lpd_qc_fake, coords = c("lon", "lat"))
 saveRDS(lpd_qc_fake, "data/lpd_qc_fake.RDS")
 
 # save internally in the tableauplpi package
-usethis::use_data(lpd_qc_fake, overwrite = TRUE)
+usethis::use_data(lpd_qc_fake, overwrite = TRUE, internal = TRUE)
