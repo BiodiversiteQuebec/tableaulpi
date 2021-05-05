@@ -45,9 +45,9 @@ All visualisations available in this dashboard are based on data from the follow
 
 ### Structure & styling
 
-_quick overview + link to golem stuff_
+This dashboard was built using the [golem](https://thinkr-open.github.io/golem/) framework (more information on this [here](https://engineering-shiny.org/golem.html)).
 
-Styling is done commonly to all dashboards in the RBDQ project _[ link to the styling code ]_.
+Styling is done commonly to all dashboards in the RBDQ project via [ :star: :star: :star: `mapselector` :star: :star: :star: ](https://github.com/ReseauBiodiversiteQuebec/mapselector).
 
 ### Reactivity
 
@@ -71,7 +71,7 @@ A shiny module to generate the user interface and server functions used to produ
 A shiny module to generate the user interface and server functions used to produce a plotly showing each population's growth rate over the entire period covered by the dashboard (currently set to 1990-2018). This plotly is generated using the function `make_poptrend()`. This plot appears when the `IPV par population` button is clicked on the current version of the dashboard.
 
 
-##### `mod_subset_plot_leafletproxy.R.R` from :star: :star: :star: `mapselector` :star: :star: :star: 
+##### `mod_subset_plot_leafletproxy.R` 
 
 A shiny module to filter the point map on the home screen of the dashboard according to the selected taxonomic group in the sidebar using `leaflet proxy`.
 
