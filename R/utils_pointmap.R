@@ -1,6 +1,5 @@
-# Function to make a point map of populations included in the Living Planet Index
+# Maps the location of populations included in the Living Planet Index calculated for Québec 
 
-#' @import dplyr
 
 make_pointmap <- function(){
 

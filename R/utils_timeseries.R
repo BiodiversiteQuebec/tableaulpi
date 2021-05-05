@@ -1,6 +1,14 @@
-# Function to plot the raw time series for a clicked population on the point map
-
+#' Plot raw time series
+#' 
+#' Plots a raw time series for a clicked population on the point map using \code{ggplot2}. This function can then be used within the \code{timeseries} module to generate the plot on the dashboard in reaction to a click.
+#'
+#' @param clicked_population Population selected from a user's click on the point map.
+#'
 #' @import ggplot2
+#' @return A plot of the raw time series of population size through time, with years on the \code{x} axis and population size on the \code{y} axis. Points are coloured following the same palette as the rest of the dashboard, based on taxa groups, and are linked by lines.
+#' @export
+#'
+#' 
 
 make_timeseries <- function(clicked_population){
 
@@ -10,7 +18,7 @@ make_timeseries <- function(clicked_population){
            "oiseaux" = "#E69F00", 
            "poissons" = "#0072B2", 
            "reptiles" = "#009E73",
-           "#999999") # will need invertebrate colour here when survol is added ----
+           "#999999")
   
   # import dataset
   df <- readRDS("data/lpd_qc_fake.RDS")

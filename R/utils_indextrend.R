@@ -1,10 +1,13 @@
-# Function to plot each taxonomic group's LPI trend through time, where all trends are
-# plotted in grey in the background, while the selected taxonomic group is plotted
-# in colour and with its confidence intervals. There is also a plotly functionality to
-# see the LPI value for each year when hovering over the plot.
-
+#' Plot the Living Planet Index (LPI) trend
+#'
+#' Function to plot each taxonomic group's LPI trend through time, where all unselected groups' trends are plotted in grey in the background, while the selected taxonomic group is plotted in colour and with its confidence intervals. There is also a plotly functionality to see the LPI value for each year when hovering over the plot.
+#'
+#' @param taxa can take the inputs "tous" (all populations in Québec), "amphibiens" , "mammifères", "oiseaux", "poissons", "reptiles" from the Shiny user's input.
+#'
+#' @return A plotly of the Living Planet Index trend through time, with the selected taxonomic group highlighted and shown with confidence intervals.
+#' @export
 make_indextrend <- function(taxa){
-  
+
   # create colorblind-friendly palette
   pal <- c("#984ea3", "#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73")
   names(pal) <- c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles")
@@ -62,7 +65,7 @@ make_indextrend <- function(taxa){
     plotly::style(hoverinfo = "skip", traces = 1) %>%
     plotly::style(hoverinfo = "skip", traces = 2) %>%
     plotly::style(text = text_lpi, traces = 3) %>%
-    # remove zooming option
+    # remove plotly's zooming option
     plotly::config(modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d"))
   return(p)
 }

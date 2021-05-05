@@ -1,6 +1,13 @@
-# ggplot2 theme
-
-#' @import ggplot2
+#' Mapselector ggplot2 theme
+#'
+#' @return A \code{ggplot} theme that can be added to any \code{ggplot} object to change its theme. Plot titles are set to be larger, grid lines are adjusted to show only major grid lines, and facet colours and label size are set.
+#' @export
+#'
+#' @examples 
+#' library(ggplot2)
+#' ggplot(diamonds) + 
+#' geom_point(aes(x = carat, y = price, col = color)) + 
+#' theme_mapselector()
 
 theme_mapselector <- function(){
   
