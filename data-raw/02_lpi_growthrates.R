@@ -57,15 +57,14 @@ for(i in 1:length(gam)){
   tryCatch({
   gam[[i]] = compute_gam(df_gam_ls[[i]])},
   error = function(e) print(e))
+  names(gam)[i] <- unique(paste(df_gam_ls[[i]]$id_datasets, 
+                                df_gam_ls[[i]]$org_event, 
+                                df_gam_ls[[i]]$system,
+                                df_gam_ls[[i]]$taxa, 
+                                df_gam_ls[[i]]$scientific_name, 
+                                df_gam_ls[[i]]$common_name, 
+                                sep = "_"))
 }  
-# name elements in list
-names(gam) = unique(paste(df_gam$id_datasets, 
-                          df_gam$org_event, 
-                          df_gam$system,
-                          df_gam$taxa, 
-                          df_gam$scientific_name, 
-                          df_gam$common_name, 
-                          sep = "_"))
 # save list
 saveRDS(gam, "data/lpi_gam.RDS")
 
@@ -89,10 +88,12 @@ pred_ls <- Filter(Negate(anyNA), pred_ls)
 growthrates <- lapply(pred_ls, get_dt, year_pred = year_pred[,1]) %>% 
   bind_rows(.id = "popID") %>%
   # add information from LPD to predicted growth rates results
-  separate(col = popID, sep = "_",
+  tidyr::separate(col = popID, sep = "_",
            into = c("id_datasets", "org_event", "system", 
-                    "taxa", "genus", "species", "common_name")) %>%
-  unite("scientific_name", genus:species, sep = "_")
+                    "taxa", "scientific_name", "common_name")) 
+# if the above gives this error: Error in .Call("_tidyr_simplifyPieces", pieces, p, fillLeft)
+# restarting the R Session resolves it... very mysterious!!
+
 # fill in common names for fake time series
 growthrates$common_name[which(is.na(growthrates$common_name))] <- growthrates$scientific_name[which(is.na(growthrates$common_name))]
 
