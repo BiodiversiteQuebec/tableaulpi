@@ -38,10 +38,23 @@ All visualisations available in this dashboard are based on data from the follow
 
 ## Get started
 
-[ information about how to install and run the app ]
+This is a Shiny app built as an R package. The package can be installed using the R package `devtools`, like so:
+
+```
+devtools::install_github("ReseauBiodiversiteQuebec/tableaulpi")
+```
+
+To run the app locally within the tableaulpi directory, run the following:
+
+```
+library(tableaulpi)
+run_app()
+```
+
+There may be some differences between this local version and the [published](https://coleo.biodiversite-quebec.ca/apps/tableaulpi/) version due to additional styling when the dashboard gets published onto the server. 
 
 
-## How it works
+## How `tableaulpi` works
 
 ### Structure & styling
 
@@ -52,7 +65,7 @@ Styling is done commonly to all dashboards in the RBDQ project via [ :star: :sta
 ### Reactivity
 
 `taxachoice` via radio buttons 
-Users of this dashboard can select the taxonomic group for which they want to see the LPI trend (...)
+Users of this dashboard can select a taxonomic group of interest. This choice affects some plots in the dashboard, such as the point map, the LPI trendplot, and the bubbleplot.
 
 ### Modules
 
@@ -79,7 +92,6 @@ A shiny module to filter the point map on the home screen of the dashboard accor
 ## Credits
 
 This dashboard is an ever-evolving collaborative effort with the entire [Réseau Biodiversité Québec](https://github.com/ReseauBiodiversiteQuebec) team, with special thanks to [Andrew Macdonald](https://github.com/aammd) for code review, contributions, and the development of [:star: :star: :star: `mapselector` :star: :star: :star:](https://github.com/ReseauBiodiversiteQuebec/mapselector), [Vincent Bellavance](https://github.com/VincentBellavance) for ideas and help with conception and design, data, troubleshooting, and development, and [Guillaume Larocque](https://github.com/glaroc) for help with design, development, troubleshooting, and a superhuman reactivity to the ever-evolving beast that is this project.
-
 
 
 ## To-do list
