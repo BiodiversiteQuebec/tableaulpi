@@ -4,6 +4,7 @@
 # load libraries
 require(tidyr)
 require(dplyr)
+require(ggplot2)
 require(EnvStats)
 
 # load functions
@@ -11,6 +12,9 @@ source("data-raw/00_lpi_functions.R")
 
 # import population growth rates
 growthrates <- readRDS("data/lpi_growthrates.RDS") 
+# remove entries before 1990 (why are these here if the prediction years in the previous script are only 1990 onwards???)
+growthrates <- dplyr::filter(growthrates, year_pred >= 1990)
+
 
 ## get growth rates per species ----
 
@@ -38,6 +42,10 @@ for(i in 1:length(dt_gm_sp)){
 
 # bind rows back together
 growthrates_sp <- bind_rows(dt_gm_sp)
+# change Nan to NA
+is.nan.data.frame <- function(x) do.call(cbind, lapply(x, is.nan))
+growthrates_sp[is.nan(growthrates_sp)] <- NA
+
 
 ## LPI per taxa group ----
 
@@ -46,34 +54,34 @@ growthrates_ls <- split(growthrates_sp, growthrates_sp$taxa)
 
 # get mean per year per taxa
 dt_gm_taxa <- vector("list", length(growthrates_ls))
-for(i in c(1,2,4)){#1:length(dt_gm_taxa)){
+for(i in c(1:length(dt_gm_taxa))){
   dt_gm_taxa[[i]] <- dt_gm_group(growthrates_ls[[i]], names(growthrates_ls)[i])
 }
-# 3 and 5 are bugging. ---############----------############-####################
 
 # calculate LPI per taxa with confidence intervals
 for(i in 1:length(dt_gm_taxa)){
-  dt_gm_taxa[[i]]$lpi <- calclpi(dt_gm_taxa[[i]]$gm)
-  dt_gm_taxa[[i]]$lpi_cilo <- calclpi(dt_gm_taxa[[i]]$cilo)
-  dt_gm_taxa[[i]]$lpi_cihi <- calclpi(dt_gm_taxa[[i]]$cihi)
+  dt_gm_taxa[[i]]$lpi <- calclpi(10^dt_gm_taxa[[i]]$gm)
+  dt_gm_taxa[[i]]$lpi_cilo <- calclpi(10^dt_gm_taxa[[i]]$cilo)
+  dt_gm_taxa[[i]]$lpi_cihi <- calclpi(10^dt_gm_taxa[[i]]$cihi)
 }
+ggplot(lpi_df, aes(x = year, y = lpi, col = taxa)) + geom_line()
 
+## LPI for all VERTEBRATE groups ----
 
-## LPI for all groups ----
-
-# get mean per year overall
-dt_gm_tous <- dt_gm_group(growthrates, groupname = "tous")
+# get mean per year overall for vertebrates
+dt_gm_tous <- dt_gm_group(filter(growthrates, taxa != "invertébrés"), 
+                          groupname = "tous")
 # calculate overall LPI with confidence intervals
-dt_gm_tous$lpi <- calclpi(dt_gm_tous$gm)
-dt_gm_tous$lpi_cilo <- calclpi(dt_gm_tous$cilo)
-dt_gm_tous$lpi_cihi <- calclpi(dt_gm_tous$cihi)
+dt_gm_tous$lpi <- calclpi(10^dt_gm_tous$gm)
+dt_gm_tous$lpi_cilo <- calclpi(10^dt_gm_tous$cilo)
+dt_gm_tous$lpi_cihi <- calclpi(10^dt_gm_tous$cihi)
 
 # bind all groups together
 lpi_df <- bind_rows(dt_gm_taxa, .id = NULL) %>%
   rbind(dt_gm_tous) %>%
   select(c(groupid, year, gm, cilo, cihi, lpi, lpi_cilo, lpi_cihi)) %>%
   rename(taxa = groupid)
-ggplot(filter(lpi_df, taxa == "tous"), aes(x = year, y = lpi, col  = taxa)) + geom_line()
+ggplot(filter(lpi_df, taxa == "tous"), aes(x = year, y = lpi, col = taxa)) + geom_line()
 
 ## MANUALLY CHANGE FAKE DATA FOR TEST PURPOSES ---- to remove after the prototype ## -----------
 
