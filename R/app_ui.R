@@ -31,8 +31,7 @@ app_ui <- function(request) {
                                                "Choisir le groupe d'espèces")
         ),
         
-        
-        
+  
         # Modals that appear when a button is clicked ----
         
         # Index trend through time
@@ -53,7 +52,7 @@ app_ui <- function(request) {
                              outputFunction = mapselector::mod_map_select_ui),
         
         
-        # Second tab: more detailed information about the index
+        # Second tab: More detailed information about the index
         mapselector::tab_gen(title = "À propos de l'indice", 
                 outputFunction = htmlOutput, 
                 id = "about")

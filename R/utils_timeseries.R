@@ -36,6 +36,9 @@ make_timeseries <- function(clicked_population){
     scale_x_continuous(breaks = function(x) seq(ceiling(x[1]), floor(x[2]), by = 1)) + # round to integer, since the x axis is years
     labs(x = "",
          y = "Abondance de la population",
+         title = paste0(
+           gsub("_", " ", df$scientific_name[1]), 
+           " (", df$common_name[1], ")"),
          caption = paste0("Source des données: ", 
                           unique(df$intellectual_rights))) +
     theme_mapselector()

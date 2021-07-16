@@ -19,12 +19,17 @@ app_server <- function( input, output, session ) {
   # Plot raw time series of clicked population in a pop-up modal ----
   
   mod_timeseries_server("timeseries_ui_1", clicked_population)
+  mod_summarise_rawdata_server("summarise_rawdata_ui_1", clicked_population)
   mapselector::mod_modal_make_server(id = "pop_modal",
                                      region = clicked_population, 
-                                     title_format_pattern = "Les données pour la population de %s",
-                                     tabPanel("Population trend", 
+                                     title_format_pattern = "Les données pour Population %s",
+                                     tabPanel("Données brutes", 
                                               mod_timeseries_ui("timeseries_ui_1")
-                                              ))
+                                              ),
+                                     tabPanel("Détails",
+                                              mod_summarise_rawdata_ui("summarise_rawdata_ui_1")
+                                              )
+                                     )
   
   
   # Show tutorial information in various modals ----
@@ -44,10 +49,9 @@ app_server <- function( input, output, session ) {
                                          md_file = "second_modal_text.md")
 
   
-  # Show index plots in a modal ----
+  # Show index plots in a modal with tabs ----
   
-  
-  mod_lpi_time_series_server("lpi", taxachoice =  taxachoice)
+  mod_lpi_time_series_server("lpi", taxachoice = taxachoice)
   mod_population_bubbleplot_server("poptrend", taxachoice = taxachoice)
   mod_ridgeplot_server("mod_ridgeplot_ui_1")
   
@@ -55,7 +59,6 @@ app_server <- function( input, output, session ) {
     "affiche_index",
     title_format_pattern =  "Indice Planète Vivante pour %s",
     title_var = taxachoice,
-    
     # Plot the index trend through time, by selected taxa group ----
     tabPanel(
       title = "Tendance moyenne",
@@ -71,29 +74,6 @@ app_server <- function( input, output, session ) {
       title = "Par population",
       mod_population_bubbleplot_ui("poptrend")
       ))
-    
-
-  # Plot overall population-level trend value, by selected taxa group ----
-  
-  # mapselector::mod_modal_observeEvent_server("affiche_poptrend",
-  #                                            title_format_pattern =  "Taux de croissance des populations pour %s",
-  #                                            title_var = taxachoice,
-  #                                            tabPanel(
-  #                                              title = "title",
-  #                                              mod_population_bubbleplot_ui("poptrend")
-  #                                            ), type = "hidden")
-  
-  
-  # Plot distribution of index values per taxa group ----
-  
-  # mapselector::mod_modal_observeEvent_server("affiche_ridgeplot",
-  #                                            title_format_pattern = "Taux de croissance des groupes %s",
-  #                                            title_var = taxachoice,
-  #                                            tabPanel(
-  #                                              title = "title",
-  #                                              mod_ridgeplot_ui("mod_ridgeplot_ui_1")
-  #                                            ), type = "hidden")
-  # 
 
   # Include more detailed html content (text, plots, etc.) about the index
   
