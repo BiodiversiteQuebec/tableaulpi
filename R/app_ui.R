@@ -36,13 +36,7 @@ app_ui <- function(request) {
         # Modals that appear when a button is clicked ----
         
         # Index trend through time
-        mapselector::mod_modal_observeEvent_ui("affiche_index", button_text = "Afficher l'IPV"), 
-        
-        # Density plot showing the distributions of index values per group 
-        mapselector::mod_modal_observeEvent_ui("affiche_ridgeplot", button_text = "IPV par groupe"),
-        
-        # Point plot showing individual populations' trends
-        mapselector::mod_modal_observeEvent_ui("affiche_poptrend", button_text = "IPV par population"),
+        mapselector::mod_modal_observeEvent_ui("affiche_index", button_text = "Afficher l'indice"), 
         
         # Pop-up information box
         mapselector::mod_modal_observeEvent_ui("affiche_tuto", button_text = "Guide d'utilisation")

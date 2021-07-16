@@ -44,41 +44,56 @@ app_server <- function( input, output, session ) {
                                          md_file = "second_modal_text.md")
 
   
-  # Plot the index trend through time, by selected taxa group ----
+  # Show index plots in a modal ----
+  
   
   mod_lpi_time_series_server("lpi", taxachoice =  taxachoice)
-  mapselector::mod_modal_observeEvent_server("affiche_index",
-                                             title_format_pattern =  "Indice Planète Vivante pour %s",
-                                             title_var = taxachoice,
-                                             tabPanel(
-                                               title = "title",
-                                               mod_lpi_time_series_ui("lpi")
-                                             ), type = "hidden")
-
+  mod_population_bubbleplot_server("poptrend", taxachoice = taxachoice)
+  mod_ridgeplot_server("mod_ridgeplot_ui_1")
   
+  mapselector::mod_modal_observeEvent_server(
+    "affiche_index",
+    title_format_pattern =  "Indice Planète Vivante pour %s",
+    title_var = taxachoice,
+    
+    # Plot the index trend through time, by selected taxa group ----
+    tabPanel(
+      title = "Tendance moyenne",
+      mod_lpi_time_series_ui("lpi")
+    ), 
+    # Plot of distribution of growth rates by group
+    tabPanel(
+      title = "Par groupe d'espèces",
+      mod_ridgeplot_ui("mod_ridgeplot_ui_1")
+      ),
+    # Plot of growth rates of each population
+    tabPanel(
+      title = "Par population",
+      mod_population_bubbleplot_ui("poptrend")
+      ))
+    
+
   # Plot overall population-level trend value, by selected taxa group ----
   
-  mod_population_bubbleplot_server("poptrend", taxachoice = taxachoice)
-  mapselector::mod_modal_observeEvent_server("affiche_poptrend",
-                                             title_format_pattern =  "Taux de croissance des populations pour %s",
-                                             title_var = taxachoice,
-                                             tabPanel(
-                                               title = "title",
-                                               mod_population_bubbleplot_ui("poptrend")
-                                             ), type = "hidden")
+  # mapselector::mod_modal_observeEvent_server("affiche_poptrend",
+  #                                            title_format_pattern =  "Taux de croissance des populations pour %s",
+  #                                            title_var = taxachoice,
+  #                                            tabPanel(
+  #                                              title = "title",
+  #                                              mod_population_bubbleplot_ui("poptrend")
+  #                                            ), type = "hidden")
   
   
   # Plot distribution of index values per taxa group ----
   
-  mod_ridgeplot_server("mod_ridgeplot_ui_1")
-  mapselector::mod_modal_observeEvent_server("affiche_ridgeplot",
-                                             title_format_pattern = "Taux de croissance des groupes %s",
-                                             title_var = taxachoice,
-                                             tabPanel(
-                                               title = "title",
-                                               mod_ridgeplot_ui("mod_ridgeplot_ui_1")
-                                             ), type = "hidden")
-  
+  # mapselector::mod_modal_observeEvent_server("affiche_ridgeplot",
+  #                                            title_format_pattern = "Taux de croissance des groupes %s",
+  #                                            title_var = taxachoice,
+  #                                            tabPanel(
+  #                                              title = "title",
+  #                                              mod_ridgeplot_ui("mod_ridgeplot_ui_1")
+  #                                            ), type = "hidden")
+  # 
 
   # Include more detailed html content (text, plots, etc.) about the index
   
