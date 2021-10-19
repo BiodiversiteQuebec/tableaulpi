@@ -22,8 +22,8 @@ app_ui <- function(request) {
     # Standard mapselector dashboard format ----
     
     mapselector::tableau_de_bord(
-      mapselector::dash_title(title = "Indice Planète Vivante"), 
       mapselector::dash_sidebar(
+	mapselector::dash_title(title = "Indice Planète Vivante", icon="nature-collection-landscape-1"),
         badge(text_badge = "L'Indice Planète Vivante mesure les changements dans l'abondance des populations animales depuis 1990."),
         mod_subset_plot_leafletproxy_ui(
           "pointmap", 
