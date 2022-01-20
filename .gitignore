@@ -44,6 +44,21 @@ data-raw/LPR2020data_public.csv
 
 # To-do list
 todo.txt
+
+# RStudio
 .Rproj.user
 tableauproto.Rproj
+
+# Datasets, draft scripts, and rlpi outputs
 data-raw/valid.csv
+atlas_draft.R
+data/rlpi/default_infile_infile.txt
+data/rlpi/default_infile_infile_dtemp_array.txt
+data/rlpi/default_infile_infile_dtemp_array_named.csv
+data/rlpi/default_infile_infile_Results.txt
+data/rlpi/default_infile_pops.txt
+data/rlpi/default_infile_pops_dtemp.csv
+data/rlpi/default_infile_pops_lambda.csv
+data/rlpi/default_infile_pops_Lambda.txt
+data/rlpi/default_infile_pops_Minmax.txt
+data/rlpi/lpi_temp/
