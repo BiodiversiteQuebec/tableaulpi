@@ -4,6 +4,8 @@
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @import mapselector
+#' @import ratlas
+#' @import dplyr
 #' @noRd
 
 app_server <- function( input, output, session ) {
