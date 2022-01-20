@@ -1,6 +1,15 @@
 # Maps the location of populations included in the Living Planet Index calculated for Québec 
 
+## colour palette ##
+pal <- c("Amphibiens" = "#56B4E9",
+         "Mammifères" = "#D55E00", 
+         "Oiseaux" = "#E69F00", 
+         "Poissons" = "#0072B2", 
+         "Reptiles" = "#009E73",
+         "#999999")
 
+
+# function to make empty map with legend
 make_pointmap <- function(){
 
   ## MAP ##
@@ -14,61 +23,64 @@ make_pointmap <- function(){
 }
 
 
-filter_lpd_qc <- function(target_taxa){
-  ## SELECTION ##
-  lpd_qc <- readRDS("data/lpd_qc_fake.RDS")
-  #tableaulpi::lpd_qc_fake
+# function to filter the dataset to selected taxa
+filter_atlas <- function(target_taxa){
   
-  stopifnot(target_taxa %in% c("poissons",
-                               "mammifères", 
-                               "reptiles", 
-                               "amphibiens", 
-                               "oiseaux","tous"
-  ))
+  # set api token as environment variable
+  Sys.setenv("ATLAS_API_TOKEN" = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZF9vbmx5X2FsbCIsIm1haWwiOiJrYXRoZXJpbmUuaGViZXJ0QHVzaGVyYnJvb2tlLmNhIn0.jHfCLsRseU0--5qFB5A_PfIOEv0I24PQw1ip3q_3KQw')
   
+  ## Data ##
+  #lpd_qc <- readRDS("data/lpd_qc_fake.RDS")
   
-  if (target_taxa != "tous") {
-    lpd_qc_filtered <- subset(lpd_qc, lpd_qc$taxa == target_taxa)
-  } else {
-    lpd_qc_filtered <- lpd_qc
-  }
-  return(lpd_qc_filtered)
+  # get time series and taxonomic info to observations
+  obs <- dplyr::left_join(ratlas::get_timeseries(), 
+                   ratlas::get_gen(endpoint="taxa"), 
+                   by = c("id_taxa" = "id"))
+  
+  stopifnot(target_taxa %in% c("Poissons", "Amphibiens", "Oiseaux", "Mammifères", "Reptiles", "Tous"))
+  
+  # Subset to selected taxa 
+  if (target_taxa != "Tous") {
+    obs <- subset(obs, obs$species_gr == target_taxa)
+  } 
+  return(obs)
 }
-
-pal <- c("amphibiens" = "#56B4E9",
-         "mammifères" = "#D55E00", 
-         "oiseaux" = "#E69F00", 
-         "poissons" = "#0072B2", 
-         "reptiles" = "#009E73",
-         "#999999")
 
 ## function to set marker color ##
-getColor <- function(data_with_taxa_names) {
-  pal[data_with_taxa_names$taxa]
+getColor <- function(obs) {
+  pal[obs$species_gr]
 }
 
 
-## POP-UPS ##
-get_popup_content <- function(lpd_qc_dataset){
+## POP-UPS when clicking a map point ##
+get_popup_content <- function(obs){
   paste0(
-    "<b>", lpd_qc_dataset$common_name, "</b>",
-    "<br><i>", gsub("_", " ", lpd_qc_dataset$scientific_name), "</i>",
-    "<br><b>Source: </b>", lpd_qc_dataset$intellectual_rights
+    #"<b>", obs$common_name, "</b>", # to replace when this info is in the taxa table
+    "<br><i>", gsub("_", " ", obs$scientific_name), "</i>",
+    "<br>", obs$species_gr#, 
+    #"<br><b>Source: </b>", obs$intellectual_rights
   )
 }
 
-filter_leaflet_map <- function(mapid, taxa_to_show = "tous"){
+# show map points from filtered dataset
+filter_leaflet_map <- function(mapid, taxa_to_show = "Tous"){
   
-  lpd_qc_filtered <- filter_lpd_qc(taxa_to_show)
+  obs <- filter_atlas(taxa_to_show)
   
+  # pull out coordinates to make them recognizable to leaflet
+  coord <- head(t(sapply(obs$geom$coordinates, as.list)), nrow(obs))
+  colnames(coord) <- c("lng", "lat")
+                       
   leaflet::leafletProxy(mapid) %>%
     leaflet::clearMarkers() %>% 
     leaflet::addCircleMarkers(
-      data = lpd_qc_filtered,
-      layerId = lpd_qc_filtered[["org_event"]],
-      label = lpd_qc_filtered[["org_event"]],
-      popup = ~get_popup_content(lpd_qc_filtered),
-      color = unname(getColor(lpd_qc_filtered)),
+      data = obs,
+      lng = as.numeric(coord[, "lng"]), 
+      lat = as.numeric(coord[, "lat"]),
+      layerId = obs[["id"]],
+      label = obs[["id"]],
+      #popup = ~get_popup_content(obs),
+      color = unname(getColor(obs)),
       stroke = FALSE,
       fillOpacity = .7,
       radius = 5

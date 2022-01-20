@@ -11,8 +11,8 @@ mod_subset_plot_leafletproxy_ui <- function(id, spp_menu_title = "groupe d'espè
   ns <- NS(id)
   tagList(
     radioButtons(ns("taxa"), label = spp_menu_title,
-                 choiceValues = c("tous", "amphibiens", "mammifères",
-                                  "oiseaux", "poissons", "reptiles"),
+                 choiceValues = c("Tous", "Amphibiens", "Mammifères",
+                                  "Oiseaux", "Poissons", "Reptiles"),
                  choiceNames = c("Toutes les espèces", "Amphibiens", 
                                  "Mammifères", "Oiseaux", "Poissons", "Reptiles"))
   )
