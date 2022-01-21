@@ -10,21 +10,32 @@
 make_summarise_rawdata <- function(clicked_population){
  
   # import dataset
-  df <- readRDS("data/lpd_qc_fake.RDS")
-  df <- df[which(df$org_event == clicked_population),]
+  
+  # set api token as environment variable
+  Sys.setenv("ATLAS_API_TOKEN" = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZF9vbmx5X2FsbCIsIm1haWwiOiJrYXRoZXJpbmUuaGViZXJ0QHVzaGVyYnJvb2tlLmNhIn0.jHfCLsRseU0--5qFB5A_PfIOEv0I24PQw1ip3q_3KQw')
+  
+  # get time series and taxonomic info to observations
+  obs <- dplyr::left_join(ratlas::get_timeseries(), 
+                          ratlas::get_gen(endpoint="taxa"), 
+                          by = c("id_taxa" = "id"))
+  obs$id <- as.character(obs$id)
+  obs <- obs[which(obs$id == clicked_population),]
   
   # summarise information about this dataset
   summary_table <- data.frame(
     "Description" = c("Nom scientifique",
-                  "Longueur de la série (années)",
-                  "Système",
-                  "Groupe d'espèces",
-                  "Source"),
-    "Détails" = c(gsub("_", " ", df$scientific_name[1]),
-                  length(df$year_obs),
-                  df$system[1],
-                  df$taxa[1],
-                  df$intellectual_rights[1])
+                  "Longueur du suivi",
+                  "Statut (Québec)",
+                  "Groupe"#,
+                  #"Source"
+                  ),
+    "Détails" = c(gsub("_", " ", obs$scientific_name[1]),
+                  paste0(min(obs$years[[1]]), "-", max(obs$years[[1]]), 
+                         " (", length(obs$years[[1]]), " ans)"),
+                  if(is.na(obs$qc_status[1])){"-"} else{obs$qc_status[1]},
+                  obs$species_gr[1]#,
+                  #df$intellectual_rights[1]
+                  )
   )
   return(summary_table)
 }
