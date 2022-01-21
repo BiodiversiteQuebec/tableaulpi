@@ -36,6 +36,7 @@ filter_atlas <- function(target_taxa){
   obs <- dplyr::left_join(ratlas::get_timeseries(), 
                    ratlas::get_gen(endpoint="taxa"), 
                    by = c("id_taxa" = "id"))
+  obs$id <- as.character(obs$id)
   
   stopifnot(target_taxa %in% c("Poissons", "Amphibiens", "Oiseaux", "Mammifères", "Reptiles", "Tous"))
   
