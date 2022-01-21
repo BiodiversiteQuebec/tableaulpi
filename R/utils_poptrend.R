@@ -10,50 +10,40 @@
 
 make_poptrend <- function(taxachoice){
   
-  # Index to make a bubble plot of each populations' trend, where each bubble's fill
-  # colour is scaled to the population's population growth rate (%). The x axis is 
-  # arbitrary, while the y axis indicates growth rate (%).
+  lambda <- read.csv("~/Documents/GitHub/tableaulpi/data/rlpi/default_infile_pops_PopLambda.txt")
+  lambda[lambda == -1] <- NA
+
+  temp <- data.frame(
+    "id" = lambda$population_id,
+    "mean_lambda" = lambda[,3:ncol(lambda)] %>% as.matrix() %>% apply(1, mean, na.rm = TRUE) 
+  )
   
-  #' @import dplyr
+  lambda <- left_join(temp, 
+                      subset(obs, select = c(id, scientific_name, qc_status, exotic, species_gr)),
+                      by = "id")
   
-  # Import population growth rates
-  pop_trends <- readRDS("data/lpi_trend_populations.RDS")
-  # prepare data
-  temp <- dplyr::filter(pop_trends, taxa != "tous") %>%
-    # create a column for % change since 1990
-    dplyr::mutate(perc_change = (dt-1))
-  # set random seed
-  set.seed(20)
-  # assign random y axis positions to each population
-  temp$position <- runif(nrow(temp), min = 0.1, max = 1)
-  
-  # select taxa of choice
-  if(taxachoice != "tous"){
-    temp <- dplyr::filter(temp, taxa == taxachoice)
-  }
+  lambda$perc <- round(lambda$mean_lambda*100, digits = 2)
   
   # set up plotly object
   plotly::plot_ly(showscale = FALSE) %>%
     # format points
     plotly::add_markers(
-      data = temp,
-      x = ~perc_change,
-      y = ~position,
-      color = ~perc_change,
-      colors = colorRampPalette(RColorBrewer::brewer.pal(10,"RdYlGn"))(length(unique(temp$perc_change))),
+      data = lambda,
+      x = ~perc,
+      y = ~species_gr,
+      color = ~perc,
+      colors = colorRampPalette(RColorBrewer::brewer.pal(10,"RdYlGn"))(length(unique(lambda$perc))),
       marker = list(size = 20, line = list(width = .2, color = "grey80")),
-      text = ~common_name,
+      text = ~scientific_name, # switch to common name
       hovertemplate = paste('<b>%{text}</b>',
-                            "<br>L'abondance de cette population <br>a changé de %{x:.1%} depuis 1990.<br>",
+                            "<br>L'abondance de cette population <br>a changé de %{x:1}% depuis 1990.<br>",
                             "<extra></extra>")
     ) %>%
-    plotly::colorbar(limits = c(-max(abs(pop_trends$dt-1))-0.02,
-                                max(abs(pop_trends$dt-1))+0.02)) %>%
+    plotly::colorbar(limits = c(-100,100), title = "Taux de croissance") %>%
     # axis and label stuff
     plotly::layout(
-      xaxis = list(range = c(-max(abs(pop_trends$dt-1))-0.02,
-                             max(abs(pop_trends$dt-1))+0.02),
-                   title = "Taux de croissance"),
+      xaxis = list(range = c(-100, 100),
+                   title = "Taux de croissance (moyenne)"),
       # hide y axis
       yaxis = list(
         title = "",
