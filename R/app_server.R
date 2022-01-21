@@ -21,6 +21,7 @@ app_server <- function( input, output, session ) {
   # Plot raw time series of clicked population in a pop-up modal ----
   
   mod_timeseries_server("timeseries_ui_1", clicked_population)
+  mod_species_photo_server("species_photo_ui_1", clicked_population)
   mod_summarise_rawdata_server("summarise_rawdata_ui_1", clicked_population)
   mapselector::mod_modal_make_server(id = "pop_modal",
                                      region = clicked_population, 
@@ -29,6 +30,7 @@ app_server <- function( input, output, session ) {
                                               mod_timeseries_ui("timeseries_ui_1")
                                               ),
                                      tabPanel("Détails",
+                                              mod_species_photo_ui("species_photo_ui_1"),
                                               mod_summarise_rawdata_ui("summarise_rawdata_ui_1")
                                               )
                                      )
