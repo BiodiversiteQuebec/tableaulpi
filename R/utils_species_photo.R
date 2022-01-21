@@ -9,7 +9,7 @@
 
 make_species_photo <- function(clicked_population){
   
-  obs <- dplyr::filter(ratlas::get_gen(endpoint="taxa"), 
+  obs <- dplyr::filter(ratlas::get_gen(endpoint="taxa"),  # to update with get_taxa when ready
                        id == as.integer(clicked_population))
   
   src <- mapselector::get_species_photo(obs$scientific_name[1])$thumb_url
