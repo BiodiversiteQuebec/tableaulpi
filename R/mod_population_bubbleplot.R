@@ -7,9 +7,14 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-mod_population_bubbleplot_ui <- function(id){
+mod_population_bubbleplot_ui <- function(id, spp_menu_title = "Groupe d'espèces"){
   ns <- NS(id)
   tagList(
+    radioButtons(ns("target_taxa"), label = spp_menu_title,
+                 choiceValues = c("Tous", "Amphibiens", "Mammifères",
+                                  "Oiseaux", "Poissons", "Reptiles"),
+                 choiceNames = c("Toutes les espèces", "Amphibiens", 
+                                 "Mammifères", "Oiseaux", "Poissons", "Reptiles")),
     plotly::plotlyOutput(outputId = ns("poptrend"), width = "100%")
   )
 }
@@ -17,11 +22,11 @@ mod_population_bubbleplot_ui <- function(id){
 #' population_bubbleplot Server Functions
 #'
 #' @noRd 
-mod_population_bubbleplot_server <- function(id, taxachoice){
+mod_population_bubbleplot_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     output$poptrend <- plotly::renderPlotly({
-      make_poptrend(taxachoice = taxachoice())}
+      make_poptrend(taxachoice = input$target_taxa)}
     )
   })
 }
