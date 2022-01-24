@@ -6,7 +6,6 @@
 #' @import mapselector
 #' @noRd
 app_ui <- function(request) {
-  
   tagList(
     
     # information panel that slides onto window (appears on hover)
@@ -18,15 +17,12 @@ app_ui <- function(request) {
     
     # Application UI logic -----------------------------------------------------
     
-    
     # Standard mapselector dashboard format ----
-    
     mapselector::tableau_de_bord(
       mapselector::dash_sidebar(
-	mapselector::dash_title(title = "Indice Planète Vivante", icon="nature-collection-landscape-1"),
-        badge(text_badge = "L'Indice Planète Vivante mesure les changements dans l'abondance des populations animales depuis 1990."),
-        mod_subset_plot_leafletproxy_ui(
-          "pointmap", 
+ 	  mapselector::dash_title(title = "Indice Planète Vivante", icon="nature-collection-landscape-1"),
+         badge(text_badge = "L'Indice Planète Vivante mesure les changements dans l'abondance des populations animales depuis 1990."),
+        mod_subset_plot_leafletproxy_ui("pointmap", 
           mapselector::mod_modal_helpbutton_ui(id = "spp_help",
                                                "Choisir le groupe d'espèces")
         ),
@@ -48,7 +44,8 @@ app_ui <- function(request) {
         
         # First tab: Map on landing page
         #maybe a little strange, but here we pass in the UI of a modal and the id that defines it.
-        mapselector::tab_map(title = "Carte", id = "pointmap",
+        mapselector::tab_map(title = "Carte", 
+                             id = "pointmap",
                              outputFunction = mapselector::mod_map_select_ui),
         
         
