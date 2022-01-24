@@ -7,7 +7,7 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-mod_subset_plot_leafletproxy_ui <- function(id, spp_menu_title = "groupe d'espèces"){
+mod_subset_plot_leafletproxy_ui <- function(id, spp_menu_title = "Groupe d'espèces"){
   ns <- NS(id)
   tagList(
     radioButtons(ns("taxa"), label = spp_menu_title,
