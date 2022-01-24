@@ -1,4 +1,10 @@
-# Maps the location of populations included in the Living Planet Index calculated for Québec 
+#' Functions to make a map of population points that are in the dataset, which can be filtered by selected taxonomic group.
+#'
+#' @param target_taxa 
+#'
+#' @return Leaflet map of point coordinations for populations included in the dataset.
+#' @export
+#'
 
 ## colour palette ##
 pal <- c("Amphibiens" = "#56B4E9",
@@ -29,8 +35,6 @@ filter_atlas <- function(target_taxa){
   # set api token as environment variable
   Sys.setenv("ATLAS_API_TOKEN" = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZF9vbmx5X2FsbCIsIm1haWwiOiJrYXRoZXJpbmUuaGViZXJ0QHVzaGVyYnJvb2tlLmNhIn0.jHfCLsRseU0--5qFB5A_PfIOEv0I24PQw1ip3q_3KQw')
   
-  ## Data ##
-  #lpd_qc <- readRDS("data/lpd_qc_fake.RDS")
   
   # get time series and taxonomic info to observations
   obs <- dplyr::left_join(ratlas::get_timeseries(), 
