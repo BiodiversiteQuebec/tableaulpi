@@ -4,7 +4,7 @@
 \alias{make_indextrend}
 \title{Plot the Living Planet Index (LPI) trend}
 \usage{
-make_indextrend(taxa)
+make_indextrend(target_taxa = "Tous")
 }
 \arguments{
 \item{taxa}{can take the inputs "tous" (all populations in Québec), "amphibiens" , "mammifères", "oiseaux", "poissons", "reptiles" from the Shiny user's input.}

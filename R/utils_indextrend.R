@@ -10,49 +10,47 @@
 #' 
 #' @export
 #' 
-make_indextrend <- function(taxa){
+make_indextrend <- function(target_taxa = "Tous"){
 
-  # create colorblind-friendly palette
-  pal <- c("#984ea3", "#56B4E9", "#D55E00", "#E69F00", "#0072B2", "#009E73")
-  names(pal) <- c("tous", "amphibiens", "mammifères", "oiseaux", "poissons", "reptiles")
+  ## colour palette ##
+  pal <- c("Amphibiens" = "#56B4E9",
+           "Mammifères" = "#D55E00", 
+           "Oiseaux" = "#E69F00", 
+           "Poissons" = "#0072B2", 
+           "Reptiles" = "#009E73",
+           "Tous" = "#999999")
   
-  # create ggplot theme options to apply to all figures
-  plot_theme <- ggplot2::theme_classic() +
-    ggplot2::theme(axis.text = ggplot2::element_text(size = 13),
-                   axis.title = ggplot2::element_text(size = 15))
-  
-  # Import LPI results per taxa group
-  lpi_df <- readRDS("data/lpi_index_taxa.RDS")
+  lpi <- tableaulpi::calculate_LPI(target_taxa)
   # round so the hover text is nicer
-  lpi_df[,c(3:8)] <- apply(lpi_df[,c(3:8)], 2, round, digits = 2)
-  # filter for subset of values according to user's choice of taxa
-  lpi_taxa <- lpi_df[which(lpi_df$taxa == taxa),]
+  lpi[,1:3] <- round(lpi[,1:3], digits = 2)
+  
+  # calculate index for populations to show in the background of the plot
+  # lpi_pops <- tableaulpi::make_rlpi_population(target_taxa)
+  # removing bc heavy and also not very informative when there are a lot of populations.
   
   # generate a custom string (to appear in tooltip)
   text_lpi <- paste0(
-    "LPI en ", lpi_taxa$year," = ", lpi_taxa$lpi,
-    "\n(CI: ", lpi_taxa$lpi_cilo, ", ", lpi_taxa$lpi_cihi, ")"
+    "LPI en ", lpi$years," = ", lpi$LPI_final,
+    "\n(CI: ", lpi$CI_low, ", ", lpi$CI_high, ")"
   )
-  # rename the background lpi trend columns
-  lpi_df <- dplyr::rename(lpi_df, "lpi_b" = "lpi")
   
   # plot the LPI trend
-  p <- ggplot2::ggplot() +
-    # plot all taxa trends in grey
-    ggplot2::geom_line(data = lpi_df,
-                       ggplot2::aes(x = year, y = lpi_b, group = taxa),
-                       col = "grey90",
-                       lwd = .4) +
+  p <- ggplot2::ggplot(lpi, ggplot2::aes(x = years)) +
+    # # plot all populations trends in grey
+    # ggplot2::geom_line(data = lpi_pops,
+    #                    ggplot2::aes(x = years, y = LPI_final, group = population_id),
+    #                    col = "grey90",
+    #                    lwd = .4) +
     # plot uncertainty interval for chosen taxa
-    ggplot2::geom_ribbon(data = lpi_taxa,
-                         ggplot2::aes(x = year, ymin = lpi_cilo, ymax = lpi_cihi),
-                         fill = unname(pal[taxa]),
+    ggplot2::geom_ribbon(data = lpi, 
+                         ggplot2::aes(x = years, ymin = CI_low, ymax = CI_high),
+                         fill = unname(pal[target_taxa]),
                          colour = NA, # remove ribbon border
                          alpha = .2) +
     # plot trend for chosen taxa in color
-    ggplot2::geom_line(data = lpi_taxa,
-                       ggplot2::aes(x = year, y = lpi),
-                       col = unname(pal[taxa]),
+    ggplot2::geom_line(data = lpi, 
+                       ggplot2::aes(x = years, y = LPI_final),
+                       col = unname(pal[target_taxa]),
                        lwd = .7) +
     # baseline reference
     ggplot2::geom_hline(yintercept = 1,
@@ -60,10 +58,10 @@ make_indextrend <- function(taxa){
                         col = "grey20",
                         lwd = .2) +
     ggplot2::labs(y = "Indice Planète Vivante", x = "") +
-    plot_theme
+    tableaulpi::theme_mapselector()
   # generate as plotly object
-  p <- plotly::ggplotly(p, tooltip = c("lpi")) %>%
-    plotly::layout(yaxis = list(range = c(0, max(c(abs(lpi_df$lpi_cihi)))+0.1)),
+  p <- plotly::ggplotly(p, tooltip = c("LPI_final")) %>%
+    plotly::layout(yaxis = list(range = c(0, max(c(abs(c(lpi$CI_high))))+0.1)),
                    hovermode = "x unified"
     ) %>%
     plotly::style(hoverinfo = "skip", traces = 1) %>%

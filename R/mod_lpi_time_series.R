@@ -7,9 +7,14 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-mod_lpi_time_series_ui <- function(id){
+mod_lpi_time_series_ui <- function(id, spp_menu_title = "Groupe d'espèces"){
   ns <- NS(id)
   tagList(
+    radioButtons(ns("target_taxa"), label = spp_menu_title,
+                 choiceValues = c("Tous", "Amphibiens", "Mammifères",
+                                  "Oiseaux", "Poissons", "Reptiles"),
+                 choiceNames = c("Toutes les espèces", "Amphibiens", 
+                                 "Mammifères", "Oiseaux", "Poissons", "Reptiles")),
     plotly::plotlyOutput(outputId = ns("indextrend"), width = "100%")
   )
 }
@@ -17,12 +22,12 @@ mod_lpi_time_series_ui <- function(id){
 #' lpi_time_series Server Functions
 #'
 #' @noRd
-mod_lpi_time_series_server <- function(id, taxachoice){
+mod_lpi_time_series_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
     output$indextrend <- plotly::renderPlotly({
-      make_indextrend(taxa = taxachoice())}
+      make_indextrend(target_taxa = input$target_taxa)}
       )
   })
 }

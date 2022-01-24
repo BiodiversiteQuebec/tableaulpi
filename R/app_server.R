@@ -55,7 +55,7 @@ app_server <- function( input, output, session ) {
   
   # Show index plots in a modal with tabs ----
   
-  mod_lpi_time_series_server("lpi", taxachoice = taxachoice)
+  mod_lpi_time_series_server("lpi")
   mod_population_bubbleplot_server("poptrend")
   mod_ridgeplot_server("mod_ridgeplot_ui_1")
   
