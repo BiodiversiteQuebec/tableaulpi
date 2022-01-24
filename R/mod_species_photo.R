@@ -9,7 +9,7 @@
 #' @importFrom shiny NS tagList 
 mod_species_photo_ui <- function(id){
   ns <- NS(id)
-  uiOutput(ns("photo"))
+  htmlOutput(ns("photo"))
 }
     
 #' species_photo Server Functions
