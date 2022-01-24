@@ -4,7 +4,7 @@
 \alias{make_ridgeplot}
 \title{Ridgeplot of the density of population growth rates per taxa}
 \usage{
-make_ridgeplot()
+make_ridgeplot(taxachoice)
 }
 \value{
 A ridgeplot of the density of all population growth rates for each taxa, stacked vertically to allow comparison between groups. The plot is themed with \code{theme_mapselector()}.
