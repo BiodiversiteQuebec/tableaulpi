@@ -7,10 +7,16 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-mod_ridgeplot_ui <- function(id){
+mod_ridgeplot_ui <- function(id, spp_menu_title = "Groupe d'espèces"){
   ns <- NS(id)
   tagList(
-    plotOutput(outputId = ns("ridgeplot"), width = "100%")
+    radioButtons(ns("target_taxa"), label = spp_menu_title,
+                 choiceValues = c("Tous", "Amphibiens", "Mammifères",
+                                  "Oiseaux", "Poissons", "Reptiles"),
+                 choiceNames = c("Toutes les espèces", "Amphibiens", 
+                                 "Mammifères", "Oiseaux", "Poissons", "Reptiles"))
+  ,
+  plotOutput(outputId = ns("ridgeplot"), width = "100%")
   )
 }
     
@@ -22,7 +28,7 @@ mod_ridgeplot_server <- function(id){
     ns <- session$ns
     
     output$ridgeplot <- renderPlot({
-      make_ridgeplot()}
+      make_ridgeplot(taxachoice = input$target_taxa)}
     )
   })
 }
