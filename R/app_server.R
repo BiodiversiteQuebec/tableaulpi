@@ -27,13 +27,17 @@ app_server <- function( input, output, session ) {
                                      region = clicked_population, 
                                      title_format_pattern = "Les données pour Population %s",
                                      tabPanel("Données brutes", 
-                                              mod_timeseries_ui("timeseries_ui_1")
-                                              ),
-                                     tabPanel("Détails",
-                                              mod_species_photo_ui("species_photo_ui_1"),
-                                              mod_summarise_rawdata_ui("summarise_rawdata_ui_1")
+                                              fluidRow(
+                                                column(4, 
+                                                       mod_species_photo_ui("species_photo_ui_1"),
+                                                       mod_summarise_rawdata_ui("summarise_rawdata_ui_1")
+                                                       ),
+                                                column(8,
+                                                       mod_timeseries_ui("timeseries_ui_1")
+                                                       )
                                               )
                                      )
+  )
   
   
   # Show tutorial information in various modals ----
