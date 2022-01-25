@@ -9,10 +9,16 @@
 
 make_species_photo <- function(clicked_population){
   
-  obs <- dplyr::filter(ratlas::get_gen(endpoint="taxa"),  # to update with get_taxa when ready
-                       id == as.integer(clicked_population))
+  # get data for the clicked population
+  obs <- ratlas::get_timeseries() %>%
+    dplyr::filter(id == as.integer(clicked_population)) %>%
+    dplyr::left_join(., 
+                     ratlas::get_gen(endpoint="taxa",
+                                        id = unique(obs$id_taxa)),
+                     by = c("id_taxa" = "id"))
+    
   
   src <- mapselector::get_species_photo(obs$scientific_name[1])$thumb_url
   
-  return(tags$img(src=src))
+  return(tags$img(src=src, height="200", width ="200")) # how to control the size of the photo here? sometimes it's still huge
 }
