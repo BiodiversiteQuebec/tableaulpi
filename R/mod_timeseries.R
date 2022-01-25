@@ -11,8 +11,8 @@ mod_timeseries_ui <- function(id){
   ns <- NS(id)
   tagList(
     div(
-      htmlOutput(ns("blurb")),
-    plotOutput(outputId = ns("timeseries"), width = "100%")
+    plotOutput(outputId = ns("timeseries"), width = "100%"),
+    htmlOutput(ns("blurb"))
     )
   )
 }
@@ -23,19 +23,18 @@ mod_timeseries_ui <- function(id){
 mod_timeseries_server <- function(id, clicked_population){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
+  
+    output$timeseries <- renderPlot({
+      make_timeseries(clicked_population())}
+    )
     
     output$blurb <- renderUI({
       
       # write some context
       tags$div(id = "blurbid", 
                class = "blurbtext",
-               tags$h5("Série temporelle brute pour la population choisie"),
-               tags$p("Chaque point est une mesure de l'abondance de la population à un point dans le temps. L'indice se base sur le taux de changement entre ces points pour estimer une tendance dans l'abondance des populations.")
+               tags$p("Chaque point est une mesure de l'abondance de la population à un point dans le temps. L'Indice Planète Vivante se base sur le taux de changement entre ces points pour estimer une tendance moyenne des changements d'abondance de plusieurs populations.")
       )})
-    
-    output$timeseries <- renderPlot({
-      make_timeseries(clicked_population())}
-    )
   })
 }
     
