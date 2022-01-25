@@ -24,32 +24,21 @@ make_indextrend <- function(target_taxa = "Tous"){
   # round so the hover text is nicer
   lpi[,1:3] <- round(lpi[,1:3], digits = 2)
   
-  # calculate index for populations to show in the background of the plot
-  # lpi_pops <- tableaulpi::make_rlpi_population(target_taxa)
-  # removing bc heavy and also not very informative when there are a lot of populations.
-  
-  # generate a custom string (to appear in tooltip)
-  text_lpi <- paste0(
-    "LPI en ", lpi$years," = ", lpi$LPI_final,
-    "\n(CI: ", lpi$CI_low, ", ", lpi$CI_high, ")"
-  )
-  
   # plot the LPI trend
-  p <- ggplot2::ggplot(lpi, ggplot2::aes(x = years)) +
-    # # plot all populations trends in grey
-    # ggplot2::geom_line(data = lpi_pops,
-    #                    ggplot2::aes(x = years, y = LPI_final, group = population_id),
-    #                    col = "grey90",
-    #                    lwd = .4) +
+  p <- ggplot2::ggplot(data = lpi, 
+                       ggplot2::aes(x = years, 
+                                    text = paste0(
+                                      "IPV en ", years," = ", LPI_final,
+                                      "\nIntervale de confiance: ", CI_low, "–", CI_high, ""    ),
+                                    group = 1)
+                       ) +
     # plot uncertainty interval for chosen taxa
-    ggplot2::geom_ribbon(data = lpi, 
-                         ggplot2::aes(x = years, ymin = CI_low, ymax = CI_high),
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = CI_low, ymax = CI_high),
                          fill = unname(pal[target_taxa]),
                          colour = NA, # remove ribbon border
                          alpha = .2) +
     # plot trend for chosen taxa in color
-    ggplot2::geom_line(data = lpi, 
-                       ggplot2::aes(x = years, y = LPI_final),
+    ggplot2::geom_line(ggplot2::aes(y = LPI_final),
                        col = unname(pal[target_taxa]),
                        lwd = .7) +
     # baseline reference
@@ -60,13 +49,11 @@ make_indextrend <- function(target_taxa = "Tous"){
     ggplot2::labs(y = "Indice Planète Vivante", x = "") +
     tableaulpi::theme_mapselector()
   # generate as plotly object
-  p <- plotly::ggplotly(p, tooltip = c("LPI_final")) %>%
-    plotly::layout(yaxis = list(range = c(0, max(c(abs(c(lpi$CI_high))))+0.1)),
-                   hovermode = "x unified"
+  p <- plotly::ggplotly(p, tooltip = c("text")) %>%
+    plotly::layout(hovermode = "x unified",
+                   yaxis = list(range = c(0, max(c(abs(c(lpi$CI_high))))+0.1))
     ) %>%
     plotly::style(hoverinfo = "skip", traces = 1) %>%
-    plotly::style(hoverinfo = "skip", traces = 2) %>%
-    plotly::style(text = text_lpi, traces = 3) %>%
     # remove plotly's zooming option
     plotly::config(modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d"))
   return(p)
