@@ -37,22 +37,29 @@ make_timeseries <- function(clicked_population){
     "values" = unlist(df$values)
     )
   
+  # make axis breaks
+  # round to integer, since the x axis is years
+  if(nrow(df_plot) <= 10){
+    x_breaks = seq(min(df_plot$years), max(df_plot$years), by = 1)
+  } else{
+    x_breaks = seq(min(df_plot$years), max(df_plot$years), by = 5)
+  }
+  
   # plot raw time series
-  ggplot(data = df_plot,
-         aes(x = years, y = values)) +
-    geom_line(col = "#4d4d4d") +
-    geom_point(col = pal[df$species_gr[1]], 
-               size = 4) +
-    scale_color_manual(values = pal) +  # use palette from above
-    scale_x_continuous(breaks = function(x) seq(ceiling(x[1]), floor(x[2]), by = 1)) + # round to integer, since the x axis is years
-    labs(x = "",
-         y = "Abondance de la population",
-         title = paste0(
-           gsub("_", " ", df$scientific_name[1])#, 
-           #" (", df$common_name[1], ")"
-           )#,
-         # caption = paste0("Source des données: ", 
-         #                  unique(df$intellectual_rights))
-         ) +
-    theme_mapselector()
+  ggplot2::ggplot(data = df_plot,
+                  ggplot2::aes(x = years, y = values)) +
+    ggplot2::geom_line(col = "#4d4d4d") +
+    ggplot2::geom_point(col = pal[df$species_gr[1]], 
+                        size = 4) +
+    ggplot2::scale_color_manual(values = pal) +  # use palette from above
+    ggplot2::scale_x_continuous(breaks = x_breaks) + 
+    ggplot2::labs(x = "",
+                  y = "Abondance de la population",
+                  title = paste0(
+                    "Suivi de la population choisie (",
+                    gsub("_", " ", df$scientific_name[1]), ")"
+                  ) 
+                  #" (", df$common_name[1], ")"
+    ) +
+    tableaulpi::theme_mapselector()
 }
