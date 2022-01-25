@@ -9,6 +9,9 @@
 #' 
 calculate_LPI <- function(target_taxa = "Tous"){
   
+  # set seed for randomisations
+  set.seed(12)
+  
   # get time series and taxonomic info to observations
   obs <- dplyr::left_join(ratlas::get_timeseries(), 
                           ratlas::get_gen(endpoint="taxa"), 
@@ -59,7 +62,7 @@ calculate_LPI <- function(target_taxa = "Tous"){
                        goParallel = TRUE,
                        VERBOSE = FALSE, save_plots = 0, plot_lpi = 0,
                        SHOW_PROGRESS = FALSE,
-                       force_recalculation = TRUE)
+                       force_recalculation = FALSE)
   
   # Remove NAs (trailing years with no data)
   lpi <- lpi[complete.cases(lpi), ]
