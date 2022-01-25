@@ -9,33 +9,32 @@
 
 make_summarise_rawdata <- function(clicked_population){
  
-  # import dataset
-  
-  # set api token as environment variable
-  Sys.setenv("ATLAS_API_TOKEN" = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZF9vbmx5X2FsbCIsIm1haWwiOiJrYXRoZXJpbmUuaGViZXJ0QHVzaGVyYnJvb2tlLmNhIn0.jHfCLsRseU0--5qFB5A_PfIOEv0I24PQw1ip3q_3KQw')
-  
   # get time series and taxonomic info to observations
-  obs <- dplyr::left_join(ratlas::get_timeseries(), 
-                          ratlas::get_gen(endpoint="taxa"), 
-                          by = c("id_taxa" = "id"))
+  obs <- ratlas::get_timeseries() %>% 
+    dplyr::left_join(., ratlas::get_gen(endpoint="taxa", id = unique(obs$id_taxa)), 
+                     by = c("id_taxa" = "id")) %>%
+    dplyr::left_join(., ratlas::get_datasets(id = unique(obs$id_datasets)),
+                     "id_datasets" = "id")
   obs$id <- as.character(obs$id)
   obs <- obs[which(obs$id == clicked_population),]
   
   # summarise information about this dataset
   summary_table <- data.frame(
     "Description" = c("Nom scientifique",
-                  "Longueur du suivi",
-                  "Statut (Québec)",
-                  "Groupe"#,
-                  #"Source"
-                  ),
+                      "Durée du suivi",
+                      "Statut de l'espèce (Québec)",
+                      "Groupe",
+                      "Source des données",
+                      "License"
+    ),
     "Détails" = c(gsub("_", " ", obs$scientific_name[1]),
                   paste0(min(obs$years[[1]]), "-", max(obs$years[[1]]), 
                          " (", length(obs$years[[1]]), " ans)"),
                   if(is.na(obs$qc_status[1])){"-"} else{obs$qc_status[1]},
-                  obs$species_gr[1]#,
-                  #df$intellectual_rights[1]
-                  )
+                  obs$species_gr[1],
+                  paste0(obs$title[1], " par ", obs$creator[1]),
+                  paste0(obs$intellectual_rights[1], "(", obs$license[1], ")")
+    )
   )
   return(summary_table)
 }
