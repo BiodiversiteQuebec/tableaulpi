@@ -10,12 +10,22 @@
 mod_lpi_time_series_ui <- function(id, spp_menu_title = "Groupe d'espèces"){
   ns <- NS(id)
   tagList(
-    radioButtons(ns("target_taxa"), label = spp_menu_title,
-                 choiceValues = c("Tous", "Amphibiens", "Mammifères",
-                                  "Oiseaux", "Poissons", "Reptiles"),
-                 choiceNames = c("Toutes les espèces", "Amphibiens", 
-                                 "Mammifères", "Oiseaux", "Poissons", "Reptiles")),
-    plotly::plotlyOutput(outputId = ns("indextrend"), width = "100%")
+    fluidRow(
+      column(3, 
+             shiny::radioButtons(ns("target_taxa"), 
+                                 label = spp_menu_title,
+                                 choiceValues = c("Tous", "Amphibiens", "Mammifères",
+                                                  "Oiseaux", "Poissons", "Reptiles"),
+                                 choiceNames = c("Toutes les espèces", "Amphibiens",
+                                                 "Mammifères", "Oiseaux", "Poissons", "Reptiles"))
+      ),
+      column(9,
+             shiny::textOutput(outputId = ns("datasummary"))
+      )
+    ),
+    fluidRow(
+      plotly::plotlyOutput(outputId = ns("indextrend"), width = "100%")
+    )
   )
 }
 
@@ -26,6 +36,10 @@ mod_lpi_time_series_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    output$datasummary <- shiny::renderText({
+      summarise_index_data(target_taxa = input$target_taxa)
+    })
+    
     output$indextrend <- plotly::renderPlotly({
       make_indextrend(target_taxa = input$target_taxa)}
       )
@@ -39,7 +53,7 @@ mod_lpi_time_series_server <- function(id){
 # mod_lpi_time_series_server("lpi_time_series_ui_1")
 
 
-
+#### Test ####
 
 testapp_lpi_timeseries <- function(){
   ui <- fluidPage(
