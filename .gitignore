@@ -62,3 +62,4 @@ data/rlpi/default_infile_pops_lambda.csv
 data/rlpi/default_infile_pops_Lambda.txt
 data/rlpi/default_infile_pops_Minmax.txt
 data/rlpi/lpi_temp/
+dev/run_dev.R
