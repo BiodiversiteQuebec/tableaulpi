@@ -31,11 +31,7 @@ make_pointmap <- function(){
 
 # function to filter the dataset to selected taxa
 filter_atlas <- function(target_taxa){
-  
-  # set api token as environment variable
-  Sys.setenv("ATLAS_API_TOKEN" = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZF9vbmx5X2FsbCIsIm1haWwiOiJrYXRoZXJpbmUuaGViZXJ0QHVzaGVyYnJvb2tlLmNhIn0.jHfCLsRseU0--5qFB5A_PfIOEv0I24PQw1ip3q_3KQw')
-  
-  
+
   # get time series and taxonomic info to observations
   obs <- dplyr::left_join(ratlas::get_timeseries(), 
                    ratlas::get_gen(endpoint="taxa"), 
