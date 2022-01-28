@@ -10,7 +10,8 @@
 make_species_photo <- function(clicked_population){
   
   # get data for the clicked population
-  obs <- ratlas::get_timeseries() %>%
+  obs <- ratlas::get_timeseries() 
+  obs <- obs %>%
     dplyr::filter(id == as.integer(clicked_population)) %>%
     dplyr::left_join(., 
                      ratlas::get_gen(endpoint="taxa",
