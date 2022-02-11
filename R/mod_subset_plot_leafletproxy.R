@@ -7,14 +7,21 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-mod_subset_plot_leafletproxy_ui <- function(id, spp_menu_title = "Groupe d'espèces"){
+mod_subset_plot_leafletproxy_ui <- function(id, spp_menu_title = "Groupe d'espèces", start_sel = "Tous"){
   ns <- NS(id)
   tagList(
-    radioButtons(ns("taxa"), label = spp_menu_title,
-                 choiceValues = c("Tous", "Amphibiens", "Mammifères",
-                                  "Oiseaux", "Poissons", "Reptiles"),
-                 choiceNames = c("Toutes les espèces", "Amphibiens", 
-                                 "Mammifères", "Oiseaux", "Poissons", "Reptiles"))
+    shinyWidgets::radioGroupButtons(ns("taxa"),
+                                    label = spp_menu_title,
+                                    choiceValues = list("Tous", "Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles"),
+                                    choiceNames = list(HTML("<i class='finature-collection nature-collection-landscape-1'>Tous</i>"),
+                                                       HTML("<i class='fianimals animals-010-frog'>Amphibiens</i>"),
+                                                       HTML("<i class='fianimals animals-015-squirrel'>Mammifères</i>"),
+                                                       HTML("<i class='fianimals animals-020-bird'>Oiseaux</i>"),
+                                                       HTML("<i class='finature-collection nature-collection-fish'>Poissons</i>"),
+                                                       HTML("<i class='fianimals animals-038-turtle'>Reptiles</i>")),
+                                    direction = "vertical",
+                                    status = 'primary fibuttons',
+                                    selected = start_sel)
   )
 }
     
