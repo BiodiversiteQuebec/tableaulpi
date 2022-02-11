@@ -6,28 +6,10 @@
 #' @export
 #'
 
-## colour palette ##
-pal <- c("Amphibiens" = "#56B4E9",
-         "Mammifères" = "#D55E00", 
-         "Oiseaux" = "#E69F00", 
-         "Poissons" = "#0072B2", 
-         "Reptiles" = "#009E73",
-         "#999999")
-
-
-# function to make empty map with legend
+# function to make empty map 
 make_pointmap <- function(){
-
-  ## MAP ##
-  mapselector::make_leaflet_empty()  %>%
-    leaflet::addLegend(
-      "topleft",
-      colors = pal[c(1:5)],
-      labels = c("Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles"),
-      opacity = 1
-    )
+  mapselector::make_leaflet_empty() 
 }
-
 
 # function to filter the dataset to selected taxa
 filter_atlas <- function(target_taxa){
@@ -38,6 +20,7 @@ filter_atlas <- function(target_taxa){
                    by = c("id_taxa" = "id"))
   obs$id <- as.character(obs$id)
   
+  # check that the input makes sense
   stopifnot(target_taxa %in% c("Poissons", "Amphibiens", "Oiseaux", "Mammifères", "Reptiles", "Tous"))
   
   # Subset to selected taxa 
@@ -47,43 +30,25 @@ filter_atlas <- function(target_taxa){
   return(obs)
 }
 
-## function to set marker color ##
-getColor <- function(obs) {
-  pal[obs$species_gr]
-}
-
-
-## POP-UPS when clicking a map point ##
-get_popup_content <- function(obs){
-  paste0(
-    #"<b>", obs$common_name, "</b>", # to replace when this info is in the taxa table
-    "<br><i>", gsub("_", " ", obs$scientific_name), "</i>",
-    "<br>", obs$species_gr#, 
-    #"<br><b>Source: </b>", obs$intellectual_rights
-  )
-}
-
 # show map points from filtered dataset
 filter_leaflet_map <- function(mapid, taxa_to_show = "Tous"){
   
-  obs <- filter_atlas(taxa_to_show)
+  # create icons for the populations
+  ics <- make_site_icons()
   
+  obs <- filter_atlas(taxa_to_show)
   # pull out coordinates to make them recognizable to leaflet
   coord <- head(t(sapply(obs$geom$coordinates, as.list)), nrow(obs))
   colnames(coord) <- c("lng", "lat")
                        
   leaflet::leafletProxy(mapid) %>%
     leaflet::clearMarkers() %>% 
-    leaflet::addCircleMarkers(
+    leaflet::addAwesomeMarkers(
       data = obs,
+      icon = ~ics[obs$species_gr],
       lng = as.numeric(coord[, "lng"]), 
       lat = as.numeric(coord[, "lat"]),
       layerId = obs[["id"]],
-      label = obs[["id"]],
-      #popup = ~get_popup_content(obs),
-      color = unname(getColor(obs)),
-      stroke = FALSE,
-      fillOpacity = .7,
-      radius = 5
+      label = obs[["scientific_name"]]
     )
 }
