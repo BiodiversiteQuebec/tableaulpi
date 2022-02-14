@@ -12,14 +12,6 @@
 
 make_timeseries <- function(clicked_population){
 
-  ## colour palette ##
-  pal <- c("Amphibiens" = "#56B4E9",
-           "Mammifères" = "#D55E00",
-           "Oiseaux" = "#E69F00",
-           "Poissons" = "#0072B2",
-           "Reptiles" = "#009E73",
-           "#999999")
-
   # import dataset
   obs <- dplyr::left_join(ratlas::get_timeseries(),
                           ratlas::get_gen(endpoint="taxa"),
@@ -44,10 +36,8 @@ make_timeseries <- function(clicked_population){
   # plot raw time series
   ggplot2::ggplot(data = df_plot,
                   ggplot2::aes(x = years, y = values)) +
-    ggplot2::geom_line(col = "#4d4d4d") +
-    ggplot2::geom_point(col = pal[df$species_gr[1]],
-                        size = 4) +
-    ggplot2::scale_color_manual(values = pal) +  # use palette from above
+    ggplot2::geom_line(col = "#7bb5b1") +
+    ggplot2::geom_point(col = "#2e483e", size = 5) +
     ggplot2::scale_x_continuous(breaks = x_breaks) +
     ggplot2::labs(x = "",
                   y = "Abondance de la population",

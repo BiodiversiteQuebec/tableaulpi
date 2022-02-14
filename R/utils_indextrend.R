@@ -11,14 +11,6 @@
 #' @export
 #' 
 make_indextrend <- function(target_taxa = "Tous"){
-
-  ## colour palette ##
-  pal <- c("Amphibiens" = "#56B4E9",
-           "Mammifères" = "#D55E00", 
-           "Oiseaux" = "#E69F00", 
-           "Poissons" = "#0072B2", 
-           "Reptiles" = "#009E73",
-           "Tous" = "#999999")
   
   lpi <- tableaulpi::calculate_LPI(target_taxa)
   # round so the hover text is nicer
@@ -34,18 +26,18 @@ make_indextrend <- function(target_taxa = "Tous"){
                        ) +
     # plot uncertainty interval for chosen taxa
     ggplot2::geom_ribbon(ggplot2::aes(ymin = CI_low, ymax = CI_high),
-                         fill = unname(pal[target_taxa]),
+                         fill = "#7bb5b1",
                          colour = NA, # remove ribbon border
-                         alpha = .2) +
+                         alpha = .8) +
     # plot trend for chosen taxa in color
     ggplot2::geom_line(ggplot2::aes(y = LPI_final),
-                       col = unname(pal[target_taxa]),
+                       col = "#2e483e",
                        lwd = .7) +
     # baseline reference
     ggplot2::geom_hline(yintercept = 1,
                         lty = 1,
-                        col = "grey20",
-                        lwd = .2) +
+                        col = "#2e483e",
+                        lwd = .1) +
     ggplot2::labs(y = "Indice Planète Vivante", x = "") +
     tableaulpi::theme_mapselector()
   # generate as plotly object
