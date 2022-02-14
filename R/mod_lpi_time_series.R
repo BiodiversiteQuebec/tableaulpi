@@ -1,12 +1,13 @@
 #' lpi_time_series UI Function
 #'
-#' @description A shiny Module.
+#' @description A shiny Module to show the LPI trend line plot for a selected taxonomic group, with a loading spinner.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+
 mod_lpi_time_series_ui <- function(id, spp_menu_title = "Groupe d'espèces"){
   ns <- NS(id)
   tagList(
@@ -24,7 +25,12 @@ mod_lpi_time_series_ui <- function(id, spp_menu_title = "Groupe d'espèces"){
       )
     ),
     fluidRow(
-      plotly::plotlyOutput(outputId = ns("indextrend"), width = "100%")
+      shinycssloaders::withSpinner(
+      plotly::plotlyOutput(outputId = ns("indextrend"), width = "100%"),
+      type = 8,
+      color = "#7bb5b1", 
+      size = 1
+      )
     )
   )
 }
