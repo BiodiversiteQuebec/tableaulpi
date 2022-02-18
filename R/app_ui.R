@@ -6,6 +6,7 @@
 #' @import mapselector
 #' @noRd
 app_ui <- function(request) {
+  
   tagList(
     
     # information panel that slides onto window (appears on hover)
@@ -20,21 +21,22 @@ app_ui <- function(request) {
     # Standard mapselector dashboard format ----
     mapselector::tableau_de_bord(
       mapselector::dash_sidebar(
- 	  mapselector::dash_title(title = "Indice Planète Vivante", icon="nature-collection-landscape-1"),
-         badge(text_badge = "L'Indice Planète Vivante mesure les changements dans l'abondance des populations animales depuis 1990."),
+        mapselector::dash_title(title = "Indice Planète Vivante", 
+                                icon="nature-collection-landscape-1"),
+        badge(text_badge = "L'Indice Planète Vivante mesure les changements dans l'abondance des populations animales depuis 1990."),
         mod_subset_plot_leafletproxy_ui("pointmap", 
-          mapselector::mod_modal_helpbutton_ui(id = "spp_help",
-                                               "Choisir le groupe d'espèces")
+                                        mapselector::mod_modal_helpbutton_ui(id = "spp_help",
+                                                                             "Choisir le groupe d'espèces")
         ),
         
-  
         # Modals that appear when a button is clicked ----
-        
+
         # Index trend through time
-        mapselector::mod_modal_observeEvent_ui("affiche_index", button_text = "Afficher l'indice"), 
+        mod_view_index_ui(id = "lpi_help", "Afficher l'IPV"),
         
-        # Pop-up information box
-        mapselector::mod_modal_observeEvent_ui("affiche_tuto", button_text = "Guide d'utilisation")
+        # dataset description stats
+        mod_map_summarytable_ui("map_summarytable_1")
+        
       ),
       
       
@@ -47,7 +49,6 @@ app_ui <- function(request) {
         mapselector::tab_map(title = "Carte", 
                              id = "pointmap",
                              outputFunction = mapselector::mod_map_select_ui),
-        
         
         # Second tab: More detailed information about the index
         mapselector::tab_gen(title = "À propos de l'indice", 

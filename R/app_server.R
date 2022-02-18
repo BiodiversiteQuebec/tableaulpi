@@ -17,6 +17,8 @@ app_server <- function( input, output, session ) {
   # this is a sort of part-2 to the modal above. it must have the SAME ID or else it won't find the right map
   taxachoice <- mod_subset_plot_leafletproxy_server("pointmap")
   
+  # show summary statistics on the landing page
+  mod_map_summarytable_server("map_summarytable_1", taxa = taxachoice)
   
   # Plot raw time series of clicked population in a pop-up modal ----
   
@@ -43,17 +45,17 @@ app_server <- function( input, output, session ) {
   # Show tutorial information in various modals ----
   
   mapselector::mod_modal_observeEvent_tutorial_server("affiche_tuto",
-                                                      title_text = "C'est un tuto",
+                                                      title_text = "Que mesure l'Indice Planète Vivante?",
                                                       md_file = "firstModal.md", 
                                                       second_button = 
                                                       mapselector::mod_modal_observeEvent_ui("affiche_tuto2",
-                                                                                             button_text = "Je veux plus d'info"))
-  mapselector::mod_modal_observeEvent_tutorial_server("affiche_tuto2",
-                                                      title_text = "Guide d'interprétation",
+                                                                                             button_text = "Plus d'informations"))
+  mapselector::mod_modal_observeEvent_tutorial_server("lpi_help",
+                                                      title_text = "Guide d'interprétation de l'Indice Planète Vivante",
                                                       md_file = "second_modal_text.md")
   
   mapselector::mod_modal_observeEvent_tutorial_server("spp_help",
-                                         title_text = "Categories d'espece",
+                                         title_text = "Catégories d'espèces",
                                          md_file = "second_modal_text.md")
 
   
@@ -65,7 +67,7 @@ app_server <- function( input, output, session ) {
   
   mapselector::mod_modal_observeEvent_server(
     "affiche_index",
-    title_format_pattern =  "Indice Planète Vivante pour %s",
+    title_format_pattern =  "Indice Planète Vivante: %s",
     title_var = taxachoice,
     # Plot the index trend through time, by selected taxa group ----
     tabPanel(
@@ -74,12 +76,12 @@ app_server <- function( input, output, session ) {
     ), 
     # Plot of distribution of growth rates by group
     tabPanel(
-      title = "Par groupe d'espèces",
+      title = "Distribution des tendances",
       mod_ridgeplot_ui("mod_ridgeplot_ui_1")
       ),
     # Plot of growth rates of each population
     tabPanel(
-      title = "Par population",
+      title = "IPV par population",
       mod_population_bubbleplot_ui("poptrend")
       ))
 
