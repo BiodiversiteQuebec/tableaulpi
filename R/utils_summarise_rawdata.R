@@ -12,11 +12,11 @@ make_summarise_rawdata <- function(clicked_population){
   # get time series and taxonomic info to observations
   obs <- ratlas::get_timeseries() 
   obs <- obs %>% 
-    dplyr::left_join(., ratlas::get_gen(endpoint="taxa", 
-                                        id = unique(obs$id_taxa)), 
+    dplyr::left_join(ratlas::get_gen(endpoint="taxa", 
+                                     id = unique(obs$id_taxa)), 
                      by = c("id_taxa" = "id")) %>%
-    dplyr::left_join(., ratlas::get_datasets(id = unique(obs$id_datasets)),
-                     "id_datasets" = "id")
+    dplyr::left_join(ratlas::get_datasets(id = unique(obs$id_datasets)),
+                     by = c("id_datasets" = "id"))
   obs$id <- as.character(obs$id)
   obs <- obs[which(obs$id == clicked_population),]
   
