@@ -7,16 +7,14 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-mod_ridgeplot_ui <- function(id, spp_menu_title = "Groupe d'espèces"){
+mod_ridgeplot_ui <- function(id){
   ns <- NS(id)
   tagList(
-    radioButtons(ns("target_taxa"), label = spp_menu_title,
-                 choiceValues = c("Tous", "Amphibiens", "Mammifères",
-                                  "Oiseaux", "Poissons", "Reptiles"),
-                 choiceNames = c("Toutes les espèces", "Amphibiens", 
-                                 "Mammifères", "Oiseaux", "Poissons", "Reptiles"))
-  ,
-  plotOutput(outputId = ns("ridgeplot"), width = "100%")
+    # fluidRow(shinyWidgets::sliderTextInput("target_year",
+    #                                        label = NULL,
+    #                                        choices = as.character(c(1950:2018)),
+    #                                        selected = c("1990","2018"))),
+    fluidRow(plotly::plotlyOutput(outputId = ns("ridgeplot"), width = "100%"))
   )
 }
     
@@ -24,12 +22,10 @@ mod_ridgeplot_ui <- function(id, spp_menu_title = "Groupe d'espèces"){
 #'
 #' @noRd 
 mod_ridgeplot_server <- function(id){
-  moduleServer( id, function(input, output, session){
+  moduleServer(id, function(input, output, session){
     ns <- session$ns
     
-    output$ridgeplot <- renderPlot({
-      make_ridgeplot(taxachoice = input$target_taxa)}
-    )
+    output$ridgeplot <- plotly::renderPlotly({make_ridgeplot()})
   })
 }
     
@@ -38,3 +34,4 @@ mod_ridgeplot_server <- function(id){
     
 ## To be copied in the server
 # mod_ridgeplot_server("ridgeplot_ui_1")
+
