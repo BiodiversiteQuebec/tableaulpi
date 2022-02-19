@@ -8,28 +8,34 @@
 #'
 #' @importFrom shiny NS tagList
 
-mod_lpi_time_series_ui <- function(id, spp_menu_title = "Groupe d'espèces"){
+mod_lpi_time_series_ui <- function(id, spp_menu_title = "Groupe d'espèces", start_sel = "Tous"){
   ns <- NS(id)
   tagList(
     fluidRow(
-      column(3, 
-             shiny::radioButtons(ns("target_taxa"), 
-                                 label = spp_menu_title,
-                                 choiceValues = c("Tous", "Amphibiens", "Mammifères",
-                                                  "Oiseaux", "Poissons", "Reptiles"),
-                                 choiceNames = c("Toutes les espèces", "Amphibiens",
-                                                 "Mammifères", "Oiseaux", "Poissons", "Reptiles"))
+      shinyWidgets::radioGroupButtons(ns("target_taxa"),
+                                      label = spp_menu_title,
+                                      choiceValues = list("Tous", "Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles"),
+                                      choiceNames = list(HTML("<i class='finature-collection nature-collection-landscape-1'></i>"),
+                                                         HTML("<i class='fianimals animals-010-frog'></i>"),
+                                                         HTML("<i class='fianimals animals-015-squirrel'></i>"),
+                                                         HTML("<i class='fianimals animals-020-bird'></i>"),
+                                                         HTML("<i class='finature-collection nature-collection-fish'></i>"),
+                                                         HTML("<i class='fianimals animals-038-turtle'></i>")),
+                                      #direction = "vertical",
+                                      status = 'primary fibuttons', 
+                                      size = "sm", 
+                                      justified = TRUE, 
+                                      selected = start_sel)
       ),
-      column(9,
-             shiny::textOutput(outputId = ns("datasummary"))
-      )
+    fluidRow(
+      shiny::textOutput(outputId = ns("datasummary"))
     ),
     fluidRow(
       shinycssloaders::withSpinner(
-      plotly::plotlyOutput(outputId = ns("indextrend"), width = "100%"),
-      type = 8,
-      color = "#7bb5b1", 
-      size = 1
+        plotly::plotlyOutput(outputId = ns("indextrend"), width = "100%"),
+        type = 8,
+        color = "#7bb5b1", 
+        size = 1
       )
     )
   )
@@ -69,7 +75,7 @@ testapp_lpi_timeseries <- function(){
   server <-  function(input, output, session) {
 
     mod_lpi_time_series_server("test",
-                               taxachoice = reactive("tous"))
+                               target_taxa = reactive("tous"))
   }
   shinyApp(ui, server)
 }

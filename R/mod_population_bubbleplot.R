@@ -7,14 +7,23 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-mod_population_bubbleplot_ui <- function(id, spp_menu_title = "Groupe d'espèces"){
+mod_population_bubbleplot_ui <- function(id, spp_menu_title = "Groupe d'espèces", start_sel = "Tous"){
   ns <- NS(id)
   tagList(
-    radioButtons(ns("target_taxa"), label = spp_menu_title,
-                 choiceValues = c("Tous", "Amphibiens", "Mammifères",
-                                  "Oiseaux", "Poissons", "Reptiles"),
-                 choiceNames = c("Toutes les espèces", "Amphibiens", 
-                                 "Mammifères", "Oiseaux", "Poissons", "Reptiles")),
+    shinyWidgets::radioGroupButtons(ns("target_taxa"),
+                                    label = spp_menu_title,
+                                    choiceValues = list("Tous", "Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles"),
+                                    choiceNames = list(HTML("<i class='finature-collection nature-collection-landscape-1'></i>"),
+                                                       HTML("<i class='fianimals animals-010-frog'></i>"),
+                                                       HTML("<i class='fianimals animals-015-squirrel'></i>"),
+                                                       HTML("<i class='fianimals animals-020-bird'></i>"),
+                                                       HTML("<i class='finature-collection nature-collection-fish'></i>"),
+                                                       HTML("<i class='fianimals animals-038-turtle'></i>")),
+                                    #direction = "vertical",
+                                    status = 'primary fibuttons', 
+                                    size = "sm", 
+                                    justified = TRUE, 
+                                    selected = start_sel),
     plotly::plotlyOutput(outputId = ns("poptrend"), width = "100%")
   )
 }
@@ -26,7 +35,7 @@ mod_population_bubbleplot_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     output$poptrend <- plotly::renderPlotly({
-      make_poptrend(taxachoice = input$target_taxa)}
+      make_poptrend(target_taxa = input$target_taxa)}
     )
   })
 }
