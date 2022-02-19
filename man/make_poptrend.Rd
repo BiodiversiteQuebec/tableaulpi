@@ -4,10 +4,10 @@
 \alias{make_poptrend}
 \title{Plot each population growth rate since 1990}
 \usage{
-make_poptrend(taxachoice)
+make_poptrend(target_taxa)
 }
 \arguments{
-\item{taxachoice}{Species group selected by the user.}
+\item{target_taxa}{Species group selected by the user.}
 }
 \value{
 A "bubbleplot" using \code{plotly} where each population is shown as a filled circle, called a "bubble" here. Each bubble's fill colour is scaled to the population's population growth rate (%). Bubbles are arranged on the \code{x} axis according to the population's growth rate (%) since 1990. The \code{y} axis is a set of random positions to differentiate the circles more easily. On hover, the common name of the population and a sentence explaining this population change rate (%) appears over the circle.
