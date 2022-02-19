@@ -2,13 +2,13 @@
 #' 
 #' Makes a plot to compare individual populations' growth rates over the entire time frame of the estimated LPI trend (1990-2018).
 #'
-#' @param taxachoice Species group selected by the user.
+#' @param target_taxa Species group selected by the user.
 #' @import ggplot2 dplyr plotly
 #'
 #' @return A "bubbleplot" using \code{plotly} where each population is shown as a filled circle, called a "bubble" here. Each bubble's fill colour is scaled to the population's population growth rate (%). Bubbles are arranged on the \code{x} axis according to the population's growth rate (%) since 1990. The \code{y} axis is a set of random positions to differentiate the circles more easily. On hover, the common name of the population and a sentence explaining this population change rate (%) appears over the circle.
 #' @export
 
-make_poptrend <- function(taxachoice){
+make_poptrend <- function(target_taxa){
   
   # read ratlas data
   obs <- dplyr::left_join(ratlas::get_timeseries(), 
@@ -16,9 +16,9 @@ make_poptrend <- function(taxachoice){
                           by = c("id_taxa" = "id"))
   
   # Subset to selected taxa 
-  stopifnot(taxachoice %in% c("Poissons", "Amphibiens", "Oiseaux", "Mammifères", "Reptiles", "Tous"))
-  if (taxachoice != "Tous") {
-    obs <- subset(obs, obs$species_gr == taxachoice)
+  stopifnot(target_taxa %in% c("Poissons", "Amphibiens", "Oiseaux", "Mammifères", "Reptiles", "Tous"))
+  if (target_taxa != "Tous") {
+    obs <- subset(obs, obs$species_gr == target_taxa)
   } 
 
   # split into list per series to calculate log-ratio index for each population

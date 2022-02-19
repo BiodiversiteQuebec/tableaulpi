@@ -15,10 +15,10 @@ app_server <- function( input, output, session ) {
                                                            what_to_click = "marker",
                                                            fun = make_pointmap)
   # this is a sort of part-2 to the modal above. it must have the SAME ID or else it won't find the right map
-  taxachoice <- mod_subset_plot_leafletproxy_server("pointmap")
+  target_taxa <- mod_subset_plot_leafletproxy_server("pointmap")
   
   # show summary statistics on the landing page
-  mod_map_summarytable_server("map_summarytable_1", taxa = taxachoice)
+  mod_map_summarytable_server("map_summarytable_1", taxa = target_taxa)
   
   # Plot raw time series of clicked population in a pop-up modal ----
   
@@ -68,7 +68,7 @@ app_server <- function( input, output, session ) {
   mapselector::mod_modal_observeEvent_server(
     "affiche_index",
     title_format_pattern =  "Indice Planète Vivante: %s",
-    title_var = taxachoice,
+    title_var = target_taxa,
     # Plot the index trend through time, by selected taxa group ----
     tabPanel(
       title = "Tendance moyenne",
