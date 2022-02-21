@@ -11,7 +11,7 @@ mod_timeseries_ui <- function(id){
   ns <- NS(id)
   tagList(
     div(
-    plotOutput(outputId = ns("timeseries"), width = "100%"),
+    plotly::plotlyOutput(outputId = ns("timeseries"), width = "100%"),
     htmlOutput(ns("blurb"))
     )
   )
@@ -24,7 +24,7 @@ mod_timeseries_server <- function(id, clicked_population){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
   
-    output$timeseries <- renderPlot({
+    output$timeseries <- renderPlotly({
       make_timeseries(clicked_population())}
     )
     

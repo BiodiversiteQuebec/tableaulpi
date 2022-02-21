@@ -28,7 +28,7 @@ app_server <- function( input, output, session ) {
   mapselector::mod_modal_make_server(id = "pop_modal",
                                      region = clicked_population, 
                                      title_format_pattern = "Les données pour Population %s",
-                                     tabPanel("Données brutes", 
+                                     tabPanel("Portrait de la population", 
                                               fluidRow(
                                                 column(4, 
                                                        mod_species_photo_ui("species_photo_ui_1"),
