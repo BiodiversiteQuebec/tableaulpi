@@ -1,4 +1,4 @@
-#' population_bubbleplot UI Function
+#' trend_perpopulation UI Function
 #'
 #' @description A shiny Module.
 #'
@@ -7,7 +7,7 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-mod_population_bubbleplot_ui <- function(id, spp_menu_title = "Groupe d'espèces", start_sel = "Tous"){
+mod_trend_perpopulation_ui <- function(id, spp_menu_title = "Groupe d'espèces", start_sel = "Tous"){
   ns <- NS(id)
   tagList(
     fluidRow(
@@ -37,10 +37,10 @@ mod_population_bubbleplot_ui <- function(id, spp_menu_title = "Groupe d'espèces
   )
 }
     
-#' population_bubbleplot Server Functions
+#' trend_perpopulation Server Functions
 #'
 #' @noRd 
-mod_population_bubbleplot_server <- function(id){
+mod_trend_perpopulation_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     output$poptrend <- plotly::renderPlotly({
@@ -50,7 +50,7 @@ mod_population_bubbleplot_server <- function(id){
 }
     
 ## To be copied in the UI
-# mod_population_bubbleplot_ui("population_bubbleplot_ui_1")
+# mod_trend_perpopulation_ui("trend_perpopulation_ui_1")
     
 ## To be copied in the server
-# mod_population_bubbleplot_server("population_bubbleplot_ui_1")
+# mod_trend_perpopulation_server("trend_perpopulation_ui_1")

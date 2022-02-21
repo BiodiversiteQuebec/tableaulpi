@@ -62,7 +62,7 @@ app_server <- function( input, output, session ) {
   # Show index plots in a modal with tabs ----
 
   mod_lpi_time_series_server("lpi")
-  mod_population_bubbleplot_server("poptrend")
+  mod_trend_perpopulation_server("poptrend")
   mod_trend_distribution_server("mod_trend_distribution_ui_1")
 
   mapselector::mod_modal_observeEvent_server(
@@ -82,7 +82,7 @@ app_server <- function( input, output, session ) {
     # Plot of growth rates of each population
     tabPanel(
       title = "Tendances par population",
-      mod_population_bubbleplot_ui("poptrend")
+      mod_trend_perpopulation_ui("poptrend")
       ))
 
   # Include more detailed html content (text, plots, etc.) about the index

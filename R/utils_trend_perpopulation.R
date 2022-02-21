@@ -1,4 +1,4 @@
-#' Plot each population growth rate since 1990
+#' Plot each population's mean population growth rate
 #' 
 #' Makes a plot to compare individual populations' growth rates over the entire time frame of the estimated LPI trend (1990-2018).
 #'
