@@ -24,11 +24,12 @@ make_timeseries <- function(clicked_population){
     "years" = unlist(df$years),
     "values" = unlist(df$values)
     )
-  df_plot$hovertemplate <- paste("<b>Année</b>:", df_plot$years, "<br><b>Individus:</b>", df_plot$values)
+  df_plot$hovertemplate <- paste("<b>Année</b>:", df_plot$years, 
+                                 "<br><b>Abondance:</b>", df_plot$values)
   
   # plot raw time series
   p <- ggplot2::ggplot(data = df_plot,
-                  ggplot2::aes(x = years, y = values)) +
+                  ggplot2::aes(x = as.integer(years), y = values)) +
     ggplot2::geom_line(col = "#7bb5b1") +
     ggplot2::geom_point(ggplot2::aes(text = hovertemplate), col = "#2e483e", size = 5) +
     ggplot2::labs(x = "",
