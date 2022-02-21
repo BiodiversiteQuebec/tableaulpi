@@ -18,7 +18,13 @@ mod_trend_distribution_ui <- function(id){
                          round = TRUE,
                          animate = FALSE,
                          sep = "", width = '100%')),
-    fluidRow(plotly::plotlyOutput(outputId = ns("trend_distribution"), width = "100%"))
+    fluidRow(
+      shinycssloaders::withSpinner(
+        plotly::plotlyOutput(outputId = ns("trend_distribution"), width = "100%"),
+        type = 8,
+        color = "#7bb5b1", 
+        size = 1
+      ))
   )
 }
 

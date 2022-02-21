@@ -10,7 +10,8 @@
 mod_population_bubbleplot_ui <- function(id, spp_menu_title = "Groupe d'espèces", start_sel = "Tous"){
   ns <- NS(id)
   tagList(
-    shinyWidgets::radioGroupButtons(ns("target_taxa"),
+    fluidRow(
+      shinyWidgets::radioGroupButtons(ns("target_taxa"),
                                     label = spp_menu_title,
                                     choiceValues = list("Tous", "Amphibiens", "Mammifères", "Oiseaux", "Poissons", "Reptiles"),
                                     choiceNames = list(HTML("<i class='finature-collection nature-collection-landscape-1'></i>"),
@@ -23,8 +24,16 @@ mod_population_bubbleplot_ui <- function(id, spp_menu_title = "Groupe d'espèces
                                     status = 'primary fibuttons', 
                                     size = "sm", 
                                     justified = TRUE, 
-                                    selected = start_sel),
-    plotly::plotlyOutput(outputId = ns("poptrend"), width = "100%")
+                                    selected = start_sel)
+      ),
+    fluidRow(
+      shinycssloaders::withSpinner(
+        plotly::plotlyOutput(outputId = ns("poptrend"), width = "100%"),
+        type = 8,
+        color = "#7bb5b1", 
+        size = 1
+        )
+  )
   )
 }
     
