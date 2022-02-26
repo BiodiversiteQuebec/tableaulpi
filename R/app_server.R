@@ -18,26 +18,25 @@ app_server <- function( input, output, session ) {
   target_taxa <- mod_subset_plot_leafletproxy_server("pointmap")
 
   # show summary statistics on the landing page
-  mod_map_summarytable_server("map_summarytable_1", taxa = target_taxa)
-
+  mod_main_stats_server('main_stats', taxa = target_taxa)
+  
+  
   # Plot raw time series of clicked population in a pop-up modal ----
-
+  
   mod_timeseries_server("timeseries_ui_1", clicked_population)
   mod_species_photo_server("species_photo_ui_1", clicked_population)
   mod_summarise_rawdata_server("summarise_rawdata_ui_1", clicked_population)
   mapselector::mod_modal_make_server(id = "pop_modal",
                                      region = clicked_population,
-                                     title_format_pattern = "Les données pour Population %s",
-                                     tabPanel("Portrait de la population",
-                                              fluidRow(
-                                                column(4,
-                                                       mod_species_photo_ui("species_photo_ui_1"),
-                                                       mod_summarise_rawdata_ui("summarise_rawdata_ui_1")
-                                                       ),
-                                                column(8,
-                                                       mod_timeseries_ui("timeseries_ui_1")
-                                                       )
-                                              )
+                                     title_format_pattern = "Portrait de la population (%s)",
+                                     fluidRow(
+                                       column(3,
+                                              mod_species_photo_ui("species_photo_ui_1"),
+                                              mod_summarise_rawdata_ui("summarise_rawdata_ui_1")
+                                       ),
+                                       column(9,
+                                              mod_timeseries_ui("timeseries_ui_1")
+                                       )
                                      )
   )
 

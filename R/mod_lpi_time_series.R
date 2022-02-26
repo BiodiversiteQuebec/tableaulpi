@@ -28,15 +28,17 @@ mod_lpi_time_series_ui <- function(id, spp_menu_title = "Groupe d'espèces", sta
                                       selected = start_sel)
       ),
     fluidRow(
-      shiny::textOutput(outputId = ns("datasummary"))
-    ),
-    fluidRow(
       shinycssloaders::withSpinner(
         plotly::plotlyOutput(outputId = ns("indextrend"), width = "100%"),
         type = 8,
         color = "#7bb5b1", 
         size = 1
       )
+    ),
+    fluidRow(
+      h4("Sommaire des données"),
+      p("L'Indice Planète Vivante ci-dessus est basée sur les populations suivis pendant un minimum de six ans."),
+      shiny::htmlOutput(ns("data_stats"))
     )
   )
 }
@@ -47,10 +49,29 @@ mod_lpi_time_series_ui <- function(id, spp_menu_title = "Groupe d'espèces", sta
 mod_lpi_time_series_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-
-    output$datasummary <- shiny::renderText({
-      summarise_index_data(target_taxa = input$target_taxa)
-    })
+    
+    output$data_stats <- renderUI({
+      
+      obs <- tableaulpi::filter_atlas(input$target_taxa)
+      # subset to observations with at least 6 observations in time
+      # (to reflect what is actually included when the LPI is calculated)
+      # see utils_calculate_LPI.R
+      obs <- obs[unlist(lapply(obs$years, length)) >= 6,]
+      
+      # Make a named list of summary stats
+      d <- list(
+        "n_sp" = length(unique(obs$id_taxa)),
+        "n_pop" = length(unique(obs$id)),
+        "mean_tslength" = unlist(lapply(obs$years, length)) %>% mean(na.rm = TRUE) %>% floor()
+      )
+      
+      div(
+        stats_card(d$n_pop,'Populations', 'map-marker', 'main-1', 'col-sm-4'),
+        stats_card(d$n_sp, 'Espèces', 'bug', 'main-2', 'col-sm-4'),
+        stats_card(d$mean_tslength, 'ans par suivi', 'clock', 'main-3', 'col-sm-4')
+      )
+    }
+    )
     
     output$indextrend <- plotly::renderPlotly({
       make_indextrend(target_taxa = input$target_taxa)}

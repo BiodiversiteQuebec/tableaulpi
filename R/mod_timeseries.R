@@ -30,9 +30,22 @@ mod_timeseries_server <- function(id, clicked_population){
     
     output$blurb <- renderUI({
       
+      # get time series and taxonomic info to observations
+      obs <- ratlas::get_timeseries() 
+      obs <- obs %>% 
+        dplyr::left_join(ratlas::get_gen(endpoint="taxa", 
+                                         id = unique(obs$id_taxa)), 
+                         by = c("id_taxa" = "id")) %>%
+        dplyr::left_join(ratlas::get_datasets(id = unique(obs$id_datasets)),
+                         by = c("id_datasets" = "id"))
+      obs$id <- as.character(obs$id)
+      obs <- obs[which(obs$id == clicked_population()),]
+      
       # write some context
       tags$div(id = "blurbid", 
                class = "blurbtext",
+               tags$h5("Source des données:", obs$owner[1], "(License: ", obs$license[1], ")"),
+               tags$h6("Unités d'abondance (de la source originale):", obs$unit[1]),
                tags$p("Chaque point est une mesure de l'abondance de la population à un point dans le temps. L'Indice Planète Vivante se base sur le taux de changement entre ces points pour estimer une tendance moyenne des changements d'abondance de plusieurs populations.")
       )})
   })

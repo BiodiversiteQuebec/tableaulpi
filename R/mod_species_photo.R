@@ -20,7 +20,13 @@ mod_species_photo_server <- function(id, clicked_population){
     ns <- session$ns
  
     output$photo <- renderUI({
-      make_species_photo(clicked_population())
+      
+     x <- make_species_photo(clicked_population())
+     photo <- x$photo
+      
+      div(style=list('float:left'),
+          photo_card(photo$thumb_url, x$sp_name, x$species_gr, photo$url)
+      )
     })
     
   })

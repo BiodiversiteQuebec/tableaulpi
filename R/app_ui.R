@@ -34,8 +34,8 @@ app_ui <- function(request) {
         # Index trend through time
         mod_view_index_ui(id = "lpi_help", "Afficher l'IPV"),
         
-        # dataset description stats
-        mod_map_summarytable_ui("map_summarytable_1")
+        # card stats
+        mod_main_stats_ui('main_stats')
         
       ),
       
