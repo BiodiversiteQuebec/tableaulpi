@@ -26,9 +26,9 @@ make_summarise_rawdata <- function(clicked_population){
                       "Durée du suivi",
                       "Unités d'abondance",
                       "Statut de l'espèce (Québec)",
-                      "Groupe",
-                      "Source des données",
-                      "License"
+                      #"Groupe",
+                      #"Source des données",
+                      #"License"
     ),
     "Détails" = c(gsub("_", " ", obs$scientific_name[1]),
                   paste0(min(obs$years[[1]]), "-", max(obs$years[[1]]), 
