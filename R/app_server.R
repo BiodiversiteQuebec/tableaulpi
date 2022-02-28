@@ -19,10 +19,10 @@ app_server <- function( input, output, session ) {
 
   # show summary statistics on the landing page
   mod_main_stats_server('main_stats', taxa = target_taxa)
-  
-  
+
+
   # Plot raw time series of clicked population in a pop-up modal ----
-  
+
   mod_timeseries_server("timeseries_ui_1", clicked_population)
   mod_species_photo_server("species_photo_ui_1", clicked_population)
   mod_summarise_rawdata_server("summarise_rawdata_ui_1", clicked_population)
@@ -45,17 +45,17 @@ app_server <- function( input, output, session ) {
 
   mapselector::mod_modal_observeEvent_tutorial_server("affiche_tuto",
                                                       title_text = "Que mesure l'Indice Planète Vivante?",
-                                                      md_file = "firstModal.md",
+                                                      md_file = "help_InfoIPV.md",
                                                       second_button =
-                                                      mapselector::mod_modal_observeEvent_ui("affiche_tuto2",
-                                                                                             button_text = "Plus d'informations"))
+                                                      mapselector::mod_modal_observeEvent_ui("lpi_help",
+                                                                                             button_text = "Guide d'interprétation"))
   mapselector::mod_modal_observeEvent_tutorial_server("lpi_help",
                                                       title_text = "Guide d'interprétation de l'Indice Planète Vivante",
-                                                      md_file = "second_modal_text.md")
+                                                      md_file = "help_InterpretIPV.md")
 
   mapselector::mod_modal_observeEvent_tutorial_server("spp_help",
                                          title_text = "Catégories d'espèces",
-                                         md_file = "second_modal_text.md")
+                                         md_file = "help_categories_especes.md")
 
 
   # Show index plots in a modal with tabs ----
