@@ -48,12 +48,12 @@ app_ui <- function(request) {
         #maybe a little strange, but here we pass in the UI of a modal and the id that defines it.
         mapselector::tab_map(title = "Carte", 
                              id = "pointmap",
-                             outputFunction = mapselector::mod_map_select_ui),
+                             outputFunction = mapselector::mod_map_select_ui)#,
         
-        # Second tab: More detailed information about the index
-        mapselector::tab_gen(title = "À propos de l'indice", 
-                outputFunction = htmlOutput, 
-                id = "about")
+        # # Second tab: More detailed information about the index
+        # mapselector::tab_gen(title = "À propos de l'indice", 
+        #         outputFunction = htmlOutput, 
+        #         id = "about")
       )
     )
   )
