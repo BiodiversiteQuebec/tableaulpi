@@ -10,7 +10,7 @@ app_ui <- function(request) {
   tagList(
     
     # information panel that slides onto window (appears on hover)
-    mapselector::marcel(filename = "marcel_IntroductionIPV.md"),
+    mapselector::marcel(filename = "firstModal.md"),
     
     # Leave this function for adding external resources
     golem_add_external_resources(),
@@ -26,13 +26,13 @@ app_ui <- function(request) {
         badge(text_badge = "L'Indice Planète Vivante mesure les changements dans l'abondance des populations animales depuis 1990."),
         mod_subset_plot_leafletproxy_ui("pointmap", 
                                         mapselector::mod_modal_helpbutton_ui(id = "spp_help",
-                                                                             "Choisir un groupe d'espèces")
+                                                                             "Choisir le groupe d'espèces")
         ),
         
         # Modals that appear when a button is clicked ----
 
         # Index trend through time
-        mod_view_index_ui(id = "affiche_tuto", "Afficher l'IPV"),
+        mod_view_index_ui(id = "lpi_help", "Afficher l'IPV"),
         
         # card stats
         mod_main_stats_ui('main_stats')
