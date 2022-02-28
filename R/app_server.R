@@ -86,6 +86,6 @@ app_server <- function( input, output, session ) {
 
   # Include more detailed html content (text, plots, etc.) about the index
 
- # output$about <- renderUI({includeHTML("data/apropos_lpi.html")})
+  output$about <- renderUI({includeHTML("data/apropos_lpi.html")})
 
 }
