@@ -45,17 +45,17 @@ app_server <- function( input, output, session ) {
 
   mapselector::mod_modal_observeEvent_tutorial_server("affiche_tuto",
                                                       title_text = "Que mesure l'Indice Planète Vivante?",
-                                                      md_file = "firstModal.md",
+                                                      md_file = "help_infoIPV.md",
                                                       second_button =
-                                                      mapselector::mod_modal_observeEvent_ui("affiche_tuto2",
-                                                                                             button_text = "Plus d'informations"))
+                                                      mapselector::mod_modal_observeEvent_ui("lpi_help",
+                                                                                             button_text = "Guide d'interprétation"))
   mapselector::mod_modal_observeEvent_tutorial_server("lpi_help",
                                                       title_text = "Guide d'interprétation de l'Indice Planète Vivante",
-                                                      md_file = "second_modal_text.md")
+                                                      md_file = "help_InterpretIPV.md")
 
   mapselector::mod_modal_observeEvent_tutorial_server("spp_help",
                                          title_text = "Catégories d'espèces",
-                                         md_file = "second_modal_text.md")
+                                         md_file = "help_categories_especes.md")
 
 
   # Show index plots in a modal with tabs ----
