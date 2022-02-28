@@ -19,7 +19,7 @@ mod_view_index_ui <- function(id, text_before_button){
                                                 label = "", icon = icon("info"), size = "xs", status = "primary"))),
   # button to open the model with index plots
   # affiche_index is then linked in app_server
-  mapselector::mod_modal_observeEvent_ui("affiche_index", button_text = icon("chart-line"))
+  mapselector::mod_modal_observeEvent_ui("affiche_index", button_text = icon("chart-line"), class = "btn-primary")
   )
 }
 
