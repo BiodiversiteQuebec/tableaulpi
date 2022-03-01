@@ -1,7 +1,4 @@
 <h1 style="font-weight:normal">
-  <a href="https://coleo.biodiversite-quebec.ca/apps/tableaulpi/">
-    <img src=https://github.com/ReseauBiodiversiteQuebec/mapselector/blob/main/inst/app/www/coleo_test_small.png?raw=true alt="ReseauBiodiversiteQuebec" width=35>
-  </a>
   &nbsp;Tableau LPI&nbsp;
   <a href="https://coleo.biodiversite-quebec.ca/apps/tableaulpi/"><img src=https://img.shields.io/badge/View-TableauLPI-brightgreen.svg?colorA=grey></a>
   <a href="https://opensource.org/licenses/MIT/"><img src=https://img.shields.io/badge/License-MIT-blue.svg?colorA=grey]></a>
