@@ -16,7 +16,6 @@ Un tableau de bord Shiny pour visualiser les tendances de populations animales a
 - [Get started](#get-started)
 - [How it works](#how-it-works)
 - [Credits](#credits)
-- [To-do list](#to-do-list)
 - [Wishlist](#wishlist)
 - [Links](#links)
 
@@ -64,8 +63,14 @@ Styling is done commonly to all dashboards in the RBDQ project via [ :star: :sta
 
 ### Reactivity
 
-`taxachoice` via radio buttons 
-Users of this dashboard can select a taxonomic group of interest. This choice affects some plots in the dashboard, such as the point map, the LPI trendplot, and the bubbleplot.
+`taxa` via radioGroup buttons on main page: filters the map of population coordinates
+
+`clicked_population` selects a population ID from the map, and opens a modal to show the population time series and some summary information about the population.
+
+`target_taxa` via radioGroup buttons on IPV plot module, in each tab. Filters the plot by taxonomic group selected by the user.
+
+`target_years` via radioGroup buttons on IPV plot module, tab 'Tendances dans le temps'. Filters the plot by the range of years selected by the user.
+
 
 ### Modules
 
@@ -75,13 +80,13 @@ Users of this dashboard can select a taxonomic group of interest. This choice af
 
 A shiny module to generate the user interface and server functions used to produce a time series plotly of the Living Planet Index for the selected taxonomic group. This plotly is generated using the function `make_indextrend()`. This plot appears when the `Afficher l'IPV` button is clicked on the current version of the dashboard.
 
-##### `mod_ridgeplot.R`
+##### `mod_trend_distribution.R`
 
-A shiny module to generate the user interface and server functions used to produce a plot showing the density of each taxonomic group's population growth rates over the entire period covered by the dashboard (currently set to 1990-2018). This plotly is generated using the function `make_ridgeplot()`. This plot appears when the `IPV par groupe` button is clicked on the current version of the dashboard.
+A shiny module to generate the user interface and server functions used to produce a barplot (plotly) showing the proportion of populations that are declining, stable (between -5% and 5% mean annual change), or growing over a user-selected time period between 1950-2018. This plotly is generated using the function `make_trend_distribution()`. This plot appears when the `IPV par groupe` button is clicked on the current version of the dashboard.
 
-##### `mod_population_bubbleplot.R`
+##### `mod_trend_perpopulation.R`
 
-A shiny module to generate the user interface and server functions used to produce a plotly showing each population's growth rate over the entire period covered by the dashboard (currently set to 1990-2018). This plotly is generated using the function `make_poptrend()`. This plot appears when the `IPV par population` button is clicked on the current version of the dashboard.
+A shiny module to generate the user interface and server functions used to produce a scatter plotly showing each population's growth rate over the entire period covered by the dashboard (currently set to 1990-2018). This plotly is generated using the function `make_trend_perpopulation()`. 
 
 
 ##### `mod_subset_plot_leafletproxy.R` 
@@ -93,23 +98,11 @@ A shiny module to filter the point map on the home screen of the dashboard accor
 
 This dashboard is an ever-evolving collaborative effort with the entire [Réseau Biodiversité Québec](https://github.com/ReseauBiodiversiteQuebec) team, with special thanks to [Andrew Macdonald](https://github.com/aammd) for code review, contributions, and the development of [:star: :star: :star: `mapselector` :star: :star: :star:](https://github.com/ReseauBiodiversiteQuebec/mapselector), [Vincent Bellavance](https://github.com/VincentBellavance) for ideas and help with conception and design, data, troubleshooting, and development, and [Guillaume Larocque](https://github.com/glaroc) for help with design, development, troubleshooting, and a superhuman reactivity to the ever-evolving beast that is this project.
 
-
-## To-do list
-
-These are essential things that are left to do:
-- [ ] Organise the figures (and their event buttons) in a way that makes sense in terms of information flow
-- [ ] Add interpretation guide in the à propos 
-- [ ] Add informative text in the tutorial and information modals
-- [ ] Add selection option within the trendplot modal, the population one, and the ridgeplot/density plot
-- [ ] Add information about time series length in map pop-ups (and in à propos)
-- [ ] Add SurVol Benthos data in there.. and chiroptères?
-- [ ] Centralize the palette used across the dashboard to avoid re-writing it in each plot function
-
 ## Wishlist
 
 These are things that would enhance the dashboard, but are not necessary:
 - [ ] Show the clicked population's position in the ridgeplot distribution?
-- [ ] Think of a way to "score" population time series in terms of their length (vs. life histories???) to help with interpretation
+- [ ] Show some rating of the certainty of the index, based on # of populations, # data points, etc.
 
 
 ## Links
